@@ -7,7 +7,10 @@ import com.liquidresources.game.LiquidResources;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.useGL30 = true;
+		//config.useGL30 = false;
+		config.title = "LiquidResources";
+		config.height = 640;
+		config.width = 800;
 		new LwjglApplication(new LiquidResources(), config);
 	}
 }
