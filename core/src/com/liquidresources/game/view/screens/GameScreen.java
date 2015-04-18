@@ -1,6 +1,7 @@
 package com.liquidresources.game.view.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameScreen implements Screen {
@@ -43,6 +44,6 @@ public class GameScreen implements Screen {
 
     }
 
-
+    private ParticleEffectPool smokeEffectPool;
     private final SpriteBatch batch;
 }

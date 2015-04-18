@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		//config.useGL30 = false;
 		config.title = "LiquidResources";
-		config.height = 640;
+		config.height = 600;
 		config.width = 800;
 		new LwjglApplication(new LiquidResources(), config);
 	}

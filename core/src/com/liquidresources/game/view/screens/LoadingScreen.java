@@ -14,7 +14,9 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 public class LoadingScreen implements Screen {
     public LoadingScreen(final SpriteBatch batch) {
         this.batch = batch;
-        stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
+        stage = new Stage(
+                new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),
+                batch);
     }
 
     @Override
