@@ -1,12 +1,13 @@
 package com.liquidresources.game.debug;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DebugStatistic {
     public DebugStatistic() {
-        System.out.println(Gdx.files.internal("").path());
+        fontStandard  = new BitmapFont(Gdx.files.internal("fonts/whiteFont.fnt"));
         if (isWindows()) {
             debugBatch = new SpriteBatch(5000, DebugShader.createDefaultShader());
         } else {
@@ -16,7 +17,7 @@ public class DebugStatistic {
 
     public void render(final SpriteBatch batch) {
         debugBatch.begin();
-        fontStandart.draw(debugBatch,
+        fontStandard.draw(debugBatch,
                 "D_C:" + batch.renderCalls +
                         " fps:" + Gdx.graphics.getFramesPerSecond(), 20, 20);
         debugBatch.end();
@@ -24,15 +25,14 @@ public class DebugStatistic {
 
     public boolean isWindows() {
         final String os = System.getProperty("os.name").toLowerCase();
-        //windows
-        return os.contains("win");
+        return (os.contains("win") && System.getProperty("os.name")!=null);
     }
 
     public void dispose() {
         debugBatch.dispose();
     }
 
-    private BitmapFont fontStandart = new BitmapFont(Gdx.files.internal("fonts/whiteFont.fnt"));
+    private BitmapFont fontStandard;
     private SpriteBatch debugBatch;
 
 }

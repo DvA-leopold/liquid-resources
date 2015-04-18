@@ -1,7 +1,9 @@
 package com.liquidresources.game.view.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameScreen implements Screen {
@@ -11,12 +13,25 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        smokeEffect = new ParticleEffect();
+        smokeEffect.load(Gdx.files.internal("particles/smoke.p"), Gdx.files.internal("particles"));
+        smokeEffect.setPosition(200, 200);
+        smokeEffect.findEmitter("smoke").setContinuous(true);
+        smokeEffect.findEmitter("smoke").setAttached(true);
+        smokeEffect.start();
 
     }
 
     @Override
     public void render(float delta) {
 
+        batch.begin();
+        smokeEffect.draw(batch, delta);
+        batch.end();
+
+        if (Gdx.input.isTouched()) {
+            smokeEffect.findEmitter("smoke").setContinuous(false);
+        }
     }
 
     @Override
@@ -41,9 +56,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        smokeEffect.dispose();
     }
 
-    private ParticleEffectPool smokeEffectPool;
+    private ParticleEffect smokeEffect;
     private final SpriteBatch batch;
 }
