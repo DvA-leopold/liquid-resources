@@ -1,5 +1,6 @@
 package com.liquidresources.game.model.resource.manager;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -23,14 +24,14 @@ public class ResourceManager {
         mimeFileTypes.put("png", Texture.class);
         mimeFileTypes.put("jpeg", Texture.class);
         mimeFileTypes.put("jpg", Texture.class);
-        mimeFileTypes.put("gif", Texture.class);
-
         mimeFileTypes.put("bmp", Texture.class);
 
         mimeFileTypes.put("pack", TextureAtlas.class);
         mimeFileTypes.put("atlas", TextureAtlas.class);
 
         mimeFileTypes.put("mp3", Music.class);
+        mimeFileTypes.put("ogg", Audio.class);
+
         mimeFileTypes.put("fnt", BitmapFont.class);
         mimeFileTypes.put("json", Skin.class);
     }
@@ -92,7 +93,7 @@ public class ResourceManager {
         if (mimeFileTypes.containsKey(fileExtension)){
             assetManager.load(fileName, mimeFileTypes.get(fileExtension));
         } else {
-            throw new FileNotFoundException("no such extension for this type of file " + fileName);
+            throw new FileNotFoundException(" no such extension for this type of file " + fileName);
         }
         if (sync) {
             assetManager.finishLoading();
@@ -107,7 +108,7 @@ public class ResourceManager {
         if (assetManager.isLoaded(fileName)) {
             return assetManager.get(fileName);
         } else {
-            System.err.print(fileName + "was not loaded");
+            System.err.print(fileName + " was not loaded ");
             return null;
         }
     }
@@ -122,8 +123,8 @@ public class ResourceManager {
     }
 
     private FileHandle[] getFiles(FileHandle sectionForLoading) throws FileNotFoundException {
-        if (!sectionForLoading.isDirectory()){
-            throw new FileNotFoundException("this is not a directory");
+        if (!sectionForLoading.isDirectory()) {
+            throw new FileNotFoundException(" this is not a directory ");
         }
         Queue<FileHandle> fileHandles = new LinkedList<>();
         LinkedList<FileHandle> filesList = new LinkedList<>();

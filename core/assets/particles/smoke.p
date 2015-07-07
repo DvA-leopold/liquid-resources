@@ -148,4 +148,4 @@ additive: false
 behind: true
 premultipliedAlpha: false
 - Image Path -
-particle.png
+pump_smoke.png
