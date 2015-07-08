@@ -11,7 +11,6 @@ public abstract class PumpT {
 
     public abstract void update();
 
-    private int someFuck;
     private boolean isActive;
 }
 
