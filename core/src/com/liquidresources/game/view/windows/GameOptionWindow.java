@@ -52,7 +52,7 @@ public class GameOptionWindow extends Window {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO сохранить прогресс перед выходом
+                //TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 //((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
         });

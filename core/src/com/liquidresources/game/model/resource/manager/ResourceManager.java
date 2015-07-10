@@ -149,6 +149,7 @@ public class ResourceManager {
         private static final ResourceManager instance = new ResourceManager();
     }
 
-    private final Hashtable<String, Class> mimeFileTypes;
-    private final AssetManager assetManager;
+
+    final private Hashtable<String, Class> mimeFileTypes;
+    final private AssetManager assetManager;
 }

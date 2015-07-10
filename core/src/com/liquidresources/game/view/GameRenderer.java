@@ -2,6 +2,7 @@ package com.liquidresources.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,16 +18,36 @@ public class GameRenderer {
     public GameRenderer(final SpriteBatch batch) {
         this.batch = batch;
 
-        shipFactoryFacade = new ShipFactoryViewFacade(300, 80);
-        pompAnimation = new OilPumpAnimation(0.3f);
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
         blackFont = (BitmapFont) ResourceManager.getInstance().get("fonts/blackFont.fnt");
+
+        float floatingXPosition = 120;
+        float floatingYPosition = 80;
+        final float graphicsWidth = Gdx.graphics.getWidth() * 0.15f;
+        final float graphicsHeight = Gdx.graphics.getHeight() * 0.15f;
+        final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
+
+        oilPompFacade = new OilPumpAnimation(0.3f,
+                floatingXPosition, floatingYPosition,
+                graphicsWidth, graphicsHeight
+        );
+
+        floatingXPosition += oilPompFacade.getWidth() + buildingsPositionDelimiter;
+        mainAI = new Sprite((Texture) ResourceManager.getInstance().get("buildings/mainAI.png"));
+        mainAI.setPosition(floatingXPosition, floatingYPosition);
+        mainAI.setSize(graphicsWidth, graphicsHeight * 2);
+
+        floatingXPosition += mainAI.getWidth() + buildingsPositionDelimiter;
+        shipFactoryFacade = new ShipFactoryViewFacade(
+                floatingXPosition, floatingYPosition,
+                graphicsWidth, graphicsHeight
+        );
 
         prepareText = I18NBundleManager.getString("prepare");
     }
 
     public void show() {
-        pompAnimation.create();
+        oilPompFacade.create(Animation.PlayMode.LOOP_PINGPONG);
         shipFactoryFacade.startEffect();
     }
 
@@ -56,13 +77,16 @@ public class GameRenderer {
         batch.disableBlending();
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
+
         blackFont.draw(batch, prepareText,
                 (Gdx.graphics.getWidth() - prepareText.length()) / 2,
                 Gdx.graphics.getHeight() * 0.8f);
+
+        batch.end();
+
         if (Gdx.input.isTouched()) { //TODO make something better
             GameWorld.changeWorldState(GameStates.GAME_RUNNING);
         }
-        batch.end();
     }
 
     private void renderRunState() {
@@ -72,9 +96,9 @@ public class GameRenderer {
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
+        oilPompFacade.draw(batch);
         shipFactoryFacade.draw(batch, Gdx.graphics.getDeltaTime());
-        pompAnimation.draw(batch, 120, 80, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight() * 0.2f);
-        //mainAI.draw(batch);
+        mainAI.draw(batch);
         //baseShield.draw(batch, 0.5f);
 
         batch.end();
@@ -87,8 +111,9 @@ public class GameRenderer {
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
+        oilPompFacade.draw(batch);
         shipFactoryFacade.draw(batch, 0f);
-        pompAnimation.draw(batch, 120, 80, Gdx.graphics.getWidth() * 0.15f, Gdx.graphics.getHeight() * 0.15f);
+        mainAI.draw(batch);
 
         batch.end();
     }
@@ -108,7 +133,7 @@ public class GameRenderer {
 
     private Texture desertBackground;
 
-    private Animator pompAnimation;
+    private Animator oilPompFacade;
     private ShipFactoryViewFacade shipFactoryFacade;
     private Sprite mainAI;
     private Sprite baseShield;
