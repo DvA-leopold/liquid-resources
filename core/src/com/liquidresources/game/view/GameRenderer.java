@@ -43,7 +43,7 @@ public class GameRenderer {
                 graphicsWidth, graphicsHeight
         );
 
-        prepareText = I18NBundleManager.getString("prepare");
+        //prepareText = I18NBundleManager.getString("prepare");
     }
 
     public void show() {
@@ -78,9 +78,9 @@ public class GameRenderer {
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        blackFont.draw(batch, prepareText,
-                (Gdx.graphics.getWidth() - prepareText.length()) / 2,
-                Gdx.graphics.getHeight() * 0.8f);
+        blackFont.draw(batch, I18NBundleManager.getString("prepare"),
+                Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.8f
+        );
 
         batch.end();
 
@@ -139,7 +139,6 @@ public class GameRenderer {
     private Sprite baseShield;
 
     private BitmapFont blackFont;
-    final private String prepareText;
 
     final private SpriteBatch batch;
 }

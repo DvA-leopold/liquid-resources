@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class SmokeParticles {
-    public SmokeParticles(Vector2 smokePosition, boolean isContinuous) { //TODO разобраться с эммитерами
+    public SmokeParticles(Vector2 smokePosition, boolean isContinuous) {
         listOfParticleEffects = new ArrayList<>(numberOfParticleEffects);
         for (int i = 0; i < numberOfParticleEffects; ++i) {
             listOfParticleEffects.add(new ParticleEffect());
-            listOfParticleEffects.get(i).load(Gdx.files.internal("particles/smoke.p"), Gdx.files.internal("particles"));//TODO сделать лоадер
+            listOfParticleEffects.get(i).load(Gdx.files.internal("particles/smoke.p"), Gdx.files.internal("particles"));//TODO СЃРґРµР»Р°С‚СЊ Р·Р°РіСЂСѓР·С‡РёРє
             listOfParticleEffects.get(i).setPosition(smokePosition.x, smokePosition.y);
             listOfParticleEffects.get(i).findEmitter("smoke"/* + Integer.toString(i)*/).setContinuous(isContinuous);
         }
@@ -37,7 +37,7 @@ public class SmokeParticles {
         isAnimationStarted = false;
         for (ParticleEffect p : listOfParticleEffects) {
             //smokeEffect.findEmitter("smoke").allowCompletion();
-            p.findEmitter("smoke").allowCompletion(); // TODO сделать плавное завершение эффекта
+            p.findEmitter("smoke").allowCompletion(); // TODO СЃРґРµР»Р°С‚СЊ РїР»Р°РІРЅРѕРµ Р·Р°РІРµСЂС€РµРЅРёРµ Р°РЅРёРјР°С†РёРё
         }
     }
 

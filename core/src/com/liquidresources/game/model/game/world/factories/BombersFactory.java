@@ -17,8 +17,8 @@ public class BombersFactory extends Pool<Bomber> {
     @Override
     protected Bomber newObject() {
         return new Bomber(factoryPosition.x, factoryPosition.y, bombersDefaultHealth);
-        //this.obtain(); достает свободный объект из пула
-        //this.free(bomber); кладет объект в пул
+        //this.obtain(); РґРѕСЃС‚Р°РµС‚ РѕР±СЉРµРєС‚ РёР· РїСѓР»Р°
+        //this.free(bomber); РєР»Р°РґРµС‚ РѕР±СЉРµРєС‚ РѕР±СЂР°С‚РЅРѕ РІ РїСѓР»
     }
 
 
