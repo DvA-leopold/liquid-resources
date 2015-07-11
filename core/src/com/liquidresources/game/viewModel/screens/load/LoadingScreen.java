@@ -22,6 +22,7 @@ public class LoadingScreen implements Screen {
         ResourceManager.getInstance().loadSection("backgrounds", false);
         ResourceManager.getInstance().loadSection("audio", false);
         ResourceManager.getInstance().loadSection("buildings", false);
+        ResourceManager.getInstance().loadSection("symbols", false);
         ResourceManager.getInstance().loadSection("fonts", false);
     }
 

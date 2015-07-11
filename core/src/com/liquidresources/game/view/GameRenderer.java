@@ -12,6 +12,7 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.animation.Animator;
 import com.liquidresources.game.view.animation.oilpump.OilPumpAnimation;
 import com.liquidresources.game.view.objects.ShipFactoryViewFacade;
+import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
 public class GameRenderer {
@@ -26,6 +27,9 @@ public class GameRenderer {
         final float graphicsWidth = Gdx.graphics.getWidth() * 0.15f;
         final float graphicsHeight = Gdx.graphics.getHeight() * 0.15f;
         final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
+
+        symbolsRenderer = new SymbolsRenderer(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 100, 20, 40);
+        test = 3;
 
         oilPompFacade = new OilPumpAnimation(0.3f,
                 floatingXPosition, floatingYPosition,
@@ -90,6 +94,8 @@ public class GameRenderer {
     }
 
     private void renderRunState() {
+        test += Gdx.graphics.getDeltaTime() * 10;
+
         batch.begin();
 
         batch.disableBlending();
@@ -100,6 +106,8 @@ public class GameRenderer {
         shipFactoryFacade.draw(batch, Gdx.graphics.getDeltaTime());
         mainAI.draw(batch);
         //baseShield.draw(batch, 0.5f);
+
+        symbolsRenderer.renderNumber(batch, (int) test);
 
         batch.end();
     }
@@ -130,6 +138,9 @@ public class GameRenderer {
         shipFactoryFacade.dispose();
     }
 
+
+    private SymbolsRenderer symbolsRenderer;
+    private float test;
 
     private Texture desertBackground;
 
