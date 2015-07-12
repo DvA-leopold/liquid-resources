@@ -7,7 +7,7 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorld;
 import com.liquidresources.game.view.GameRenderer;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
-import com.liquidresources.game.viewModel.screens.wg.WidgetsGroup;
+import com.liquidresources.game.viewModel.WidgetsGroup;
 
 public class GameScreen implements Screen {
     public GameScreen() {

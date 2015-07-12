@@ -1,4 +1,4 @@
-package com.liquidresources.game.viewModel.screens.wg;
+package com.liquidresources.game.viewModel;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 

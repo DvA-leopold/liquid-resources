@@ -12,7 +12,7 @@ import com.liquidresources.game.model.GameWorld;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.windows.GameOptionWindow;
 import com.liquidresources.game.viewModel.GameStates;
-import com.liquidresources.game.viewModel.screens.wg.WidgetsGroup;
+import com.liquidresources.game.viewModel.WidgetsGroup;
 
 public class GameScreenWidgetsGroup implements WidgetsGroup {
     public GameScreenWidgetsGroup(final Batch batch) {
