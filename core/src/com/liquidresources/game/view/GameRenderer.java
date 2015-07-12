@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.model.GameWorld;
+import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.i18N.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.animation.Animator;
@@ -16,20 +17,21 @@ import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
 public class GameRenderer {
-    public GameRenderer(final SpriteBatch batch) {
+    public GameRenderer(final SpriteBatch batch, final MainAI mainAIModelStorage) {
         this.batch = batch;
+        this.mainAIModelStorage = mainAIModelStorage;
 
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
         blackFont = (BitmapFont) ResourceManager.getInstance().get("fonts/blackFont.fnt");
 
+        // TODO change hardcoded numbers
         float floatingXPosition = 120;
         float floatingYPosition = 80;
         final float graphicsWidth = Gdx.graphics.getWidth() * 0.15f;
         final float graphicsHeight = Gdx.graphics.getHeight() * 0.15f;
         final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
 
-        symbolsRenderer = new SymbolsRenderer(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 100, 20, 40);
-        test = 3;
+        symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45);
 
         oilPompFacade = new OilPumpAnimation(0.3f,
                 floatingXPosition, floatingYPosition,
@@ -46,8 +48,6 @@ public class GameRenderer {
                 floatingXPosition, floatingYPosition,
                 graphicsWidth, graphicsHeight
         );
-
-        //prepareText = I18NBundleManager.getString("prepare");
     }
 
     public void show() {
@@ -88,14 +88,12 @@ public class GameRenderer {
 
         batch.end();
 
-        if (Gdx.input.isTouched()) { //TODO make something better
+        if (Gdx.input.isTouched()) { //TODO change world state to run state
             GameWorld.changeWorldState(GameStates.GAME_RUNNING);
         }
     }
 
     private void renderRunState() {
-        test += Gdx.graphics.getDeltaTime() * 10;
-
         batch.begin();
 
         batch.disableBlending();
@@ -107,7 +105,8 @@ public class GameRenderer {
         mainAI.draw(batch);
         //baseShield.draw(batch, 0.5f);
 
-        symbolsRenderer.renderNumber(batch, (int) test);
+        symbolsRenderer.renderNumber(batch, mainAIModelStorage.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, mainAIModelStorage.getWaterBarrels(), 0, -40);
 
         batch.end();
     }
@@ -122,6 +121,9 @@ public class GameRenderer {
         oilPompFacade.draw(batch);
         shipFactoryFacade.draw(batch, 0f);
         mainAI.draw(batch);
+
+        symbolsRenderer.renderNumber(batch, mainAIModelStorage.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, mainAIModelStorage.getWaterBarrels(), 0, -40);
 
         batch.end();
     }
@@ -140,7 +142,6 @@ public class GameRenderer {
 
 
     private SymbolsRenderer symbolsRenderer;
-    private float test;
 
     private Texture desertBackground;
 
@@ -151,6 +152,7 @@ public class GameRenderer {
 
     private BitmapFont blackFont;
 
+    final private MainAI mainAIModelStorage;
     final private SpriteBatch batch;
 }
 

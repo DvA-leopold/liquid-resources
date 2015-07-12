@@ -35,6 +35,23 @@ public class MainAI {
         }
     }
 
+    /**
+     * this mainAI is a storage for all useful resources and convert resources from one to another
+     * update method just add obtained resources from different stations
+     *
+     * @param oilBarrels   coefficient passed from the oil station class
+     * @param waterBarrels coefficient passed from the water station class
+     */
+    public void update(long oilBarrels, long waterBarrels) {
+        this.oilBarrels = this.oilBarrels + oilBarrels < Long.MAX_VALUE
+                ? this.oilBarrels + oilBarrels
+                : Long.MAX_VALUE - 1;
+
+        this.waterBarrels = this.waterBarrels + waterBarrels < Long.MAX_VALUE
+                ? this.waterBarrels + waterBarrels
+                : Long.MAX_VALUE - 1;
+    }
+
     public long getOilBarrels() {
         return oilBarrels;
     }

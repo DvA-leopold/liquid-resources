@@ -11,6 +11,7 @@ import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.game.world.factories.BombersFactory;
 import com.liquidresources.game.model.game.world.factories.FighterFactory;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
+import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
 import com.liquidresources.game.viewModel.GameStates;
 
@@ -25,24 +26,43 @@ public class GameWorld {
         mainAI = new MainAI();
         bombersFactory = new BombersFactory(new Vector2(50, 70), 100);
         fighterFactory = new FighterFactory(new Vector2(50, 70), 20);
-        oilPump = new OilPump[3];
-        for (int i =0; i< oilPump.length; ++i) {
-            oilPump[i] = new OilPump();
-        }
-        waterPump = new WaterPump();
+
+        oilPump1 = new OilPump(0.04f);
+        oilPump2 = new OilPump(0.04f);
+        waterPump = new WaterPump(0.09f);
     }
 
-    public void update() {
+    public void update(float delta) {
         world.step(1 / 60f, 6, 2);
+
+        switch (worldState) {
+            case GAME_PREPARING:
+                break;
+            case GAME_RUNNING:
+                mainAI.update(
+                        oilPump1.getResources(delta) + oilPump2.getResources(delta),
+                        waterPump.getResources(delta)
+                );
+                break;
+            case GAME_PAUSED:
+                break;
+            case GAME_EXIT:
+                break;
+            case GAME_OVER:
+                break;
+        }
+
     }
 
     public void pause() {
-        if (worldState != GameStates.GAME_PAUSED) {
-            changeWorldState(GameStates.GAME_PAUSED);
+        if (worldState != GameStates.GAME_PREPARING) {
+            changeWorldState(GameStates.GAME_PREPARING);
         }
     }
 
-    public void resume() { }
+    public MainAI getMainAI() {
+        return mainAI;
+    }
 
     public static GameStates getWorldState() {
         return worldState;
@@ -68,8 +88,8 @@ public class GameWorld {
     final private OrthographicCamera camera;
 
     final private MainAI mainAI;
-    final private OilPump[] oilPump;
-    final private WaterPump waterPump;
+    final private Pump oilPump1, oilPump2;
+    final private Pump waterPump;
     final private BombersFactory bombersFactory;
     final private FighterFactory fighterFactory;
 }

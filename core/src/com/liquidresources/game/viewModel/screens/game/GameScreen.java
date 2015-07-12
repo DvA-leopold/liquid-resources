@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
         gameScreenWidgetGroup = new GameScreenWidgetsGroup(batch);
 
         gameWorld = new GameWorld();
-        gameRenderer = new GameRenderer(batch);
+        gameRenderer = new GameRenderer(batch, gameWorld.getMainAI());
     }
 
     @Override
@@ -26,14 +26,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        gameRenderer.render();
-        gameWorld.update();
-        gameScreenWidgetGroup.render();
+        gameWorld.update(delta);
 
-        //if (Gdx.input.isTouched()) {
-        //    smokeParticles.stopEffect();
-        //    pompAnimation.resetAnimation(true);
-        //}
+        gameRenderer.render();
+        gameScreenWidgetGroup.render();
     }
 
     @Override
@@ -48,7 +44,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        gameWorld.resume();
     }
 
     @Override

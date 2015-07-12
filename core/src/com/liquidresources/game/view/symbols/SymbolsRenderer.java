@@ -22,11 +22,18 @@ public class SymbolsRenderer {
         }
     }
 
-    public void renderNumber(final Batch batch, int number) {
+    public void renderNumber(final Batch batch, long number) {
+        renderNumber(batch, number, 0f, 0f);
+    }
+
+    public void renderNumber(final Batch batch, long number, float xOffset, float yOffset) {
         //сдвиг цифр в обратную сторону: i = 0; i< numberOfDigits; ++i; and xDefaultPosition - width * i
         int numberOfDigits = (int) Math.ceil(Math.log10(number + 1));
         for (int i = numberOfDigits; i > 0; --i) {
-            batch.draw(texturesNumbersArray.get(number % 10), xDefaultPosition + width * i, yDefaultPosition, width, height);
+            batch.draw(
+                    texturesNumbersArray.get((int) (number % 10)),
+                    xDefaultPosition + width * i + xOffset,
+                    yDefaultPosition + yOffset, width, height);
             number /= 10;
         }
     }
