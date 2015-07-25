@@ -8,6 +8,7 @@ import com.liquidresources.game.debug.DebugShader;
 import com.liquidresources.game.debug.DebugStatistic;
 import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.version.VersionHandler;
 import com.liquidresources.game.viewModel.screens.load.LoadingScreen;
 
 public final class LiquidResources extends Game {
@@ -30,6 +31,7 @@ public final class LiquidResources extends Game {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         super.render();
         statistic.render(mainBatch);
+        VersionHandler.render(mainBatch);
     }
 
     @Override

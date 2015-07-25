@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.liquidresources.game.model.GameWorld;
-import com.liquidresources.game.model.i18N.manager.I18NBundleManager;
+import com.liquidresources.game.model.GameWorldModel;
+import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.viewModel.GameStates;
 
 public class GameOptionWindow extends Window {
@@ -52,7 +52,6 @@ public class GameOptionWindow extends Window {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO ��������� �������� ����� �������
                 //((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
         });
@@ -61,7 +60,7 @@ public class GameOptionWindow extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setVisible(false);
-                GameWorld.changeWorldState(GameStates.GAME_RUNNING);
+                GameWorldModel.changeWorldState(GameStates.GAME_RUNNING);
             }
         });
     }

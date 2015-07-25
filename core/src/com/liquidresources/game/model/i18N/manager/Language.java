@@ -1,4 +1,4 @@
-package com.liquidresources.game.model.i18N.manager;
+package com.liquidresources.game.model.i18n.manager;
 
 public enum Language {
     ENGLISH("en", "EN", "VAR1"),

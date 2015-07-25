@@ -1,7 +1,6 @@
 package com.liquidresources.game.debug;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -18,19 +17,20 @@ public class DebugStatistic {
     public void render(final SpriteBatch batch) {
         debugBatch.begin();
         fontStandard.draw(debugBatch,
-                "D_C:" + batch.renderCalls +
-                        " fps:" + Gdx.graphics.getFramesPerSecond(), 20, 20);
+                "DC:" + batch.renderCalls +
+                        " fps:" + Gdx.graphics.getFramesPerSecond(), 10, Gdx.graphics.getHeight() * 0.1f);
         debugBatch.end();
     }
 
     public boolean isWindows() {
         final String os = System.getProperty("os.name").toLowerCase();
-        return (os.contains("win") && System.getProperty("os.name")!=null);
+        return (os.contains("win") && System.getProperty("os.name") != null);
     }
 
     public void dispose() {
         debugBatch.dispose();
     }
+
 
     private BitmapFont fontStandard;
     private SpriteBatch debugBatch;

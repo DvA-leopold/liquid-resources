@@ -52,6 +52,62 @@ music_on
   orig: 50, 48
   offset: 0, 0
   index: -1
+bombers_down
+  rotate: false
+  xy: 1, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+bombers_up
+  rotate: false
+  xy: 215, 213
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+fighters_down
+  rotate: false
+  xy: 39, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+fighters_up
+  rotate: false
+  xy: 215, 175
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+rocket_down
+  rotate: false
+  xy: 77, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+rocket_up
+  rotate: false
+  xy: 215, 137
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+shield_down
+  rotate: false
+  xy: 115, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+shield_up
+  rotate: false
+  xy: 215, 99
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
 sound_off
   rotate: false
   xy: 163, 51

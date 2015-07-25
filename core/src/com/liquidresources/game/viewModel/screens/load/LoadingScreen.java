@@ -24,6 +24,7 @@ public class LoadingScreen implements Screen {
         ResourceManager.getInstance().loadSection("buildings", false);
         ResourceManager.getInstance().loadSection("symbols", false);
         ResourceManager.getInstance().loadSection("fonts", false);
+        ResourceManager.getInstance().loadSection("ships", false);
     }
 
     @Override

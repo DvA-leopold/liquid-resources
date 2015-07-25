@@ -1,4 +1,4 @@
-package com.liquidresources.game.model.i18N.manager;
+package com.liquidresources.game.model.i18n.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.I18NBundle;

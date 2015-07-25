@@ -1,34 +1,30 @@
 package com.liquidresources.game.model.game.world.base;
 
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
+
 public class MainAI {
-    public MainAI() {
-        shieldPower = 0;
+    static {
+        //TODO возможно лучше сделать нестатический вариант
         oilBarrels = 0;
         waterBarrels = 0;
+        shieldOnOffStatus = false;
     }
 
-    public boolean changeOil(int oilBarrels) {
-        if (this.oilBarrels + oilBarrels >= 0) {
-            this.oilBarrels += oilBarrels;
+    public static boolean changeOil(int oilBarrels) {
+        if (MainAI.oilBarrels + oilBarrels >= 0) {
+            MainAI.oilBarrels += oilBarrels;
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean changeWater(int waterBarrels) {
-        if (this.waterBarrels + waterBarrels >= 0) {
-            this.waterBarrels += waterBarrels;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean addShieldPower(int shieldPower, int oilShieldConversionCoefficient) {
-        if (oilBarrels - shieldPower * oilShieldConversionCoefficient >= 0) {
-            oilBarrels -= shieldPower * oilShieldConversionCoefficient;
-            this.shieldPower += shieldPower;
+    public static boolean changeWater(int waterBarrels) {
+        if (MainAI.waterBarrels + waterBarrels >= 0) {
+            MainAI.waterBarrels += waterBarrels;
             return true;
         } else {
             return false;
@@ -37,34 +33,52 @@ public class MainAI {
 
     /**
      * this mainAI is a storage for all useful resources and convert resources from one to another
-     * update method just add obtained resources from different stations
-     *
-     * @param oilBarrels   coefficient passed from the oil station class
-     * @param waterBarrels coefficient passed from the water station class
-     */
-    public void update(long oilBarrels, long waterBarrels) {
-        this.oilBarrels = this.oilBarrels + oilBarrels < Long.MAX_VALUE
-                ? this.oilBarrels + oilBarrels
+     * update method just add obtained resources from different factories
+     *  @param oilBarrels   passed from the oil factory class
+     * @param waterBarrels passed from the water factory class*/
+    public static void update(int oilBarrels, short waterBarrels) {
+        MainAI.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
+                ? MainAI.oilBarrels + oilBarrels
                 : Long.MAX_VALUE - 1;
 
-        this.waterBarrels = this.waterBarrels + waterBarrels < Long.MAX_VALUE
-                ? this.waterBarrels + waterBarrels
+        MainAI.waterBarrels = MainAI.waterBarrels + waterBarrels < Long.MAX_VALUE
+                ? MainAI.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
+
+        if (shieldOnOffStatus && MainAI.oilBarrels > 0) {
+            MainAI.oilBarrels -= 1;
+        } else {
+            shieldOnOffStatus = false;
+            GameScreenWidgetsGroup.setIONChecked(false);
+        }
     }
 
-    public long getOilBarrels() {
+    public EventListener switchIONShield() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!shieldOnOffStatus && oilBarrels > 0) {
+                    shieldOnOffStatus = true;
+                } else if (shieldOnOffStatus) {
+                    shieldOnOffStatus = false;
+                }
+            }
+        };
+    }
+
+    public static long getOilBarrels() {
         return oilBarrels;
     }
 
-    public long getWaterBarrels() {
+    public static long getWaterBarrels() {
         return waterBarrels;
     }
 
-    public int getShieldPower() {
-        return shieldPower;
+    public static boolean getShieldStatus() {
+         return shieldOnOffStatus;
     }
 
 
-    private long oilBarrels, waterBarrels;
-    private int shieldPower;
+    private static long oilBarrels, waterBarrels;
+    private static boolean shieldOnOffStatus;
 }
