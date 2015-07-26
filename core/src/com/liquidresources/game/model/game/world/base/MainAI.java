@@ -1,8 +1,11 @@
 package com.liquidresources.game.model.game.world.base;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.liquidresources.game.model.BodyFactoryWrapper;
+import com.liquidresources.game.view.drawable.bullets.Rocket;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class MainAI {
@@ -11,6 +14,11 @@ public class MainAI {
         oilBarrels = 0;
         waterBarrels = 0;
         shieldOnOffStatus = false;
+    }
+
+    public MainAI(final Vector2 position, final Vector2 rocketSize) {
+        this.position = position;
+        this.rocketSize = rocketSize;
     }
 
     public static boolean changeOil(int oilBarrels) {
@@ -66,6 +74,17 @@ public class MainAI {
         };
     }
 
+    public EventListener fireRocketLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (changeOil(-100)) {
+                    bodyFactoryWrapper.createBody(new Rocket(position, rocketSize), false);
+                }
+            }
+        };
+    }
+
     public static long getOilBarrels() {
         return oilBarrels;
     }
@@ -79,6 +98,8 @@ public class MainAI {
     }
 
 
+    final private Vector2 position;
+    final private Vector2 rocketSize;
     private static long oilBarrels, waterBarrels;
     private static boolean shieldOnOffStatus;
 }

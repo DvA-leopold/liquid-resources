@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
-import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.windows.GameOptionWindow;
 import com.liquidresources.game.viewModel.GameStates;
@@ -36,12 +35,16 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
                 Gdx.graphics.getWidth() - optionWindowButton.getWidth(),
                 Gdx.graphics.getHeight() - optionWindowButton.getHeight()
         );
+        optionWindowButton.setVisible(false);
 
         ionShieldButton = new CheckBox("", skin, "shieldAction");
-        ionShieldButton.setChecked(MainAI.getShieldStatus());
+        ionShieldButton.setVisible(false);
         rocketFire = new Button(skin, "rocketAction");
+        rocketFire.setVisible(false);
         bomberButton = new Button(skin, "bombersAction");
+        bomberButton.setVisible(false);
         fighterButton = new Button(skin, "fightersAction");
+        fighterButton.setVisible(false);
 
         Table actionTable = new Table();
         actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.1f);
@@ -72,6 +75,7 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameOptionWindow.setVisible(true);
+                setButtonVisible(false);
                 GameWorldModel.changeWorldState(GameStates.GAME_PAUSED);
             }
         });
@@ -117,21 +121,24 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
         return stage;
     }
 
-    @Override
-    public void setVisible(boolean visible) {
+    public static void setButtonVisible(boolean visible) {
+        rocketFire.setVisible(visible);
+        fighterButton.setVisible(visible);
+        bomberButton.setVisible(visible);
         optionWindowButton.setVisible(visible);
-        gameOptionWindow.setVisible(visible);
+        ionShieldButton.setVisible(visible);
     }
 
 
     final private Stage stage;
 
-    private Button optionWindowButton;
+    //TODO try to make non static buttons
+    static private Button optionWindowButton;
 
-    static private CheckBox ionShieldButton; // TODO сделать возможность нормального переключения состояния кнопки
-    private Button rocketFire;
-    private Button fighterButton;
-    private Button bomberButton;
+    static private CheckBox ionShieldButton;
+    static private Button rocketFire;
+    static private Button fighterButton;
+    static private Button bomberButton;
 
     private GameOptionWindow gameOptionWindow;
 }

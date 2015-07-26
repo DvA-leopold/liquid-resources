@@ -7,5 +7,4 @@ public interface WidgetsGroup {
     void setListeners();
     void dispose();
     Stage getStage();
-    void setVisible(boolean visible);
 }

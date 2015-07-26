@@ -10,7 +10,7 @@ import com.liquidresources.game.view.drawable.DrawableBody;
 
 public class MainAIView implements DrawableBody {
     public MainAIView(Vector2 initCoords, float graphicsWidth, float graphicsHeight) {
-        mainAI = new Sprite((Texture) ResourceManager.getInstance().get("buildings/mainAI.png"));
+        mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));
         mainAI.setPosition(initCoords.x, initCoords.y);
         mainAI.setSize(graphicsWidth, graphicsHeight * 2);
 
@@ -52,6 +52,10 @@ public class MainAIView implements DrawableBody {
 
     public float getWidth() {
         return mainAI.getWidth();
+    }
+
+    public Vector2 getPosition() {
+        return new Vector2(mainAI.getX(), mainAI.getY());
     }
 
 

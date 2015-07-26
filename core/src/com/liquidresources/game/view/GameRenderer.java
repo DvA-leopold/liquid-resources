@@ -47,15 +47,15 @@ public class GameRenderer {
                 graphicsWidth, graphicsHeight,
                 Animation.PlayMode.LOOP_PINGPONG
         );
-        bodyFactoryWrapper.createBody(oilPompFacade, true).setUserData(oilPompFacade);
+        bodyFactoryWrapper.createBody(oilPompFacade, true);
 
         initCoords.x += oilPompFacade.getWidth() + buildingsPositionDelimiter;
         mainAIView = new MainAIView(initCoords, graphicsWidth, graphicsHeight);
-        bodyFactoryWrapper.createBody(mainAIView, true).setUserData(mainAIView);
+        bodyFactoryWrapper.createBody(mainAIView, true);
 
         initCoords.x += mainAIView.getWidth() + buildingsPositionDelimiter;
         shipFactoryFacade = new ShipFactoryViewFacade(initCoords.x, initCoords.y, graphicsWidth, graphicsHeight);
-        bodyFactoryWrapper.createBody(shipFactoryFacade, true).setUserData(shipFactoryFacade);
+        bodyFactoryWrapper.createBody(shipFactoryFacade, true);
     }
 
     public void show() {
@@ -111,11 +111,6 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-        //oilPompFacade.draw(batch, null, delta);
-        //shipFactoryFacade.draw(batch, null, delta);
-        //mainAIView.draw(batch, null, delta);
-        //baseShield.draw(batch, 0.5f);
-
         symbolsRenderer.renderNumber(batch, MainAI.getOilBarrels());
         symbolsRenderer.renderNumber(batch, MainAI.getWaterBarrels(), 0, -40);
 
@@ -157,6 +152,10 @@ public class GameRenderer {
 
     public Vector2 getShipFactoryPosition() {
         return shipFactoryFacade.getShipFactoryPosition();
+    }
+
+    public Vector2 getMainAIPosition() {
+        return mainAIView.getPosition();
     }
 
     public void dispose() {

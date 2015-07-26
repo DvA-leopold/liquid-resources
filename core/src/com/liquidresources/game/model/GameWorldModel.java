@@ -9,9 +9,13 @@ import com.liquidresources.game.model.game.world.pumps.OilPump;
 import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
 import com.liquidresources.game.viewModel.GameStates;
+import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameWorldModel {
-    public GameWorldModel(final BodyFactoryWrapper bodyFactoryWrapper, final Vector2 shipFactoryPosition) {
+    public GameWorldModel(
+            final BodyFactoryWrapper bodyFactoryWrapper,
+            final Vector2 shipFactoryPosition,
+            final Vector2 mainAIPosition) {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         shipFactory = new ShipFactory(
@@ -22,7 +26,10 @@ public class GameWorldModel {
         oilPump1 = new OilPump(0.04f);
         oilPump2 = new OilPump(0.04f);
         waterPump = new WaterPump(0.09f);
-        mainAI = new MainAI();
+        mainAI = new MainAI(
+                mainAIPosition,
+                new Vector2(Gdx.graphics.getWidth() * 0.01f, Gdx.graphics.getHeight() * 0.05f)
+        );
     }
 
     public void update(float delta) {
@@ -45,7 +52,7 @@ public class GameWorldModel {
     }
 
     public void pause() {
-        if (worldState != GameStates.GAME_PREPARING) {
+        if (worldState != GameStates.GAME_PREPARING && worldState != GameStates.GAME_PAUSED) {
             changeWorldState(GameStates.GAME_PREPARING);
         }
     }
@@ -66,12 +73,24 @@ public class GameWorldModel {
         return mainAI.switchIONShield();
     }
 
+    public EventListener getRocketFireEventListener() {
+        return mainAI.fireRocketLaunch(bodyFactoryWrapper);
+    }
+
     public static GameStates getWorldState() {
         return worldState;
     }
 
     public static void changeWorldState(GameStates newWorldState) {
         worldState = newWorldState;
+        switch (newWorldState) {
+            case GAME_PREPARING:
+                GameScreenWidgetsGroup.setButtonVisible(false);
+                break;
+            case GAME_RUNNING:
+                GameScreenWidgetsGroup.setButtonVisible(true);
+                break;
+        }
     }
 
 

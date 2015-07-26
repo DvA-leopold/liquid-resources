@@ -17,14 +17,12 @@ public class LoadingScreen implements Screen {
     @Override
     public void show() {
         barHorizontalMid = new Texture("init/white_square_progress_bar.png");
-        ResourceManager.getInstance().loadSection("animation", false);
+        ResourceManager.getInstance().loadSection("drawable", false);
         ResourceManager.getInstance().loadSection("skins", false);
         ResourceManager.getInstance().loadSection("backgrounds", false);
         ResourceManager.getInstance().loadSection("audio", false);
-        ResourceManager.getInstance().loadSection("buildings", false);
         ResourceManager.getInstance().loadSection("symbols", false);
         ResourceManager.getInstance().loadSection("fonts", false);
-        ResourceManager.getInstance().loadSection("ships", false);
     }
 
     @Override

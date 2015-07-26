@@ -19,7 +19,11 @@ public class GameScreen implements Screen {
         BodyFactoryWrapper bodyFactoryWrapper = new BodyFactoryWrapper(physicsWorld);
         gameRenderer = new GameRenderer(new Vector2(100f, 80f), bodyFactoryWrapper);
 
-        gameWorldModel = new GameWorldModel(bodyFactoryWrapper, gameRenderer.getShipFactoryPosition());
+        gameWorldModel = new GameWorldModel(
+                bodyFactoryWrapper,
+                gameRenderer.getShipFactoryPosition(),
+                gameRenderer.getMainAIPosition()
+        );
 
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();
 
@@ -33,6 +37,10 @@ public class GameScreen implements Screen {
 
         gameRenderer.show();
         gameScreenWidgetGroup.setListeners();
+
+        gameScreenWidgetGroup.addRocketFireListener(
+                gameWorldModel.getRocketFireEventListener()
+        );
 
         gameScreenWidgetGroup.addBombersButtonListener(
                 gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER)

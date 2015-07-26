@@ -13,7 +13,7 @@ import com.liquidresources.game.view.particles.SmokeParticles;
 
 public class ShipFactoryViewFacade implements DrawableBody {
     public ShipFactoryViewFacade(float xDefaultPosition, float yDefaultPosition, float width, float height) {
-        Texture factoryTexture = (Texture) ResourceManager.getInstance().get("buildings/shipFactory.png");
+        Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
         shipFactory = new Sprite(factoryTexture);
         shipFactory.setPosition(xDefaultPosition, yDefaultPosition);
