@@ -20,32 +20,36 @@ public class ShipFactory {
         this.shipSize = shipSize;
     }
 
-    public EventListener bomberButtonListener(final BodyFactoryWrapper bodyFactoryWrapper) {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(MainAI.changeOil(-122)) {
-                    bodyFactoryWrapper.createBody(
-                            new Bomber(basePosition, shipSize, bombersDefaultHealth), false
-                    );
-                }
-                System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
-            }
-        };
-    }
+    public EventListener getShipButtonListener(final BodyFactoryWrapper bodyFactoryWrapper, ShipType shipType) {
+        switch (shipType) {
+            case BOMBER:
+                return new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if(MainAI.changeOil(-122)) {
+                            bodyFactoryWrapper.createBody(
+                                    new Bomber(basePosition, shipSize, bombersDefaultHealth), false
+                            );
+                        }
+                        System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
+                    }
+                };
 
-    public EventListener fighterButtonListener(final BodyFactoryWrapper bodyFactoryWrapper) {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(MainAI.changeOil(-55)) {
-                    bodyFactoryWrapper.createBody(
-                            new Fighter(basePosition, shipSize, fighterDefaultHealth), false
-                    );
-                    System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
-                }
-            }
-        };
+            case FIGHTER:
+                return new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if(MainAI.changeOil(-55)) {
+                            bodyFactoryWrapper.createBody(
+                                    new Fighter(basePosition, shipSize, fighterDefaultHealth), false
+                            );
+                            System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
+                        }
+                    }
+                };
+        }
+        System.err.println("such ship do not exist");
+        return null;
     }
 
     public enum ShipType {

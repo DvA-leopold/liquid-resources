@@ -4,13 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.game.world.Updatable;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.drawable.DrawableBody;
 
-public class Rocket implements DrawableBody {
+public class Rocket implements DrawableBody, Updatable {
     public Rocket(Vector2 defaultPosition, Vector2 rocketSize) {
         rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
         rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
@@ -18,7 +20,7 @@ public class Rocket implements DrawableBody {
 
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x, defaultPosition.y);
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(rocketSize.x * 0.5f, rocketSize.y *0.5f);
@@ -37,6 +39,11 @@ public class Rocket implements DrawableBody {
     }
 
     @Override
+    public void update(final Body body) {
+        body.applyForceToCenter(10, 3, true);
+    }
+
+    @Override
     public BodyDef getBodyDef() {
         return bodyDef;
     }
@@ -46,13 +53,13 @@ public class Rocket implements DrawableBody {
         return fixtureDef;
     }
 
+
     @Override
     public void dispose() {
 
     }
-
-
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
+
     private Sprite rocketSprite;
 }

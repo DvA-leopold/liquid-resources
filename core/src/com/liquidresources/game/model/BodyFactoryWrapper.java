@@ -1,14 +1,16 @@
 package com.liquidresources.game.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.view.drawable.DrawableBody;
 
 import java.util.HashSet;
 
 public class BodyFactoryWrapper {
-    public BodyFactoryWrapper(final World physicsWorld) {
-        this.physicsWorld = physicsWorld;
+    public BodyFactoryWrapper() {
+        physicsWorld = new World(new Vector2(0, 0), true);
         dynamicObjects = new HashSet<>();
         staticConstructions = new HashSet<>();
     }
@@ -38,11 +40,25 @@ public class BodyFactoryWrapper {
         } else {
             debug = dynamicObjects.remove(bodyForDestroy);
         }
-        //TODO dispose bodies shapes
+
         if (!debug) {
             System.err.println("no such body in a set! " + isBodyStatic);
         }
         physicsWorld.destroyBody(bodyForDestroy);
+    }
+
+    public void updateWorld() {
+        physicsWorld.step(1 / 60f, 6, 2);
+    }
+
+    public void dispose() {
+        Array<Body> worldBodies = new Array<>(physicsWorld.getBodyCount());
+        physicsWorld.getBodies(worldBodies);
+        for (Body body : worldBodies) {
+            physicsWorld.destroyBody(body);
+        }
+
+        physicsWorld.dispose();
     }
 
     public HashSet<Body> getDynamicObjects() {

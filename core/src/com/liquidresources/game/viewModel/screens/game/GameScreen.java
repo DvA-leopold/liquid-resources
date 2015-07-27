@@ -2,10 +2,7 @@ package com.liquidresources.game.viewModel.screens.game;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
@@ -15,9 +12,7 @@ import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgets
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        physicsWorld = new World(new Vector2(0, 0), true);
-
-        BodyFactoryWrapper bodyFactoryWrapper = new BodyFactoryWrapper(physicsWorld);
+        bodyFactoryWrapper = new BodyFactoryWrapper();
         gameRenderer = new GameRenderer(new Vector2(100f, 80f), bodyFactoryWrapper);
 
         gameWorldModel = new GameWorldModel(
@@ -64,8 +59,6 @@ public class GameScreen implements Screen {
         gameScreenWidgetGroup.render();
 
         gameWorldModel.update(delta);
-
-        physicsWorld.step(1 / 60f, 6, 2);
     }
 
     @Override
@@ -86,23 +79,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        gameRenderer.dispose();
         gameScreenWidgetGroup.dispose();
-
-        Array<Body> worldBodies = new Array<>(physicsWorld.getBodyCount());
-        physicsWorld.getBodies(worldBodies);
-        for (Body body : worldBodies) {
-            physicsWorld.destroyBody(body);
-        }
-
-        physicsWorld.dispose();
+        gameRenderer.dispose();
+        bodyFactoryWrapper.dispose();
     }
 
 
-    final private World physicsWorld;
-    final private GameRenderer gameRenderer;
-
-    final private GameWorldModel gameWorldModel;
-
     final private GameScreenWidgetsGroup gameScreenWidgetGroup;
+
+    final private BodyFactoryWrapper bodyFactoryWrapper;
+    final private GameWorldModel gameWorldModel;
+    final private GameRenderer gameRenderer;
 }

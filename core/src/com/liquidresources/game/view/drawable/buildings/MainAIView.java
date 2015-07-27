@@ -18,7 +18,7 @@ public class MainAIView implements DrawableBody {
         bodyDef.position.set(initCoords.x + graphicsWidth * 0.5f, initCoords.y + graphicsHeight);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        PolygonShape bodyShape = new PolygonShape();
+        PolygonShape bodyShape = new PolygonShape(); //TODO memory leakage bodyshape dispose
         bodyShape.setAsBox(graphicsWidth * 0.5f, graphicsHeight);
 
         //TODO change to normal values later
