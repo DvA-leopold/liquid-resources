@@ -10,6 +10,7 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.view.GameRenderer;
+import com.liquidresources.game.viewModel.ActionsListener;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameScreen implements Screen {
@@ -36,21 +37,25 @@ public class GameScreen implements Screen {
         Box2D.init();
 
         gameRenderer.show();
-        gameScreenWidgetGroup.setListeners();
+        gameScreenWidgetGroup.addListener(null, ActionsListener.ADDITION_INIT_ACTION);
 
-        gameScreenWidgetGroup.addRocketFireListener(
-                gameWorldModel.getRocketFireEventListener()
+        gameScreenWidgetGroup.addListener(
+                gameWorldModel.getRocketFireEventListener(), ActionsListener.ROCKET_FIRE_ACTION
         );
 
-        gameScreenWidgetGroup.addBombersButtonListener(
-                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER)
+        gameScreenWidgetGroup.addListener(
+                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER),
+                ActionsListener.CREATE_BOMBER_ACTION
         );
 
-        gameScreenWidgetGroup.addFightersButtonListener(
-                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER)
+        gameScreenWidgetGroup.addListener(
+                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER),
+                ActionsListener.CREATE_FIGHTER_ACTION
         );
 
-        gameScreenWidgetGroup.addIonShieldListener(gameWorldModel.getMainAIListener());
+        gameScreenWidgetGroup.addListener(
+                gameWorldModel.getMainAIListener(), ActionsListener.ION_SHIELD_ACTION
+        );
     }
 
     @Override

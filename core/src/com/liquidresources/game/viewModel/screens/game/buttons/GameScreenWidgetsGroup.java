@@ -14,6 +14,7 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.windows.GameOptionWindow;
+import com.liquidresources.game.viewModel.ActionsListener;
 import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.WidgetsGroup;
 
@@ -69,41 +70,33 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
     }
 
     @Override
-    public void setListeners() {
-        gameOptionWindow.setListeners();
-        optionWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameOptionWindow.setVisible(true);
-                setButtonVisible(false);
-                GameWorldModel.changeWorldState(GameStates.GAME_PAUSED);
-            }
-        });
+    public void addListener(EventListener listener, ActionsListener action) {
+        switch (action) {
+            case ION_SHIELD_ACTION:
+                ionShieldButton.addListener(listener);
+                break;
+            case ROCKET_FIRE_ACTION:
+                rocketFire.addListener(listener);
+                break;
+            case CREATE_BOMBER_ACTION:
+                bomberButton.addListener(listener);
+                break;
+            case CREATE_FIGHTER_ACTION:
+                fighterButton.addListener(listener);
+                break;
+            case ADDITION_INIT_ACTION:
+                gameOptionWindow.setListeners();
+                optionWindowButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        gameOptionWindow.setVisible(true);
+                        setButtonVisible(false);
+                        GameWorldModel.changeWorldState(GameStates.GAME_PAUSED);
+                    }
+                });
 
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    public void addIonShieldListener(EventListener listener) {
-        if (!ionShieldButton.addListener(listener)) {
-            System.err.println("ion shield listener do not set");
-        }
-    }
-
-    public void addRocketFireListener(EventListener listener) {
-        if (!rocketFire.addListener(listener)) {
-            System.err.println("rocketFire listener do not set");
-        }
-    }
-
-    public void addBombersButtonListener(EventListener listener) {
-        if (!bomberButton.addListener(listener)) {
-            System.err.println("bombers listener do not set");
-        }
-    }
-
-    public void addFightersButtonListener(EventListener listener) {
-        if (!fighterButton.addListener(listener)) {
-            System.err.println("fighters listener do not set");
+                Gdx.input.setInputProcessor(stage);
+                break;
         }
     }
 
