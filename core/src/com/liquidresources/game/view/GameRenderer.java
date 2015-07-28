@@ -16,10 +16,9 @@ import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.animation.oilpump.OilPumpAnimation;
-import com.liquidresources.game.view.drawable.DrawableBody;
-import com.liquidresources.game.view.drawable.buildings.BaseShieldView;
-import com.liquidresources.game.view.drawable.buildings.MainAIView;
-import com.liquidresources.game.view.drawable.buildings.ShipFactoryViewFacade;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.BaseShieldView;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.MainAIView;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 

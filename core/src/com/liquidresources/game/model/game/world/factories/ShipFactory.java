@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.game.world.base.MainAI;
-import com.liquidresources.game.view.drawable.ships.Bomber;
-import com.liquidresources.game.view.drawable.ships.Fighter;
+import com.liquidresources.game.viewModel.bodies.udata.ships.Bomber;
+import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 
 public class ShipFactory {
     public ShipFactory(Vector2 basePosition,

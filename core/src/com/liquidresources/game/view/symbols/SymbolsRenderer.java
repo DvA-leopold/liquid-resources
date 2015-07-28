@@ -39,8 +39,8 @@ public class SymbolsRenderer {
     }
 
 
-    private float xDefaultPosition, yDefaultPosition;
-    private float width, height;
+    final private float xDefaultPosition, yDefaultPosition;
+    final private float width, height;
 
     private ArrayList<Sprite> texturesNumbersArray;
 }

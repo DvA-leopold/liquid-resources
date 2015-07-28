@@ -1,4 +1,4 @@
-package com.liquidresources.game.view.drawable.ships;
+package com.liquidresources.game.viewModel.bodies.udata.ships;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,11 +10,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
-public class Fighter extends Ship {
-    public Fighter(Vector2 defaultPosition, Vector2 shipSize, int defaultHealth) {
+public class Bomber extends Ship {
+    public Bomber(Vector2 defaultPosition, Vector2 shipSize, int defaultHealth) {
         super(defaultPosition, shipSize, defaultHealth);
 
-        shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/fighter.png"));
+        shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/bomber.png"));
         shipSprite.setPosition(defaultPosition.x - shipSize.x * 0.5f, defaultPosition.y - shipSize.y * 0.5f);
         shipSprite.setSize(shipSize.x, shipSize.y);
     }
@@ -39,12 +39,15 @@ public class Fighter extends Ship {
 
     @Override
     public int doDamage() {
-        return 28;
+        return 55;
     }
 
     @Override
     public void draw(Batch batch, Vector2 position, float delta) {
-        shipSprite.setPosition(position.x - shipSprite.getWidth() * 0.5f, position.y - shipSprite.getHeight() * 0.5f);
+        shipSprite.setPosition(
+                position.x - shipSprite.getWidth() * 0.5f,
+                position.y - shipSprite.getHeight() * 0.5f
+        );
         shipSprite.draw(batch);
     }
 

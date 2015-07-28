@@ -1,4 +1,4 @@
-package com.liquidresources.game.view.drawable.buildings;
+package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.drawable.DrawableBody;
+import com.liquidresources.game.view.DrawableBody;
 
 public class MainAIView implements DrawableBody {
     public MainAIView(Vector2 initCoords, float graphicsWidth, float graphicsHeight) {

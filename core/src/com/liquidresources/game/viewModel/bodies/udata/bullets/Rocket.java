@@ -1,4 +1,4 @@
-package com.liquidresources.game.view.drawable.bullets;
+package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.game.world.Updatable;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.drawable.DrawableBody;
+import com.liquidresources.game.view.DrawableBody;
 
 public class Rocket implements DrawableBody, Updatable {
     public Rocket(Vector2 defaultPosition, Vector2 rocketSize) {

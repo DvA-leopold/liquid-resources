@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.animation.Animator;
-import com.liquidresources.game.view.drawable.DrawableBody;
+import com.liquidresources.game.view.DrawableBody;
 
 public class OilPumpAnimation implements Animator, DrawableBody {
     public OilPumpAnimation(float defaultAnimationSpeed,

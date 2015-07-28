@@ -1,4 +1,4 @@
-package com.liquidresources.game.view.drawable.buildings;
+package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.drawable.DrawableBody;
+import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.view.particles.SmokeParticles;
 
 public class ShipFactoryViewFacade implements DrawableBody {

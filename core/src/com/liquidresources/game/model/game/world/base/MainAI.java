@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.view.drawable.bullets.Rocket;
+import com.liquidresources.game.viewModel.bodies.udata.bullets.Rocket;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class MainAI {
