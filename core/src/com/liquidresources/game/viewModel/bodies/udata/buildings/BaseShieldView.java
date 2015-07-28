@@ -19,6 +19,11 @@ public class BaseShieldView implements DrawableBody, Updatable {
     }
 
     @Override
+    public void update(Body body) {
+        //TODO update for collisions and response
+    }
+
+    @Override
     public BodyDef getBodyDef() {
         return null;
     }
@@ -26,10 +31,5 @@ public class BaseShieldView implements DrawableBody, Updatable {
     @Override
     public FixtureDef getFixtureDef() {
         return null;
-    }
-
-    @Override
-    public void update(Body body) {
-        //TODO update for collisions and response
     }
 }
