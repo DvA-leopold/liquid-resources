@@ -1,4 +1,4 @@
-package com.liquidresources.game.viewModel.bodies.udata.buildings;
+package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -8,11 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.model.Updatable;
 import com.liquidresources.game.view.DrawableBody;
 
-public class BaseShieldView implements DrawableBody, Updatable {
-    public BaseShieldView() {
-
-    }
-
+public class Bomb implements DrawableBody, Updatable {
     @Override
     public void draw(Batch batch, Vector2 position, float delta) {
 
@@ -30,6 +26,6 @@ public class BaseShieldView implements DrawableBody, Updatable {
 
     @Override
     public void update(Body body) {
-        //TODO update for collisions and response
+
     }
 }

@@ -4,14 +4,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.Updatable;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.view.particles.SmokeParticles;
 
-public class ShipFactoryViewFacade implements DrawableBody {
+public class ShipFactoryViewFacade implements DrawableBody, Updatable {
     public ShipFactoryViewFacade(float xDefaultPosition, float yDefaultPosition, float width, float height) {
         Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
@@ -53,6 +55,11 @@ public class ShipFactoryViewFacade implements DrawableBody {
     }
 
     @Override
+    public void update(Body body) {
+
+    }
+
+    @Override
     public BodyDef getBodyDef() {
         return bodyDef;
     }
@@ -82,7 +89,6 @@ public class ShipFactoryViewFacade implements DrawableBody {
         return bodyDef.position;
     }
 
-    @Override
     public void dispose() {
         smokeParticles.dispose();
     }
@@ -92,5 +98,6 @@ public class ShipFactoryViewFacade implements DrawableBody {
     private FixtureDef fixtureDef;
 
     final private Sprite shipFactory;
+
     final private SmokeParticles smokeParticles;
 }

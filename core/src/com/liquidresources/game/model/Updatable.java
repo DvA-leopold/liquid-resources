@@ -1,4 +1,4 @@
-package com.liquidresources.game.model.game.world;
+package com.liquidresources.game.model;
 
 import com.badlogic.gdx.physics.box2d.Body;
 

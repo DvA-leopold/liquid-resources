@@ -136,6 +136,10 @@ public class GameRenderer {
         symbolsRenderer.renderNumber(batch, MainAI.getOilBarrels());
         symbolsRenderer.renderNumber(batch, MainAI.getWaterBarrels(), 0, -40);
 
+        for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
+            ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
+        }
+
         batch.end();
 
         worldRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);

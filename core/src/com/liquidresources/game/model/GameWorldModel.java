@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.liquidresources.game.model.game.world.Updatable;
 import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
@@ -43,10 +42,10 @@ public class GameWorldModel {
                         oilPump1.getResources(delta) + oilPump2.getResources(delta),
                         waterPump.getResources(delta)
                 );
-                bodyFactoryWrapper.updateWorld();
                 for (Body body : bodyFactoryWrapper.getDynamicObjects()) {
                     ((Updatable) body.getUserData()).update(body);
                 }
+                bodyFactoryWrapper.updateWorld();
                 break;
             case GAME_PAUSED:
                 break;

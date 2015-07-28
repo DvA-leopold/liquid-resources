@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.liquidresources.game.model.Updatable;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.DrawableBody;
 
-public class MainAIView implements DrawableBody {
+public class MainAIView implements DrawableBody, Updatable {
     public MainAIView(Vector2 initCoords, float graphicsWidth, float graphicsHeight) {
         mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));
         mainAI.setPosition(initCoords.x, initCoords.y);
@@ -18,7 +19,7 @@ public class MainAIView implements DrawableBody {
         bodyDef.position.set(initCoords.x + graphicsWidth * 0.5f, initCoords.y + graphicsHeight);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        PolygonShape bodyShape = new PolygonShape(); //TODO memory leakage bodyshape dispose
+        PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(graphicsWidth * 0.5f, graphicsHeight);
 
         //TODO change to normal values later
@@ -29,12 +30,17 @@ public class MainAIView implements DrawableBody {
         fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = true;
 
-        //bodyShape.dispose(); TODO dispose shape no longer needed, now its crash
+        //bodyShape.dispose(); //TODO memory leakage bodies shape dispose
     }
 
     @Override
     public void draw(Batch batch, Vector2 position, float delta) {
         mainAI.draw(batch);
+    }
+
+    @Override
+    public void update(Body body) {
+
     }
 
     @Override
@@ -46,9 +52,6 @@ public class MainAIView implements DrawableBody {
     public FixtureDef getFixtureDef() {
         return fixtureDef;
     }
-
-    @Override
-    public void dispose() { }
 
     public float getWidth() {
         return mainAI.getWidth();

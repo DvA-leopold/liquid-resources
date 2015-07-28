@@ -57,10 +57,5 @@ public class Bomber extends Ship {
     }
 
 
-    @Override
-    public void dispose() {
-
-    }
-
     final private Sprite shipSprite;
 }

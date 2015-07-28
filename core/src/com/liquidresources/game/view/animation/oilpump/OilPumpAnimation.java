@@ -106,9 +106,6 @@ public class OilPumpAnimation implements Animator, DrawableBody {
         return height;
     }
 
-    @Override
-    public void dispose() { }
-
 
     final private float xDefaultPosition, yDefaultPosition;
     final private float width, height;

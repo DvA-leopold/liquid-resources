@@ -44,7 +44,10 @@ public class Fighter extends Ship {
 
     @Override
     public void draw(Batch batch, Vector2 position, float delta) {
-        shipSprite.setPosition(position.x - shipSprite.getWidth() * 0.5f, position.y - shipSprite.getHeight() * 0.5f);
+        shipSprite.setPosition(
+                position.x - shipSprite.getWidth() * 0.5f,
+                position.y - shipSprite.getHeight() * 0.5f
+        );
         shipSprite.draw(batch);
     }
 
@@ -53,11 +56,6 @@ public class Fighter extends Ship {
 
     }
 
-
-    @Override
-    public void dispose() {
-
-    }
 
     final private Sprite shipSprite;
 }
