@@ -1,22 +1,24 @@
-package com.liquidresources.game.view.animation.oilpump;
+package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.animation.Animator;
-import com.liquidresources.game.view.DrawableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class OilPumpAnimation implements Animator, DrawableBody {
-    public OilPumpAnimation(float defaultAnimationSpeed,
-                            float xDefaultPosition, float yDefaultPosition,
-                            float width, float height,
-                            Animation.PlayMode animationPlayMode) {
+public class OilPumpFacade implements Animator, UniversalBody {
+    public OilPumpFacade(float defaultAnimationSpeed,
+                         float xDefaultPosition, float yDefaultPosition,
+                         float width, float height,
+                         Animation.PlayMode animationPlayMode) {
 
         this.defaultAnimationSpeed = defaultAnimationSpeed;
         workSpeed = defaultAnimationSpeed / 2;
@@ -68,6 +70,26 @@ public class OilPumpAnimation implements Animator, DrawableBody {
         } else {
             batch.draw(pompAnimation.getKeyFrame(stateTime, true), position.x, position.y, width, height);
         }
+    }
+
+    @Override
+    public void update(final Body body, float delta) {
+
+    }
+
+    @Override
+    public void beginCollisionContact(final Body bodyA) {
+
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.OIL_POMP;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return true;
     }
 
     @Override

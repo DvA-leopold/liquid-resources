@@ -5,27 +5,38 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.liquidresources.game.model.Updatable;
+import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.UpdatableBody;
 import com.liquidresources.game.view.DrawableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class Bomb implements DrawableBody, Updatable {
+public class Bomb extends Bullet {
+    public Bomb(final Vector2 defaultPosition, final Vector2 bulletSize, BodyDef.BodyType bodyType) {
+        super(defaultPosition, bulletSize, bodyType);
+    }
+
     @Override
-    public void draw(Batch batch, Vector2 position, float delta) {
+    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 bulletSize, BodyDef.BodyType bodyType) {
 
     }
 
     @Override
-    public BodyDef getBodyDef() {
-        return null;
+    public void draw(final Batch batch, final Vector2 position, float delta) {
+
     }
 
     @Override
-    public FixtureDef getFixtureDef() {
-        return null;
+    public void update(final Body body, float delta) {
+
     }
 
     @Override
-    public void update(Body body) {
+    public void beginCollisionContact(final Body bodyA) {
 
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.BOMB;
     }
 }

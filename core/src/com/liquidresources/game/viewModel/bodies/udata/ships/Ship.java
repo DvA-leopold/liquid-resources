@@ -3,14 +3,14 @@ package com.liquidresources.game.viewModel.bodies.udata.ships;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.liquidresources.game.model.Updatable;
-import com.liquidresources.game.view.DrawableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public abstract class Ship implements DrawableBody, Updatable {
+public abstract class Ship implements UniversalBody {
     public Ship(final Vector2 defaultPosition, final Vector2 shipSize, int health) {
         this.defaultPosition = defaultPosition;
         this.shipSize = shipSize;
         this.health = health;
+        isDestroyed = false;
 
         initBodyDefAndFixture();
     }
@@ -23,6 +23,11 @@ public abstract class Ship implements DrawableBody, Updatable {
     @Override
     public FixtureDef getFixtureDef() {
         return fixtureDef;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return isDestroyed;
     }
 
     public abstract int doDamage();
@@ -41,4 +46,6 @@ public abstract class Ship implements DrawableBody, Updatable {
 
     final protected Vector2 defaultPosition;
     final protected Vector2 shipSize;
+
+    private boolean isDestroyed;
 }

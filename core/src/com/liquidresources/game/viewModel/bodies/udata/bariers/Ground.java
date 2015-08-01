@@ -1,0 +1,63 @@
+package com.liquidresources.game.viewModel.bodies.udata.bariers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
+
+public class Ground implements UniversalBody {
+    public Ground(final Vector2 groundPosition) {
+        bodyDef = new BodyDef();
+        bodyDef.position.set(groundPosition);
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+
+        PolygonShape bodyShape = new PolygonShape();
+        bodyShape.setAsBox(1, Gdx.graphics.getWidth() * 1.2f);
+
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = bodyShape;
+    }
+    @Override
+    public void draw(final Batch batch, final Vector2 position, float delta) {
+
+    }
+
+    @Override
+    public BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    @Override
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    @Override
+    public void update(final Body body, float delta) {
+
+    }
+
+    @Override
+    public void beginCollisionContact(final Body bodyA) {
+
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.GROUND;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return false;
+    }
+
+
+    final private BodyDef bodyDef;
+    final private FixtureDef fixtureDef;
+}

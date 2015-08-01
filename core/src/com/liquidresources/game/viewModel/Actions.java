@@ -1,6 +1,6 @@
 package com.liquidresources.game.viewModel;
 
-public enum ActionsListener {
+public enum Actions {
     ION_SHIELD_ACTION,
     ROCKET_FIRE_ACTION,
     CREATE_BOMBER_ACTION,

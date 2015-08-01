@@ -14,7 +14,7 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.windows.GameOptionWindow;
-import com.liquidresources.game.viewModel.ActionsListener;
+import com.liquidresources.game.viewModel.Actions;
 import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.WidgetsGroup;
 
@@ -70,7 +70,7 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
     }
 
     @Override
-    public void addListener(EventListener listener, ActionsListener action) {
+    public void addListener(EventListener listener, Actions action) {
         switch (action) {
             case ION_SHIELD_ACTION:
                 ionShieldButton.addListener(listener);

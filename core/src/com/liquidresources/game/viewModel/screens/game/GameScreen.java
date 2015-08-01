@@ -7,12 +7,12 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.view.GameRenderer;
-import com.liquidresources.game.viewModel.ActionsListener;
+import com.liquidresources.game.viewModel.Actions;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        bodyFactoryWrapper = new BodyFactoryWrapper();
+        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -10));
         gameRenderer = new GameRenderer(new Vector2(100f, 80f), bodyFactoryWrapper);
 
         gameWorldModel = new GameWorldModel(
@@ -32,24 +32,24 @@ public class GameScreen implements Screen {
         Box2D.init();
 
         gameRenderer.show();
-        gameScreenWidgetGroup.addListener(null, ActionsListener.ADDITION_INIT_ACTION);
+        gameScreenWidgetGroup.addListener(null, Actions.ADDITION_INIT_ACTION);
 
         gameScreenWidgetGroup.addListener(
-                gameWorldModel.getRocketFireEventListener(), ActionsListener.ROCKET_FIRE_ACTION
+                gameWorldModel.getRocketFireEventListener(), Actions.ROCKET_FIRE_ACTION
         );
 
         gameScreenWidgetGroup.addListener(
                 gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER),
-                ActionsListener.CREATE_BOMBER_ACTION
+                Actions.CREATE_BOMBER_ACTION
         );
 
         gameScreenWidgetGroup.addListener(
                 gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER),
-                ActionsListener.CREATE_FIGHTER_ACTION
+                Actions.CREATE_FIGHTER_ACTION
         );
 
         gameScreenWidgetGroup.addListener(
-                gameWorldModel.getMainAIListener(), ActionsListener.ION_SHIELD_ACTION
+                gameWorldModel.getMainAIListener(), Actions.ION_SHIELD_ACTION
         );
     }
 

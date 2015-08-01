@@ -8,10 +8,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class Fighter extends Ship {
-    public Fighter(Vector2 defaultPosition, Vector2 shipSize, int defaultHealth) {
+    public Fighter(final Vector2 defaultPosition, final Vector2 shipSize, int defaultHealth) {
         super(defaultPosition, shipSize, defaultHealth);
 
         shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/fighter.png"));
@@ -43,7 +44,7 @@ public class Fighter extends Ship {
     }
 
     @Override
-    public void draw(Batch batch, Vector2 position, float delta) {
+    public void draw(final Batch batch, final Vector2 position, float delta) {
         shipSprite.setPosition(
                 position.x - shipSprite.getWidth() * 0.5f,
                 position.y - shipSprite.getHeight() * 0.5f
@@ -52,8 +53,18 @@ public class Fighter extends Ship {
     }
 
     @Override
-    public void update(final Body body) {
+    public void update(final Body body, float delta) {
 
+    }
+
+    @Override
+    public void beginCollisionContact(final Body bodyA) {
+
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.FIGHTER_SHIP;
     }
 
 

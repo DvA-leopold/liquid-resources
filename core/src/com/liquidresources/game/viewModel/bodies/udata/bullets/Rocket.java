@@ -3,59 +3,73 @@ package com.liquidresources.game.viewModel.bodies.udata.bullets;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.liquidresources.game.model.Updatable;
+import com.liquidresources.game.model.BodyFactoryWrapper;
+import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.UpdatableBody;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.DrawableBody;
 
-public class Rocket implements DrawableBody, Updatable {
-    public Rocket(Vector2 defaultPosition, Vector2 rocketSize) {
-        rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
-        rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
-        rocketSprite.setSize(rocketSize.x, rocketSize.y);
+public class Rocket extends Bullet {
+    public Rocket(final Vector2 defaultPosition, final Vector2 rocketSize) {
+        super(defaultPosition, rocketSize, BodyDef.BodyType.DynamicBody);
+        bulletSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
+        bulletSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
+        bulletSprite.setSize(rocketSize.x, rocketSize.y);
 
+        forceY = MathUtils.random(80, 90);
+    }
+
+    @Override
+    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 bulletSize, BodyDef.BodyType bodyType) {
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x, defaultPosition.y);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = bodyType;
 
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(rocketSize.x * 0.5f, rocketSize.y *0.5f);
+        PolygonShape bodyShape = new PolygonShape(); // TODO сделать фигуру различной для разных типов пуль
+        bodyShape.setAsBox(bulletSize.x * 0.5f, bulletSize.y * 0.5f);
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
     }
 
     @Override
-    public void draw(Batch batch, Vector2 position, float delta) {
-        rocketSprite.setPosition(
-                position.x - rocketSprite.getWidth() * 0.5f,
-                position.y - rocketSprite.getHeight() * 0.5f
+    public void draw(final Batch batch, final Vector2 position, float delta) {
+        bulletSprite.setPosition(
+                position.x - bulletSprite.getWidth() * 0.5f,
+                position.y - bulletSprite.getHeight() * 0.5f
         );
-        rocketSprite.draw(batch);
+        bulletSprite.draw(batch);
     }
 
     @Override
-    public void update(final Body body) {
-        body.applyForceToCenter(10, 3, true);
+    public void update(final Body body, float delta) {
+        forceY -= delta * 25;
+        body.applyForceToCenter(40, forceY, true);
     }
 
     @Override
-    public BodyDef getBodyDef() {
-        return bodyDef;
+    public void beginCollisionContact(final Body bodyA) {
+        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.GROUND) {
+            isDestroyed = true;
+            BodyFactoryWrapper.destroyBody();
+        }
+
+        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD) {
+            isDestroyed = true;
+            BodyFactoryWrapper.destroyBody();
+        }
     }
 
     @Override
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
+    public BodyType getBodyType() {
+        return BodyType.ROCKET;
     }
 
 
-    private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
-
-    private Sprite rocketSprite;
+    private float forceY;
 }

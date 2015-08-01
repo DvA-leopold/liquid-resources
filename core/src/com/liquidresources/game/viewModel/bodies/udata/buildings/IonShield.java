@@ -1,18 +1,16 @@
-package com.liquidresources.game.viewModel.bodies.udata.bullets;
+package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.model.BodyType;
-import com.liquidresources.game.model.UpdatableBody;
-import com.liquidresources.game.view.DrawableBody;
 
-public class Laser extends Bullet {
-    public Laser(final Vector2 defaultPosition, final Vector2 bulletSize, BodyDef.BodyType bodyType) {
-        super(defaultPosition, bulletSize, bodyType);
+public class IonShield extends Building {
+    public IonShield(final Vector2 defaultPosition, final Vector2 buildingSize, BodyDef.BodyType bodyType) {
+        super(defaultPosition, buildingSize, bodyType);
     }
+
 
     @Override
     protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 bulletSize, BodyDef.BodyType bodyType) {
@@ -36,6 +34,6 @@ public class Laser extends Bullet {
 
     @Override
     public BodyType getBodyType() {
-        return BodyType.LASER;
+        return BodyType.ION_SHIELD;
     }
 }

@@ -78,7 +78,7 @@ public class MainAI {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (changeOil(-100)) {
+                if (changeOil(-20)) {
                     bodyFactoryWrapper.createBody(new Rocket(position, rocketSize), false);
                 }
             }

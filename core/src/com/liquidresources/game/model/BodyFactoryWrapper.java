@@ -1,24 +1,61 @@
 package com.liquidresources.game.model;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.liquidresources.game.view.DrawableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class BodyFactoryWrapper {
-    public BodyFactoryWrapper() {
-        physicsWorld = new World(new Vector2(0, 0), true);
+    public BodyFactoryWrapper(final Vector2 worldGravity) {
+        bodyForDestroy = 0;
+        physicsWorld = new World(worldGravity, true);
         dynamicObjects = new HashSet<>();
         staticConstructions = new HashSet<>();
+
+        physicsWorld.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                /*WorldManifold manifold = contact.getWorldManifold();
+                if (contact.getFixtureA().getBody().getUserData() != null) {
+                    System.out.println(((UpdatableBody) contact.getFixtureA().getBody().getUserData()).getBodyType());
+                } else {
+                    System.out.println("null data A");
+                }
+
+                if (contact.getFixtureB().getBody().getUserData() != null) {
+                    System.out.println(((UpdatableBody) contact.getFixtureB().getBody().getUserData()).getBodyType());
+                } else {
+                    System.out.println("null data B");
+                }*/
+
+                ((UpdatableBody) contact.getFixtureB().getBody().getUserData()).
+                        beginCollisionContact(contact.getFixtureA().getBody());
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+                //System.out.println("end");
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+                //System.out.println("pre");
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+                //System.out.println("post");
+            }
+        });
     }
 
-    public Body createBody(DrawableBody drawableBody, boolean isBodyStatic) {
-        Body bodyForCreate = physicsWorld.createBody(drawableBody.getBodyDef());
-        bodyForCreate.createFixture(drawableBody.getFixtureDef());
-        bodyForCreate.setUserData(drawableBody);
+    public void createBody(final UniversalBody universalBody, boolean isBodyStatic) {
+        Body bodyForCreate = physicsWorld.createBody(universalBody.getBodyDef());
+        bodyForCreate.createFixture(universalBody.getFixtureDef());
+        bodyForCreate.setUserData(universalBody);
         boolean debug; //TODO remove in release
 
         if (isBodyStatic) {
@@ -30,10 +67,12 @@ public class BodyFactoryWrapper {
         if (!debug) {
             System.err.println("Error, container already have such element " + isBodyStatic);
         }
-        return bodyForCreate;
     }
 
     public void destroyBody(Body bodyForDestroy, boolean isBodyStatic) {
+        //bodyForDestroy.setActive(false);
+        physicsWorld.destroyBody(bodyForDestroy);
+
         boolean debug;
         if (isBodyStatic) {
             debug = staticConstructions.remove(bodyForDestroy);
@@ -44,11 +83,11 @@ public class BodyFactoryWrapper {
         if (!debug) {
             System.err.println("no such body in a set! " + isBodyStatic);
         }
-        physicsWorld.destroyBody(bodyForDestroy);
     }
 
     public void updateWorld() {
         physicsWorld.step(1 / 60f, 6, 2);
+        collectGarbage();
     }
 
     public void dispose() {
@@ -73,9 +112,31 @@ public class BodyFactoryWrapper {
         return physicsWorld;
     }
 
+    public static void destroyBody() {
+        bodyForDestroy++;
+    }
+
+    //TODO оптимизировать сборку мусора, возможно лучше подписаться слушателем на специальные события колизий
+    private void collectGarbage() {
+        if (bodyForDestroy > 0) {
+            Iterator<Body> bodyIterator = dynamicObjects.iterator(); // TODO добавить уничтожение тел другого типа
+            while (bodyIterator.hasNext() && bodyForDestroy > 0) {
+                Body tempBody = bodyIterator.next();
+                if (((UpdatableBody) tempBody.getUserData()).isDestroyed()) {
+                    tempBody.setActive(false);
+                    physicsWorld.destroyBody(tempBody);
+                    bodyIterator.remove();
+                    bodyForDestroy--;
+                }
+            }
+        }
+    }
+
+
+    private static short bodyForDestroy;
 
     final private World physicsWorld;
-
     final private HashSet<Body> dynamicObjects;
+
     final private HashSet<Body> staticConstructions;
 }

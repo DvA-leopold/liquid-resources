@@ -43,7 +43,7 @@ public class GameWorldModel {
                         waterPump.getResources(delta)
                 );
                 for (Body body : bodyFactoryWrapper.getDynamicObjects()) {
-                    ((Updatable) body.getUserData()).update(body);
+                    ((UpdatableBody) body.getUserData()).update(body, delta);
                 }
                 bodyFactoryWrapper.updateWorld();
                 break;

@@ -8,12 +8,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.liquidresources.game.model.Updatable;
+import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.view.particles.SmokeParticles;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class ShipFactoryViewFacade implements DrawableBody, Updatable {
+public class ShipFactoryViewFacade implements UniversalBody {
     public ShipFactoryViewFacade(float xDefaultPosition, float yDefaultPosition, float width, float height) {
         Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
@@ -49,14 +49,29 @@ public class ShipFactoryViewFacade implements DrawableBody, Updatable {
      * @param delta delta time
      */
     @Override
-    public void draw(final Batch batch, Vector2 position, float delta) {
+    public void draw(final Batch batch, final Vector2 position, float delta) {
         smokeParticles.draw(batch, delta);
         shipFactory.draw(batch);
     }
 
     @Override
-    public void update(Body body) {
+    public void update(final Body body, float delta) {
 
+    }
+
+    @Override
+    public void beginCollisionContact(final Body bodyA) {
+
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.SHIP_FACTORY;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return true;
     }
 
     @Override

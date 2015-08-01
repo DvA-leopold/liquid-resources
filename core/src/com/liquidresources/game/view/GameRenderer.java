@@ -12,12 +12,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
-import com.liquidresources.game.model.game.world.base.MainAI;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.animation.oilpump.OilPumpAnimation;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.BaseShieldView;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.MainAIView;
+import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.MainAI;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
@@ -41,7 +41,7 @@ public class GameRenderer {
 
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
 
-        oilPompFacade = new OilPumpAnimation(0.3f,
+        oilPompFacade = new OilPumpFacade(0.3f,
                 initCoords.x, initCoords.y,
                 graphicsWidth, graphicsHeight,
                 Animation.PlayMode.LOOP_PINGPONG
@@ -49,12 +49,15 @@ public class GameRenderer {
         bodyFactoryWrapper.createBody(oilPompFacade, true);
 
         initCoords.x += oilPompFacade.getWidth() + buildingsPositionDelimiter;
-        mainAIView = new MainAIView(initCoords, graphicsWidth, graphicsHeight);
-        bodyFactoryWrapper.createBody(mainAIView, true);
+        mainAI = new MainAI(initCoords, graphicsWidth, graphicsHeight);
+        bodyFactoryWrapper.createBody(mainAI, true);
 
-        initCoords.x += mainAIView.getWidth() + buildingsPositionDelimiter;
+        initCoords.x += mainAI.getWidth() + buildingsPositionDelimiter;
         shipFactoryFacade = new ShipFactoryViewFacade(initCoords.x, initCoords.y, graphicsWidth, graphicsHeight);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
+
+        Ground ground = new Ground(new Vector2(800, 75));
+        bodyFactoryWrapper.createBody(ground, true);
     }
 
     public void show() {
@@ -110,8 +113,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-        symbolsRenderer.renderNumber(batch, MainAI.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, MainAI.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -133,8 +136,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        symbolsRenderer.renderNumber(batch, MainAI.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, MainAI.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -158,7 +161,7 @@ public class GameRenderer {
     }
 
     public Vector2 getMainAIPosition() {
-        return mainAIView.getPosition();
+        return mainAI.getPosition();
     }
 
     public void dispose() {
@@ -174,11 +177,11 @@ public class GameRenderer {
 
     private Texture desertBackground;
 
-    private OilPumpAnimation oilPompFacade;
+    private OilPumpFacade oilPompFacade;
     private ShipFactoryViewFacade shipFactoryFacade;
 
-    private BaseShieldView baseShield;
-    private MainAIView mainAIView;
+    private IonShield baseShield;
+    private MainAI mainAI;
     private BitmapFont blackFont;
 
     final private SpriteBatch batch;
