@@ -10,6 +10,7 @@ import com.liquidresources.game.model.game.world.pumps.OilPump;
 import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
 import com.liquidresources.game.viewModel.GameStates;
+import com.liquidresources.game.viewModel.screens.game.GameScreen;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameWorldModel {
@@ -31,6 +32,8 @@ public class GameWorldModel {
                 mainAIPosition,
                 new Vector2(Gdx.graphics.getWidth() * 0.01f, Gdx.graphics.getHeight() * 0.05f)
         );
+
+        worldState = GameStates.GAME_PREPARING;
     }
 
     public void update(float delta) {
@@ -57,7 +60,7 @@ public class GameWorldModel {
     }
 
     public void pause() {
-        if (worldState != GameStates.GAME_PREPARING && worldState != GameStates.GAME_PAUSED) {
+        if (worldState != GameStates.GAME_PREPARING) {
             changeWorldState(GameStates.GAME_PREPARING);
         }
     }
@@ -87,11 +90,14 @@ public class GameWorldModel {
             case GAME_RUNNING:
                 GameScreenWidgetsGroup.setButtonVisible(true);
                 break;
+            case GAME_EXIT:
+                MainAI.dropAllData();
+                break;
         }
     }
 
 
-    private static GameStates worldState = GameStates.GAME_PREPARING;
+    private static GameStates worldState;
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 

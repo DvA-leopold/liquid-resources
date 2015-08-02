@@ -2,6 +2,7 @@ package com.liquidresources.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.debug.DebugShader;
@@ -25,7 +26,7 @@ public final class LiquidResources extends Game {
         setScreen(new LoadingScreen());
 	}
 
-	@Override
+    @Override
 	public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -56,6 +57,12 @@ public final class LiquidResources extends Game {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        super.setScreen(screen);
+        musicManager.switchSample(screen.getClass());
     }
 
     final public SpriteBatch getMainBatch() {

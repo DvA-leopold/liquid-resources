@@ -85,6 +85,10 @@ public class MainAI {
         };
     }
 
+    public static void dropAllData() {
+        oilBarrels = waterBarrels = 0;
+    }
+
     public static long getOilBarrels() {
         return oilBarrels;
     }

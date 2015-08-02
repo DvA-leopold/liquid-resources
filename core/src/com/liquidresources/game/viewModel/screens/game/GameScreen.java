@@ -1,11 +1,14 @@
 package com.liquidresources.game.viewModel.screens.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
+import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.view.GameRenderer;
 import com.liquidresources.game.viewModel.Actions;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
@@ -51,6 +54,9 @@ public class GameScreen implements Screen {
         gameScreenWidgetGroup.addListener(
                 gameWorldModel.getMainAIListener(), Actions.ION_SHIELD_ACTION
         );
+
+        ((LiquidResources) Gdx.app.getApplicationListener()).
+                getMusicManager().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
     }
 
     @Override
@@ -67,13 +73,17 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         gameWorldModel.pause();
+        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().pauseMusic();
     }
 
     @Override
-    public void resume() { }
+    public void resume() {
+        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().resumeMusic();
+    }
 
     @Override
     public void hide() {
+        //((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
         dispose();
     }
 

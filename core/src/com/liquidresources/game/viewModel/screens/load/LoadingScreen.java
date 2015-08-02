@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.screens.game.GameScreen;
+import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
 
 public class LoadingScreen implements Screen {
     public LoadingScreen() {
@@ -40,7 +41,8 @@ public class LoadingScreen implements Screen {
 
         if (progress >= 100) {
             ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().initialize();
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+            ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().startMusicManager();
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
         }
     }
 

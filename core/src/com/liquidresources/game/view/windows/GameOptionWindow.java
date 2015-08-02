@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
+import com.liquidresources.game.model.music.manager.MusicManager;
+import com.liquidresources.game.model.music.manager.SoundManager;
 import com.liquidresources.game.viewModel.GameStates;
+import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
 
 public class GameOptionWindow extends Window {
     public GameOptionWindow(String title, Skin skin) {
@@ -20,7 +24,9 @@ public class GameOptionWindow extends Window {
         setVisible(false);
 
         musicButton = new CheckBox("", skin, "musicCheckBox");
+        musicButton.setChecked(!MusicManager.isMusicEnable());
         soundButton = new CheckBox("", skin, "soundCheckBox");
+        soundButton.setChecked(!SoundManager.isIsSoundEnable());
 
         exitButton = new TextButton(I18NBundleManager.getString("exit"), skin, "exitButton");
         resumeButton = new Button(skin, "resumeButton");
@@ -38,7 +44,12 @@ public class GameOptionWindow extends Window {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO switch music
+                MusicManager.switchMusic();
+                if (MusicManager.isMusicEnable()) {
+                    ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().resumeMusic();
+                } else {
+                    ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
+                }
             }
         });
 
@@ -52,7 +63,8 @@ public class GameOptionWindow extends Window {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                ((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                GameWorldModel.changeWorldState(GameStates.GAME_EXIT);
             }
         });
 
