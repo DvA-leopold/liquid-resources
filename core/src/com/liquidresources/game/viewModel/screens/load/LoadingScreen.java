@@ -10,6 +10,8 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.screens.game.GameScreen;
 import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
 
+import java.io.FileNotFoundException;
+
 public class LoadingScreen implements Screen {
     public LoadingScreen() {
         batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
@@ -24,6 +26,7 @@ public class LoadingScreen implements Screen {
         ResourceManager.getInstance().loadSection("audio", false);
         ResourceManager.getInstance().loadSection("symbols", false);
         ResourceManager.getInstance().loadSection("fonts", false);
+        ResourceManager.getInstance().loadSection("particles", false);
     }
 
     @Override
@@ -42,6 +45,7 @@ public class LoadingScreen implements Screen {
         if (progress >= 100) {
             ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().initialize();
             ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().startMusicManager();
+            System.out.println(ResourceManager.getInstance().getTotalStorageSize());
             ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
         }
     }

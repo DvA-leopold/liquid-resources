@@ -46,11 +46,11 @@ public class MusicManager {
         musicTable.put(sClass, musicType);
     }
 
-    public void switchSample(Class<? extends Screen> sClass) {
+    public void switchSample(Class<? extends Screen> newScreenClass) {
         if (!musicManagerStarted) return;
 
-        if (musicTable.containsKey(sClass)) {
-            MusicTypes newMusicType = musicTable.get(sClass);
+        if (musicTable.containsKey(newScreenClass)) {
+            MusicTypes newMusicType = musicTable.get(newScreenClass);
             if (currentMusicType != newMusicType){
                 stop(currentMusicType);
                 play(newMusicType);
@@ -95,7 +95,7 @@ public class MusicManager {
     }
 
     private void pause(MusicTypes pauseMusicType) {
-        if (musicEnable && pauseMusicType != null) {
+        if (pauseMusicType != null) {
             switch (pauseMusicType) {
                 case MAIN_MUSIC:
                     if (mainSample.isPlaying()) {
