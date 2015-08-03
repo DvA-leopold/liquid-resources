@@ -2,16 +2,12 @@ package com.liquidresources.game.model.resource.manager;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import org.apache.commons.io.FilenameUtils;
@@ -23,7 +19,7 @@ import java.util.Queue;
 
 public class ResourceManager {
     private ResourceManager() {
-        totalStorageSize = 0;
+        currentStorageSize = 0;
         mimeFileTypes = new Hashtable<>(11);
         assetManager = new AssetManager();
 
@@ -66,7 +62,7 @@ public class ResourceManager {
             String extension = FilenameUtils.getExtension(fileName);
             if (mimeFileTypes.containsKey(extension)) {
                 getInstance().assetManager.load(file.path(), mimeFileTypes.get(extension));
-                totalStorageSize += file.length();
+                currentStorageSize += file.length();
             }
         }
         if (sync) {
@@ -88,6 +84,7 @@ public class ResourceManager {
         }
         for (FileHandle allFile : allFiles) {
             assetManager.unload(allFile.path());
+            currentStorageSize -= allFile.length();
         }
     }
 
@@ -101,6 +98,7 @@ public class ResourceManager {
         String fileExtension = FilenameUtils.getExtension(fileName);
         if (mimeFileTypes.containsKey(fileExtension)) {
             assetManager.load(fileName, mimeFileTypes.get(fileExtension));
+            currentStorageSize += new FileHandle(fileName).length();
         } else {
             throw new FileNotFoundException(" no such extension for this type of file " + fileName);
         }
@@ -154,8 +152,8 @@ public class ResourceManager {
         return filesListArray;
     }
 
-    public long getTotalStorageSize() {
-        return totalStorageSize;
+    public long getCurrentStorageSize() {
+        return currentStorageSize;
     }
 
     private static class SingletonHolder {
@@ -163,7 +161,7 @@ public class ResourceManager {
     }
 
 
-    private long totalStorageSize;
+    private long currentStorageSize;
     final private AssetManager assetManager;
     final private Hashtable<String, Class> mimeFileTypes;
 }

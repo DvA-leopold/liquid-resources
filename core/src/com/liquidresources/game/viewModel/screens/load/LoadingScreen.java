@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.viewModel.screens.game.GameScreen;
 import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
-
-import java.io.FileNotFoundException;
 
 public class LoadingScreen implements Screen {
     public LoadingScreen() {
@@ -45,7 +42,7 @@ public class LoadingScreen implements Screen {
         if (progress >= 100) {
             ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().initialize();
             ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().startMusicManager();
-            System.out.println(ResourceManager.getInstance().getTotalStorageSize());
+            System.out.println(ResourceManager.getInstance().getCurrentStorageSize());
             ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
         }
     }

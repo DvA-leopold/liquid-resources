@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.liquidresources.game.model.game.world.base.MainAI;
+import com.liquidresources.game.model.game.world.base.MainAIModel;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
 import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
 import com.liquidresources.game.viewModel.GameStates;
-import com.liquidresources.game.viewModel.screens.game.GameScreen;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameWorldModel {
@@ -28,7 +27,7 @@ public class GameWorldModel {
         oilPump1 = new OilPump(0.04f);
         oilPump2 = new OilPump(0.04f);
         waterPump = new WaterPump(0.09f);
-        mainAI = new MainAI(
+        mainAIModel = new MainAIModel(
                 mainAIPosition,
                 new Vector2(Gdx.graphics.getWidth() * 0.01f, Gdx.graphics.getHeight() * 0.05f)
         );
@@ -41,7 +40,7 @@ public class GameWorldModel {
             case GAME_PREPARING:
                 break;
             case GAME_RUNNING:
-                MainAI.update(
+                MainAIModel.update(
                         oilPump1.getResources(delta) + oilPump2.getResources(delta),
                         waterPump.getResources(delta)
                 );
@@ -70,11 +69,11 @@ public class GameWorldModel {
     }
 
     public EventListener getMainAIListener() {
-        return mainAI.switchIONShield();
+        return mainAIModel.switchIONShield();
     }
 
     public EventListener getRocketFireEventListener() {
-        return mainAI.fireRocketLaunch(bodyFactoryWrapper);
+        return mainAIModel.fireRocketLaunch(bodyFactoryWrapper);
     }
 
     public static GameStates getWorldState() {
@@ -91,7 +90,7 @@ public class GameWorldModel {
                 GameScreenWidgetsGroup.setButtonVisible(true);
                 break;
             case GAME_EXIT:
-                MainAI.dropAllData();
+                MainAIModel.dropAllData();
                 break;
         }
     }
@@ -101,7 +100,7 @@ public class GameWorldModel {
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 
-    private MainAI mainAI;
+    private MainAIModel mainAIModel;
     private Pump oilPump1, oilPump2;
     private Pump waterPump;
     private ShipFactory shipFactory;

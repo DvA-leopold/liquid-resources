@@ -33,7 +33,7 @@ public class ShipFactoryViewFacade implements UniversalBody {
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(width * 0.5f, height * 0.5f);
 
-        //TODO change to normal values later
+        //TODO change to normal values
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
         fixtureDef.density = 0.4f;
@@ -102,10 +102,6 @@ public class ShipFactoryViewFacade implements UniversalBody {
 
     public Vector2 getShipFactoryPosition() {
         return bodyDef.position;
-    }
-
-    public void dispose() {
-        smokeParticles.dispose();
     }
 
 

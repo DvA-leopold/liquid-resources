@@ -8,7 +8,7 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Rocket;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
-public class MainAI {
+public class MainAIModel {
     static {
         //TODO возможно лучше сделать нестатический вариант
         oilBarrels = 0;
@@ -16,14 +16,14 @@ public class MainAI {
         shieldOnOffStatus = false;
     }
 
-    public MainAI(final Vector2 position, final Vector2 rocketSize) {
+    public MainAIModel(final Vector2 position, final Vector2 rocketSize) {
         this.position = position;
         this.rocketSize = rocketSize;
     }
 
     public static boolean changeOil(int oilBarrels) {
-        if (MainAI.oilBarrels + oilBarrels >= 0) {
-            MainAI.oilBarrels += oilBarrels;
+        if (MainAIModel.oilBarrels + oilBarrels >= 0) {
+            MainAIModel.oilBarrels += oilBarrels;
             return true;
         } else {
             return false;
@@ -31,8 +31,8 @@ public class MainAI {
     }
 
     public static boolean changeWater(int waterBarrels) {
-        if (MainAI.waterBarrels + waterBarrels >= 0) {
-            MainAI.waterBarrels += waterBarrels;
+        if (MainAIModel.waterBarrels + waterBarrels >= 0) {
+            MainAIModel.waterBarrels += waterBarrels;
             return true;
         } else {
             return false;
@@ -45,16 +45,16 @@ public class MainAI {
      *  @param oilBarrels   passed from the oil factory class
      * @param waterBarrels passed from the water factory class*/
     public static void update(int oilBarrels, short waterBarrels) {
-        MainAI.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
-                ? MainAI.oilBarrels + oilBarrels
+        MainAIModel.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
+                ? MainAIModel.oilBarrels + oilBarrels
                 : Long.MAX_VALUE - 1;
 
-        MainAI.waterBarrels = MainAI.waterBarrels + waterBarrels < Long.MAX_VALUE
-                ? MainAI.waterBarrels + waterBarrels
+        MainAIModel.waterBarrels = MainAIModel.waterBarrels + waterBarrels < Long.MAX_VALUE
+                ? MainAIModel.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
 
-        if (shieldOnOffStatus && MainAI.oilBarrels > 0) {
-            MainAI.oilBarrels -= 1;
+        if (shieldOnOffStatus && MainAIModel.oilBarrels > 0) {
+            MainAIModel.oilBarrels -= 1;
         } else {
             shieldOnOffStatus = false;
             GameScreenWidgetsGroup.setIONChecked(false);

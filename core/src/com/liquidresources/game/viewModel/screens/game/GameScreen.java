@@ -15,7 +15,7 @@ import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgets
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -10));
+        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -9.8f));
         gameRenderer = new GameRenderer(new Vector2(100f, 80f), bodyFactoryWrapper);
 
         gameWorldModel = new GameWorldModel(
@@ -85,12 +85,12 @@ public class GameScreen implements Screen {
     public void hide() {
         //((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
         dispose();
+        gameRenderer.hide();
     }
 
     @Override
     public void dispose() {
         gameScreenWidgetGroup.dispose();
-        gameRenderer.dispose();
         bodyFactoryWrapper.dispose();
     }
 

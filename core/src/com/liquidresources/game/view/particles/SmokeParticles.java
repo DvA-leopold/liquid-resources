@@ -27,6 +27,7 @@ public class SmokeParticles {
 
     public void startEffect() {
         isAnimationStarted = true;
+        System.out.println("start effect");
         for (ParticleEffect p : listOfParticleEffects) {
             p.start();
         }
@@ -34,21 +35,15 @@ public class SmokeParticles {
 
     public void stopEffect() {
         isAnimationStarted = false;
+        System.out.println("stop effect");
         for (ParticleEffect p : listOfParticleEffects) {
-            //smokeEffect.findEmitter("smoke").allowCompletion();
             p.findEmitter("smoke").allowCompletion(); // TODO сделать плавное завершение анимации
-        }
-    }
-
-    public void dispose() {
-        for(ParticleEffect effect : listOfParticleEffects) {
-            effect.dispose();
         }
     }
 
 
     private boolean isAnimationStarted = false;
 
-    final private int numberOfParticleEffects = 1;
+    final private short numberOfParticleEffects = 1;
     private ArrayList<ParticleEffect> listOfParticleEffects;
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
+import com.liquidresources.game.model.game.world.base.MainAIModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
@@ -23,7 +24,7 @@ import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
 public class GameRenderer {
-    public GameRenderer(Vector2 initCoords, final BodyFactoryWrapper bodyFactoryWrapper) {
+    public GameRenderer(final Vector2 initCoords, final BodyFactoryWrapper bodyFactoryWrapper) {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         worldRenderer = new Box2DDebugRenderer();
@@ -113,8 +114,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -136,8 +137,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, com.liquidresources.game.model.game.world.base.MainAI.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -164,8 +165,8 @@ public class GameRenderer {
         return mainAI.getPosition();
     }
 
-    public void dispose() {
-        shipFactoryFacade.dispose();
+    public void hide() {
+        shipFactoryFacade.stopEffect();
     }
 
 

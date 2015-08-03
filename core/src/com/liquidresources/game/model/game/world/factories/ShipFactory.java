@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.game.world.base.MainAI;
+import com.liquidresources.game.model.game.world.base.MainAIModel;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Bomber;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 
@@ -26,7 +26,7 @@ public class ShipFactory {
                 return new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if(MainAI.changeOil(-122)) {
+                        if(MainAIModel.changeOil(-122)) {
                             bodyFactoryWrapper.createBody(
                                     new Bomber(basePosition, shipSize, bombersDefaultHealth), false
                             );
@@ -39,7 +39,7 @@ public class ShipFactory {
                 return new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if(MainAI.changeOil(-55)) {
+                        if(MainAIModel.changeOil(-55)) {
                             bodyFactoryWrapper.createBody(
                                     new Fighter(basePosition, shipSize, fighterDefaultHealth), false
                             );
