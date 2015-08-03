@@ -62,7 +62,7 @@ public class GameRenderer {
     }
 
     public void show() {
-        shipFactoryFacade.startEffect();
+        shipFactoryFacade.getSmokeParticles().startEffect();
     }
 
     public void render(float delta) {
@@ -166,7 +166,8 @@ public class GameRenderer {
     }
 
     public void hide() {
-        shipFactoryFacade.stopEffect();
+        shipFactoryFacade.getSmokeParticles().resetEffect();
+        shipFactoryFacade.getSmokeParticles().stopEffect();
     }
 
 

@@ -41,6 +41,12 @@ public class SmokeParticles {
         }
     }
 
+    public void resetEffect() {
+        for (ParticleEffect p : listOfParticleEffects) {
+            p.reset();
+        }
+    }
+
 
     private boolean isAnimationStarted = false;
 

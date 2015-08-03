@@ -84,12 +84,8 @@ public class ShipFactoryViewFacade implements UniversalBody {
         return fixtureDef;
     }
 
-    public void startEffect() {
-        smokeParticles.startEffect();
-    }
-
-    public void stopEffect() {
-        smokeParticles.stopEffect();
+    public SmokeParticles getSmokeParticles() {
+        return smokeParticles;
     }
 
     public float getWidth() {
