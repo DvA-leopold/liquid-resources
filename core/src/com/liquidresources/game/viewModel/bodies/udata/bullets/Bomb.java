@@ -26,6 +26,11 @@ public class Bomb extends Bullet {
     }
 
     @Override
+    public Vector2 getSize() {
+        return null;
+    }
+
+    @Override
     public void update(final Body body, float delta) {
 
     }

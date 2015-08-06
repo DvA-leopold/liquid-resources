@@ -7,12 +7,10 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Ship implements UniversalBody {
     public Ship(final Vector2 defaultPosition, final Vector2 shipSize, int health) {
-        this.defaultPosition = defaultPosition;
-        this.shipSize = shipSize;
         this.health = health;
-        isDestroyed = false;
+        isActive = false;
 
-        initBodyDefAndFixture();
+        initBodyDefAndFixture(defaultPosition, shipSize);
     }
 
     @Override
@@ -26,17 +24,18 @@ public abstract class Ship implements UniversalBody {
     }
 
     @Override
-    public boolean isDestroyed() {
-        return isDestroyed;
+    public boolean isActive() {
+        return isActive;
     }
-
-    public abstract int doDamage();
 
     /**
      * this method must initialize <code>bodyDef</code>, <code>polygonShape</code> and
      * <code>fixtureDef</code>
      */
-    protected abstract void initBodyDefAndFixture();
+    protected abstract void initBodyDefAndFixture(
+            final Vector2 defaultPosition,
+            final Vector2 shipSize
+    );
 
 
     protected BodyDef bodyDef;
@@ -44,8 +43,5 @@ public abstract class Ship implements UniversalBody {
 
     protected int health;
 
-    final protected Vector2 defaultPosition;
-    final protected Vector2 shipSize;
-
-    private boolean isDestroyed;
+    private boolean isActive;
 }

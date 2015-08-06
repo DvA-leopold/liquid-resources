@@ -11,25 +11,19 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.animation.Animator;
-import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class OilPumpFacade implements Animator, UniversalBody {
+public class OilPumpFacade extends Building {
     public OilPumpFacade(float defaultAnimationSpeed,
-                         float xDefaultPosition, float yDefaultPosition,
-                         float width, float height,
+                         final Vector2 defaultPosition,
+                         final Vector2 buildingSize,
                          Animation.PlayMode animationPlayMode) {
+        super(defaultPosition, buildingSize);
+        this.buildingSize = buildingSize;
 
         this.defaultAnimationSpeed = defaultAnimationSpeed;
         workSpeed = defaultAnimationSpeed / 2;
 
         isStoped = false;
-
-        this.width = width;
-        this.height = height;
-
-        this.xDefaultPosition = xDefaultPosition;
-        this.yDefaultPosition = yDefaultPosition;
 
         TextureRegion[] pompFrames = new TextureRegion[10];
         TextureAtlas pompImageAtlas = (TextureAtlas) ResourceManager.getInstance().get("drawable/animation/oil-pomp.atlas");
@@ -40,13 +34,16 @@ public class OilPumpFacade implements Animator, UniversalBody {
 
         pompAnimation = new Animation(workSpeed, pompFrames);
         pompAnimation.setPlayMode(animationPlayMode);
+    }
 
+    @Override
+    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(xDefaultPosition + width * 0.5f, yDefaultPosition + height * 0.5f);
+        bodyDef.position.set(defaultPosition.x + buildingSize.x * 0.5f, defaultPosition.y + buildingSize.y * 0.5f);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(width * 0.5f, height * 0.5f);
+        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y * 0.5f);
 
         //TODO change to normal values later
         fixtureDef = new FixtureDef();
@@ -65,11 +62,16 @@ public class OilPumpFacade implements Animator, UniversalBody {
             stateTime += delta;
         }
 
-        if (position == null) {
-            batch.draw(pompAnimation.getKeyFrame(stateTime, true), xDefaultPosition, yDefaultPosition, width, height);
-        } else {
-            batch.draw(pompAnimation.getKeyFrame(stateTime, true), position.x, position.y, width, height);
-        }
+        batch.draw(
+                pompAnimation.getKeyFrame(stateTime, true),
+                bodyDef.position.x - buildingSize.x * 0.5f, bodyDef.position.y - buildingSize.y * 0.5f,
+                buildingSize.x, buildingSize.y
+        );
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return buildingSize;
     }
 
     @Override
@@ -87,58 +89,18 @@ public class OilPumpFacade implements Animator, UniversalBody {
         return BodyType.OIL_POMP;
     }
 
-    @Override
-    public boolean isDestroyed() {
-        return true;
-    }
-
-    @Override
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
-
-    @Override
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
-    }
-
-    @Override
     public void resetAnimation(boolean isStoped) {
         this.isStoped = isStoped;
         workSpeed = defaultAnimationSpeed;
     }
 
-    @Override
-    public float getX() {
-        return xDefaultPosition;
-    }
-
-    @Override
-    public float getY() {
-        return yDefaultPosition;
-    }
-
-    @Override
-    public float getWidth() {
-        return width;
-    }
-
-    @Override
-    public float getHeight() {
-        return height;
-    }
-
-
-    final private float xDefaultPosition, yDefaultPosition;
-    final private float width, height;
 
     final private float defaultAnimationSpeed;
+    final private Vector2 buildingSize;
+
     private float workSpeed;
     private boolean isStoped;
     private float stateTime = 0f;
-
-    private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
 
     private Animation pompAnimation;
 }

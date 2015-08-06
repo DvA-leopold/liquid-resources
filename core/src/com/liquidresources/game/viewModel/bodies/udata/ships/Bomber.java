@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
+import java.util.Vector;
+
 public class Bomber extends Ship {
     public Bomber(final Vector2 defaultPosition, final Vector2 shipSize, int defaultHealth) {
         super(defaultPosition, shipSize, defaultHealth);
@@ -21,7 +23,10 @@ public class Bomber extends Ship {
     }
 
     @Override
-    protected void initBodyDefAndFixture() {
+    protected void initBodyDefAndFixture(
+            final Vector2 defaultPosition,
+            final Vector2 shipSize) {
+
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x + shipSize.x, defaultPosition.y + shipSize.y);
         bodyDef.type = BodyDef.BodyType.KinematicBody;
@@ -39,17 +44,17 @@ public class Bomber extends Ship {
     }
 
     @Override
-    public int doDamage() {
-        return 55;
-    }
-
-    @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
         shipSprite.setPosition(
                 position.x - shipSprite.getWidth() * 0.5f,
                 position.y - shipSprite.getHeight() * 0.5f
         );
         shipSprite.draw(batch);
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(shipSprite.getWidth(), shipSprite.getHeight());
     }
 
     @Override

@@ -21,7 +21,10 @@ public class Fighter extends Ship {
     }
 
     @Override
-    protected void initBodyDefAndFixture() {
+    protected void initBodyDefAndFixture(
+            final Vector2 defaultPosition,
+            final Vector2 shipSize) {
+
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x + shipSize.x, defaultPosition.y + shipSize.y);
         bodyDef.type = BodyDef.BodyType.KinematicBody;
@@ -39,17 +42,17 @@ public class Fighter extends Ship {
     }
 
     @Override
-    public int doDamage() {
-        return 28;
-    }
-
-    @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
         shipSprite.setPosition(
                 position.x - shipSprite.getWidth() * 0.5f,
                 position.y - shipSprite.getHeight() * 0.5f
         );
         shipSprite.draw(batch);
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return null;
     }
 
     @Override

@@ -5,4 +5,5 @@ import com.badlogic.gdx.math.Vector2;
 
 public interface DrawableBody {
     void draw(final Batch batch, final Vector2 position, float delta);
+    Vector2 getSize();
 }

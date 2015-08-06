@@ -84,8 +84,8 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         //((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
-        dispose();
         gameRenderer.hide();
+        dispose();
     }
 
     @Override

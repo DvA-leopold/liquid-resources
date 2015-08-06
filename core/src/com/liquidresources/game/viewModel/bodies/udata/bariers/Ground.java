@@ -28,6 +28,11 @@ public class Ground implements UniversalBody {
     }
 
     @Override
+    public Vector2 getSize() {
+        return null;
+    }
+
+    @Override
     public BodyDef getBodyDef() {
         return bodyDef;
     }
@@ -53,7 +58,7 @@ public class Ground implements UniversalBody {
     }
 
     @Override
-    public boolean isDestroyed() {
+    public boolean isActive() {
         return false;
     }
 

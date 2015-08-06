@@ -122,7 +122,7 @@ public class BodyFactoryWrapper {
             Iterator<Body> bodyIterator = dynamicObjects.iterator(); // TODO добавить уничтожение тел другого типа
             while (bodyIterator.hasNext() && bodyForDestroy > 0) {
                 Body tempBody = bodyIterator.next();
-                if (((UpdatableBody) tempBody.getUserData()).isDestroyed()) {
+                if (((UpdatableBody) tempBody.getUserData()).isActive()) {
                     tempBody.setActive(false);
                     physicsWorld.destroyBody(tempBody);
                     bodyIterator.remove();

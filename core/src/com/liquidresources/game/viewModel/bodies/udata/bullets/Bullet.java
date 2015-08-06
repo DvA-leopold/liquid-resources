@@ -8,7 +8,7 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Bullet implements UniversalBody {
     public Bullet(final Vector2 defaultPosition, final Vector2 bulletSize, BodyDef.BodyType bodyType) {
-        isDestroyed = false;
+        isActive = false;
         initBodyDefAndFixture(defaultPosition, bulletSize, bodyType);
     }
 
@@ -23,8 +23,8 @@ public abstract class Bullet implements UniversalBody {
     }
 
     @Override
-    public boolean isDestroyed() {
-        return isDestroyed;
+    public boolean isActive() {
+        return isActive;
     }
 
     protected abstract void initBodyDefAndFixture(
@@ -34,9 +34,7 @@ public abstract class Bullet implements UniversalBody {
     );
 
 
-    protected boolean isDestroyed;
-
-    protected Sprite bulletSprite;
+    protected boolean isActive;
 
     protected BodyDef bodyDef;
     protected FixtureDef fixtureDef;

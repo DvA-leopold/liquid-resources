@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
@@ -33,8 +34,7 @@ public class GameRenderer {
 
         this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
 
-        final float graphicsWidth = Gdx.graphics.getWidth() * 0.15f;
-        final float graphicsHeight = Gdx.graphics.getHeight() * 0.15f;
+        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.15f, Gdx.graphics.getHeight() * 0.15f);
         final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
 
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
@@ -42,19 +42,18 @@ public class GameRenderer {
 
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
 
-        oilPompFacade = new OilPumpFacade(0.3f,
-                initCoords.x, initCoords.y,
-                graphicsWidth, graphicsHeight,
-                Animation.PlayMode.LOOP_PINGPONG
-        );
+        oilPompFacade = new OilPumpFacade(0.3f, initCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG);
         bodyFactoryWrapper.createBody(oilPompFacade, true);
 
-        initCoords.x += oilPompFacade.getWidth() + buildingsPositionDelimiter;
-        mainAI = new MainAI(initCoords, graphicsWidth, graphicsHeight);
+        initCoords.x += oilPompFacade.getSize().x + buildingsPositionDelimiter;
+        mainAI = new MainAI(initCoords, graphicSize);
         bodyFactoryWrapper.createBody(mainAI, true);
 
-        initCoords.x += mainAI.getWidth() + buildingsPositionDelimiter;
-        shipFactoryFacade = new ShipFactoryViewFacade(initCoords.x, initCoords.y, graphicsWidth, graphicsHeight);
+        //baseShield = new IonShield(initCoords, null);
+        //bodyFactoryWrapper.createBody(baseShield, true);
+
+        initCoords.x += mainAI.getSize().x + buildingsPositionDelimiter;
+        shipFactoryFacade = new ShipFactoryViewFacade(initCoords, graphicSize);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
 
         Ground ground = new Ground(new Vector2(800, 75));

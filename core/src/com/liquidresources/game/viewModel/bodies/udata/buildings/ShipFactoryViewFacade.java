@@ -13,33 +13,19 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.particles.SmokeParticles;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class ShipFactoryViewFacade implements UniversalBody {
-    public ShipFactoryViewFacade(float xDefaultPosition, float yDefaultPosition, float width, float height) {
+public class ShipFactoryViewFacade extends Building {
+    public ShipFactoryViewFacade(final Vector2 defaultPosition, final Vector2 buildingSize) {
+        super(defaultPosition, buildingSize);
         Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
         shipFactory = new Sprite(factoryTexture);
-        shipFactory.setPosition(xDefaultPosition, yDefaultPosition);
-        shipFactory.setSize(width, height);
+        shipFactory.setPosition(defaultPosition.x, defaultPosition.y);
+        shipFactory.setSize(buildingSize.x, buildingSize.y);
 
-        smokeParticles = new SmokeParticles(
-                new Vector2(xDefaultPosition + 35, yDefaultPosition + shipFactory.getHeight() * 0.8f),
+        smokeParticles = new SmokeParticles( //tODO настроить позицию дыма
+                new Vector2(defaultPosition.x + 35, defaultPosition.y + shipFactory.getHeight() * 0.8f),
                 true
         );
-
-        bodyDef = new BodyDef();
-        bodyDef.position.set(xDefaultPosition + width * 0.5f, yDefaultPosition + height * 0.5f);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(width * 0.5f, height * 0.5f);
-
-        //TODO change to normal values
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = bodyShape;
-        fixtureDef.density = 0.4f;
-        fixtureDef.friction = 0.3f;
-        fixtureDef.restitution = 0.1f;
-        fixtureDef.isSensor = true;
     }
 
     /**
@@ -70,39 +56,35 @@ public class ShipFactoryViewFacade implements UniversalBody {
     }
 
     @Override
-    public boolean isDestroyed() {
-        return true;
-    }
+    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 buildingSize) {
+        bodyDef = new BodyDef();
+        bodyDef.position.set(defaultPosition.x + buildingSize.x * 0.5f, defaultPosition.y + buildingSize.y * 0.5f);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
 
-    @Override
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
+        PolygonShape bodyShape = new PolygonShape();
+        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y * 0.5f);
 
-    @Override
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = bodyShape;
+        fixtureDef.density = 0.4f;
+        fixtureDef.friction = 0.3f;
+        fixtureDef.restitution = 0.1f;
+        fixtureDef.isSensor = true;
     }
 
     public SmokeParticles getSmokeParticles() {
         return smokeParticles;
     }
 
-    public float getWidth() {
-        return shipFactory.getWidth();
-    }
-
-    public float getHeight() {
-        return shipFactory.getHeight();
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(shipFactory.getWidth(), shipFactory.getHeight());
     }
 
     public Vector2 getShipFactoryPosition() {
         return bodyDef.position;
     }
 
-
-    private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
 
     final private Sprite shipFactory;
 

@@ -9,33 +9,22 @@ import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-public class MainAI implements UniversalBody {
-    public MainAI(final Vector2 initCoords, float graphicsWidth, float graphicsHeight) {
+public class MainAI extends Building {
+    public MainAI(final Vector2 defaultPosition, final Vector2 buildingSize) {
+        super(defaultPosition, buildingSize);
         mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));
-        mainAI.setPosition(initCoords.x, initCoords.y);
-        mainAI.setSize(graphicsWidth, graphicsHeight * 2);
-
-        bodyDef = new BodyDef();
-        bodyDef.position.set(initCoords.x + graphicsWidth * 0.5f, initCoords.y + graphicsHeight);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(graphicsWidth * 0.5f, graphicsHeight);
-
-        //TODO change to normal values later
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = bodyShape;
-        fixtureDef.density = 0.4f;
-        fixtureDef.friction = 0.3f;
-        fixtureDef.restitution = 0.1f;
-        fixtureDef.isSensor = true;
-
-        //bodyShape.dispose(); //TODO memory leakage bodies shape dispose
+        mainAI.setPosition(defaultPosition.x, defaultPosition.y);
+        mainAI.setSize(buildingSize.x, buildingSize.y * 2);
     }
 
     @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
         mainAI.draw(batch);
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(mainAI.getWidth(), mainAI.getHeight());
     }
 
     @Override
@@ -54,22 +43,23 @@ public class MainAI implements UniversalBody {
     }
 
     @Override
-    public boolean isDestroyed() {
-        return true;
-    }
+    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 buildingSize) {
+        bodyDef = new BodyDef();
+        bodyDef.position.set(defaultPosition.x + buildingSize.x * 0.5f, defaultPosition.y + buildingSize.y);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
 
-    @Override
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
+        PolygonShape bodyShape = new PolygonShape();
+        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y);
 
-    @Override
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
-    }
+        //TODO change to normal values later
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = bodyShape;
+        fixtureDef.density = 0.4f;
+        fixtureDef.friction = 0.3f;
+        fixtureDef.restitution = 0.1f;
+        fixtureDef.isSensor = true;
 
-    public float getWidth() {
-        return mainAI.getWidth();
+        //bodyShape.dispose(); //TODO memory leakage bodies shape dispose
     }
 
     public Vector2 getPosition() {
@@ -78,7 +68,4 @@ public class MainAI implements UniversalBody {
 
 
     private Sprite mainAI;
-
-    final private BodyDef bodyDef;
-    final private FixtureDef fixtureDef;
 }

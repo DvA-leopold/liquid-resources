@@ -6,14 +6,14 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Building implements UniversalBody {
-    public Building(final Vector2 defaultPosition, final Vector2 buildingSize, BodyDef.BodyType bodyType) {
-        isDestroyed = false;
-        initBodyDefAndFixture(defaultPosition, buildingSize, bodyType);
+    public Building(final Vector2 defaultPosition, final Vector2 buildingSize) {
+        isActive = false;
+        initBodyDefAndFixture(defaultPosition, buildingSize);
     }
 
     @Override
-    public boolean isDestroyed() {
-        return isDestroyed;
+    public boolean isActive() {
+        return isActive;
     }
 
     @Override
@@ -28,14 +28,12 @@ public abstract class Building implements UniversalBody {
 
     protected abstract void initBodyDefAndFixture(
             final Vector2 defaultPosition,
-            final Vector2 bulletSize,
-            BodyDef.BodyType bodyType
+            final Vector2 buildingSize
     );
 
 
-    private boolean isDestroyed;
+    protected boolean isActive;
 
-    private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
-
+    protected BodyDef bodyDef;
+    protected FixtureDef fixtureDef;
 }

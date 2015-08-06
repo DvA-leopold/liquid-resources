@@ -13,5 +13,5 @@ public interface UpdatableBody {
     BodyDef getBodyDef();
     FixtureDef getFixtureDef();
 
-    boolean isDestroyed();
+    boolean isActive();
 }

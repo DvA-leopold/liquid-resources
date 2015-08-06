@@ -17,9 +17,10 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 public class Rocket extends Bullet {
     public Rocket(final Vector2 defaultPosition, final Vector2 rocketSize) {
         super(defaultPosition, rocketSize, BodyDef.BodyType.DynamicBody);
-        bulletSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
-        bulletSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
-        bulletSprite.setSize(rocketSize.x, rocketSize.y);
+
+        rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
+        rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
+        rocketSprite.setSize(rocketSize.x, rocketSize.y);
 
         forceY = MathUtils.random(80, 90);
     }
@@ -30,7 +31,7 @@ public class Rocket extends Bullet {
         bodyDef.position.set(defaultPosition.x, defaultPosition.y);
         bodyDef.type = bodyType;
 
-        PolygonShape bodyShape = new PolygonShape(); // TODO сделать фигуру различной для разных типов пуль
+        PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(bulletSize.x * 0.5f, bulletSize.y * 0.5f);
 
         fixtureDef = new FixtureDef();
@@ -39,11 +40,16 @@ public class Rocket extends Bullet {
 
     @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
-        bulletSprite.setPosition(
-                position.x - bulletSprite.getWidth() * 0.5f,
-                position.y - bulletSprite.getHeight() * 0.5f
+        rocketSprite.setPosition(
+                position.x - rocketSprite.getWidth() * 0.5f,
+                position.y - rocketSprite.getHeight() * 0.5f
         );
-        bulletSprite.draw(batch);
+        rocketSprite.draw(batch);
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(rocketSprite.getWidth(), rocketSprite.getHeight());
     }
 
     @Override
@@ -55,12 +61,12 @@ public class Rocket extends Bullet {
     @Override
     public void beginCollisionContact(final Body bodyA) {
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.GROUND) {
-            isDestroyed = true;
+            isActive = true;
             BodyFactoryWrapper.destroyBody();
         }
 
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD) {
-            isDestroyed = true;
+            isActive = true;
             BodyFactoryWrapper.destroyBody();
         }
     }
@@ -72,4 +78,5 @@ public class Rocket extends Bullet {
 
 
     private float forceY;
+    final private Sprite rocketSprite;
 }
