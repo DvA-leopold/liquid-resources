@@ -1,6 +1,5 @@
 package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -8,7 +7,7 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Bullet implements UniversalBody {
     public Bullet(final Vector2 defaultPosition, final Vector2 bulletSize, BodyDef.BodyType bodyType) {
-        isActive = false;
+        isActive = true;
         initBodyDefAndFixture(defaultPosition, bulletSize, bodyType);
     }
 

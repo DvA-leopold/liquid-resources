@@ -30,9 +30,12 @@ public class BodyFactoryWrapper {
                 } else {
                     System.out.println("null data B");
                 }*/
+                ((UpdatableBody) contact.getFixtureA().getBody().getUserData()).
+                        beginCollisionContact(contact.getFixtureB().getBody());
 
                 ((UpdatableBody) contact.getFixtureB().getBody().getUserData()).
                         beginCollisionContact(contact.getFixtureA().getBody());
+
             }
 
             @Override
@@ -116,14 +119,12 @@ public class BodyFactoryWrapper {
         bodyForDestroy++;
     }
 
-    //TODO оптимизировать сборку мусора, возможно лучше подписаться слушателем на специальные события колизий
     private void collectGarbage() {
         if (bodyForDestroy > 0) {
             Iterator<Body> bodyIterator = dynamicObjects.iterator(); // TODO добавить уничтожение тел другого типа
             while (bodyIterator.hasNext() && bodyForDestroy > 0) {
                 Body tempBody = bodyIterator.next();
-                if (((UpdatableBody) tempBody.getUserData()).isActive()) {
-                    tempBody.setActive(false);
+                if (!((UpdatableBody) tempBody.getUserData()).isActive()) {
                     physicsWorld.destroyBody(tempBody);
                     bodyIterator.remove();
                     bodyForDestroy--;

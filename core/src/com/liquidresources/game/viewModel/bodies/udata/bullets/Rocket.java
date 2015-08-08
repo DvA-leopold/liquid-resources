@@ -61,12 +61,12 @@ public class Rocket extends Bullet {
     @Override
     public void beginCollisionContact(final Body bodyA) {
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.GROUND) {
-            isActive = true;
+            isActive = false;
             BodyFactoryWrapper.destroyBody();
         }
 
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD) {
-            isActive = true;
+            isActive = false;
             BodyFactoryWrapper.destroyBody();
         }
     }

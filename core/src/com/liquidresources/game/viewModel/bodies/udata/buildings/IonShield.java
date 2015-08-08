@@ -7,25 +7,29 @@ import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.game.world.base.MainAIModel;
 
 public class IonShield extends Building {
-    public IonShield(final Vector2 defaultPosition, final Vector2 buildingSize) {
-        super(defaultPosition, buildingSize);
+    public IonShield(final Vector2 startPosition, final Vector2 endPosition, final Vector2 buildingSize) {
+        super(startPosition, endPosition, buildingSize);
     }
 
     @Override
     protected void initBodyDefAndFixture(
-            final Vector2 defaultPosition,
+            final Vector2 startPosition,
+            final Vector2 endPosition,
             final Vector2 buildingSize) {
 
         bodyDef = new BodyDef();
-        bodyDef.position.set(defaultPosition.x, defaultPosition.y);
+        bodyDef.position.set(endPosition.x - 10, startPosition.y + buildingSize.y - 10);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        ChainShape ionShieldShape = new ChainShape();
-        Vector2[] shapeChain = new Vector2[50];
-        for (int i = 0; i < 50; ++i) {
-            //shapeChain[i] = new Vector2(defaultPosition.x + );
-        }
-        ionShieldShape.createChain(shapeChain);
+        PolygonShape ionShieldShape = new PolygonShape();
+        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + 30);
+
+//        ChainShape ionShieldShape = new ChainShape();
+//        Vector2[] shapeChain = new Vector2[50];
+//        for (int i = 0; i < 50; ++i) {
+//            shapeChain[i] = new Vector2(startPosition.x, startPosition.y + 100);
+//        }
+//        ionShieldShape.createChain(shapeChain);
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = ionShieldShape;

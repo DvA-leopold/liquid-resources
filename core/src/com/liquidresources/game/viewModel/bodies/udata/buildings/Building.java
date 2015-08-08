@@ -6,9 +6,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Building implements UniversalBody {
-    public Building(final Vector2 defaultPosition, final Vector2 buildingSize) {
+    public Building(final Vector2 startPosition, final Vector2 endPosition, final Vector2 buildingSize) {
         isActive = false;
-        initBodyDefAndFixture(defaultPosition, buildingSize);
+        initBodyDefAndFixture(startPosition, endPosition, buildingSize);
     }
 
     @Override
@@ -27,7 +27,8 @@ public abstract class Building implements UniversalBody {
     }
 
     protected abstract void initBodyDefAndFixture(
-            final Vector2 defaultPosition,
+            final Vector2 startPosition,
+            final Vector2 endPosition,
             final Vector2 buildingSize
     );
 

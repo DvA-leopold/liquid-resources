@@ -15,7 +15,7 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public class ShipFactoryViewFacade extends Building {
     public ShipFactoryViewFacade(final Vector2 defaultPosition, final Vector2 buildingSize) {
-        super(defaultPosition, buildingSize);
+        super(defaultPosition, null, buildingSize);
         Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
         shipFactory = new Sprite(factoryTexture);
@@ -56,9 +56,9 @@ public class ShipFactoryViewFacade extends Building {
     }
 
     @Override
-    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 buildingSize) {
+    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(defaultPosition.x + buildingSize.x * 0.5f, defaultPosition.y + buildingSize.y * 0.5f);
+        bodyDef.position.set(startPosition.x + buildingSize.x * 0.5f, startPosition.y + buildingSize.y * 0.5f);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape bodyShape = new PolygonShape();

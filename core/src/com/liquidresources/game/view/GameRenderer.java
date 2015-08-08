@@ -27,6 +27,7 @@ import com.liquidresources.game.viewModel.GameStates;
 public class GameRenderer {
     public GameRenderer(final Vector2 initCoords, final BodyFactoryWrapper bodyFactoryWrapper) {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
+        final Vector2 endCoords = new Vector2(initCoords);
 
         worldRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
@@ -42,19 +43,19 @@ public class GameRenderer {
 
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
 
-        oilPompFacade = new OilPumpFacade(0.3f, initCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG);
+        oilPompFacade = new OilPumpFacade(0.3f, endCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG);
         bodyFactoryWrapper.createBody(oilPompFacade, true);
 
-        initCoords.x += oilPompFacade.getSize().x + buildingsPositionDelimiter;
-        mainAI = new MainAI(initCoords, graphicSize);
+        endCoords.x += oilPompFacade.getSize().x + buildingsPositionDelimiter;
+        mainAI = new MainAI(endCoords, graphicSize);
         bodyFactoryWrapper.createBody(mainAI, true);
 
-        //baseShield = new IonShield(initCoords, null);
-        //bodyFactoryWrapper.createBody(baseShield, true);
-
-        initCoords.x += mainAI.getSize().x + buildingsPositionDelimiter;
-        shipFactoryFacade = new ShipFactoryViewFacade(initCoords, graphicSize);
+        endCoords.x += mainAI.getSize().x + buildingsPositionDelimiter;
+        shipFactoryFacade = new ShipFactoryViewFacade(endCoords, graphicSize);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
+
+        baseShield = new IonShield(initCoords, endCoords, graphicSize);
+        bodyFactoryWrapper.createBody(baseShield, true);
 
         Ground ground = new Ground(new Vector2(800, 75));
         bodyFactoryWrapper.createBody(ground, true);

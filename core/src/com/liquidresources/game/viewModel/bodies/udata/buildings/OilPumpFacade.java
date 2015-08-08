@@ -17,7 +17,7 @@ public class OilPumpFacade extends Building {
                          final Vector2 defaultPosition,
                          final Vector2 buildingSize,
                          Animation.PlayMode animationPlayMode) {
-        super(defaultPosition, buildingSize);
+        super(defaultPosition, null, buildingSize);
         this.buildingSize = buildingSize;
 
         this.defaultAnimationSpeed = defaultAnimationSpeed;
@@ -37,9 +37,9 @@ public class OilPumpFacade extends Building {
     }
 
     @Override
-    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 buildingSize) {
+    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(defaultPosition.x + buildingSize.x * 0.5f, defaultPosition.y + buildingSize.y * 0.5f);
+        bodyDef.position.set(startPosition.x + buildingSize.x * 0.5f, startPosition.y + buildingSize.y * 0.5f);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape bodyShape = new PolygonShape();
