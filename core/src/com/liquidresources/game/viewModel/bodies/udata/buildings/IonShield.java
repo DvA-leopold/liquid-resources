@@ -1,5 +1,7 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -12,17 +14,14 @@ public class IonShield extends Building {
     }
 
     @Override
-    protected void initBodyDefAndFixture(
-            final Vector2 startPosition,
-            final Vector2 endPosition,
-            final Vector2 buildingSize) {
+    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
 
         bodyDef = new BodyDef();
-        bodyDef.position.set(endPosition.x - 10, startPosition.y + buildingSize.y - 10);
+        bodyDef.position.set(endPosition.x, startPosition.y + buildingSize.y - 10);
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape ionShieldShape = new PolygonShape();
-        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + 30);
+        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + 20);
 
 //        ChainShape ionShieldShape = new ChainShape();
 //        Vector2[] shapeChain = new Vector2[50];
@@ -33,6 +32,7 @@ public class IonShield extends Building {
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = ionShieldShape;
+        fixtureDef.isSensor = true;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class IonShield extends Building {
 
     @Override
     public void beginCollisionContact(final Body bodyA) {
-        System.out.println("shield collision");
+//        System.out.println("shield collision");
     }
 
     @Override
@@ -63,5 +63,21 @@ public class IonShield extends Building {
     @Override
     public BodyType getBodyType() {
         return BodyType.ION_SHIELD;
+    }
+
+    private void shieldAnimation() {
+        Pixmap mask = new Pixmap(128, 128, Pixmap.Format.Alpha);
+        Pixmap.setBlending(Pixmap.Blending.None);
+        mask.setColor(Color.RED);
+        mask.fill();
+        mask.fillRectangle(0, 0, 128, 128);
+
+//        Pixmap fg = new Pixmap(Gdx.files.internal("buildings/shield.jpg"));
+//        mask.drawPixmap(fg, mask.getWidth(), mask.getHeight());
+//        Pixmap.setBlending(Pixmap.Blending.SourceOver);
+
+//        shield = new Sprite(new Texture(mask, mask.getFormat(), false));
+//        shield.setPosition(x, y);
+//        shield.setSize(width, height);
     }
 }

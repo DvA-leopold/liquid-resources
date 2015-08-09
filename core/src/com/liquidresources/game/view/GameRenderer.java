@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
@@ -54,7 +53,9 @@ public class GameRenderer {
         shipFactoryFacade = new ShipFactoryViewFacade(endCoords, graphicSize);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
 
-        baseShield = new IonShield(initCoords, endCoords, graphicSize);
+        initCoords.x -= buildingsPositionDelimiter;
+        endCoords.x -= mainAI.getSize().x * 0.5f;
+        IonShield baseShield = new IonShield(initCoords, endCoords, graphicSize);
         bodyFactoryWrapper.createBody(baseShield, true);
 
         Ground ground = new Ground(new Vector2(800, 75));
@@ -182,7 +183,6 @@ public class GameRenderer {
     private OilPumpFacade oilPompFacade;
     private ShipFactoryViewFacade shipFactoryFacade;
 
-    private IonShield baseShield;
     private MainAI mainAI;
     private BitmapFont blackFont;
 

@@ -36,6 +36,7 @@ public class Rocket extends Bullet {
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
+        fixtureDef.isSensor = true;
     }
 
     @Override
@@ -65,10 +66,10 @@ public class Rocket extends Bullet {
             BodyFactoryWrapper.destroyBody();
         }
 
-        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD) {
-            isActive = false;
-            BodyFactoryWrapper.destroyBody();
-        }
+//        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD) {
+//            isActive = false;
+//            BodyFactoryWrapper.destroyBody();
+//        }
     }
 
     @Override

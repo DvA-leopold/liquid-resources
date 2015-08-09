@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.particles.SmokeParticles;
-import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public class ShipFactoryViewFacade extends Building {
     public ShipFactoryViewFacade(final Vector2 defaultPosition, final Vector2 buildingSize) {
@@ -22,7 +21,7 @@ public class ShipFactoryViewFacade extends Building {
         shipFactory.setPosition(defaultPosition.x, defaultPosition.y);
         shipFactory.setSize(buildingSize.x, buildingSize.y);
 
-        smokeParticles = new SmokeParticles( //tODO настроить позицию дыма
+        smokeParticles = new SmokeParticles( //TODO настроить позицию дыма
                 new Vector2(defaultPosition.x + 35, defaultPosition.y + shipFactory.getHeight() * 0.8f),
                 true
         );
@@ -66,9 +65,6 @@ public class ShipFactoryViewFacade extends Building {
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
-        fixtureDef.density = 0.4f;
-        fixtureDef.friction = 0.3f;
-        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = true;
     }
 
