@@ -35,9 +35,6 @@ public class Fighter extends Ship {
         //TODO change to normal values later
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
-        fixtureDef.density = 0.9f; // плотность
-        fixtureDef.friction = 0.1f; // сцепление
-        fixtureDef.restitution = 0.1f; // эластичность
         fixtureDef.isSensor = true;
     }
 

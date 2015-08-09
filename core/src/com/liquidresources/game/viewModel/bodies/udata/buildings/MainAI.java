@@ -40,11 +40,6 @@ public class MainAI extends Building {
     }
 
     @Override
-    public Vector2 getSize() {
-        return new Vector2(mainAI.getWidth(), mainAI.getHeight());
-    }
-
-    @Override
     public void update(final Body body, float delta) {
 
     }
@@ -61,6 +56,11 @@ public class MainAI extends Building {
 
     public Vector2 getPosition() {
         return new Vector2(mainAI.getX(), mainAI.getY());
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(mainAI.getWidth(), mainAI.getHeight());
     }
 
 

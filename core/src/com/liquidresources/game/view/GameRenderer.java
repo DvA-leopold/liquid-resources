@@ -34,13 +34,16 @@ public class GameRenderer {
 
         this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
 
-        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.15f, Gdx.graphics.getHeight() * 0.15f);
+        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
         final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
 
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
         blackFont = (BitmapFont) ResourceManager.getInstance().get("fonts/blackFont.fnt");
 
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
+
+        Ground ground = new Ground(initCoords);
+        bodyFactoryWrapper.createBody(ground, true);
 
         oilPompFacade = new OilPumpFacade(0.3f, endCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG);
         bodyFactoryWrapper.createBody(oilPompFacade, true);
@@ -57,9 +60,6 @@ public class GameRenderer {
         endCoords.x -= mainAI.getSize().x * 0.5f;
         IonShield baseShield = new IonShield(initCoords, endCoords, graphicSize);
         bodyFactoryWrapper.createBody(baseShield, true);
-
-        Ground ground = new Ground(new Vector2(800, 75));
-        bodyFactoryWrapper.createBody(ground, true);
     }
 
     public void show() {
@@ -111,14 +111,14 @@ public class GameRenderer {
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        for (Body staticBody : bodyFactoryWrapper.getStaticConstructions()) {
+        for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
         symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
         symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
 
-        for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
+        for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
         }
 
@@ -134,14 +134,14 @@ public class GameRenderer {
         batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        for (Body staticBody : bodyFactoryWrapper.getStaticConstructions()) {
+        for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
         symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
         symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
 
-        for (Body dynamicBody : bodyFactoryWrapper.getDynamicObjects()) {
+        for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
         }
 
@@ -172,19 +172,18 @@ public class GameRenderer {
     }
 
 
-    private final BodyFactoryWrapper bodyFactoryWrapper;
-
-    private SymbolsRenderer symbolsRenderer;
     final private Box2DDebugRenderer worldRenderer;
     final private OrthographicCamera camera;
 
+    final private BitmapFont blackFont;
+
+    final private BodyFactoryWrapper bodyFactoryWrapper;
+    final private SymbolsRenderer symbolsRenderer;
+    final private OilPumpFacade oilPompFacade;
+    final private ShipFactoryViewFacade shipFactoryFacade;
+    final private MainAI mainAI;
+
     private Texture desertBackground;
-
-    private OilPumpFacade oilPompFacade;
-    private ShipFactoryViewFacade shipFactoryFacade;
-
-    private MainAI mainAI;
-    private BitmapFont blackFont;
 
     final private SpriteBatch batch;
 }

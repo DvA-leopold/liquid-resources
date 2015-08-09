@@ -3,6 +3,7 @@ package com.liquidresources.game.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.HashSet;
@@ -103,11 +104,11 @@ public class BodyFactoryWrapper {
         physicsWorld.dispose();
     }
 
-    public HashSet<Body> getDynamicObjects() {
+    public HashSet<Body> getDynamicBodies() {
         return dynamicObjects;
     }
 
-    public HashSet<Body> getStaticConstructions() {
+    public HashSet<Body> getConstructionsBodies() {
         return staticConstructions;
     }
 

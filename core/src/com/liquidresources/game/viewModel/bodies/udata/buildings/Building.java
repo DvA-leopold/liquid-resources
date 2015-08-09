@@ -7,7 +7,7 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Building implements UniversalBody {
     public Building(final Vector2 startPosition, final Vector2 endPosition, final Vector2 buildingSize) {
-        isActive = false;
+        isActive = true;
         initBodyDefAndFixture(startPosition, endPosition, buildingSize);
     }
 

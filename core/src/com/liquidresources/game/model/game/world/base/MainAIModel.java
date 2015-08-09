@@ -1,5 +1,6 @@
 package com.liquidresources.game.model.game.world.base;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -79,7 +80,9 @@ public class MainAIModel {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (changeOil(-20)) {
-                    bodyFactoryWrapper.createBody(new Rocket(position, rocketSize), false);
+                    bodyFactoryWrapper.createBody(
+                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize), false
+                    );
                 }
             }
         };

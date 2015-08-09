@@ -8,7 +8,7 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 public abstract class Ship implements UniversalBody {
     public Ship(final Vector2 defaultPosition, final Vector2 shipSize, int health) {
         this.health = health;
-        isActive = false;
+        isActive = true;
 
         initBodyDefAndFixture(defaultPosition, shipSize);
     }

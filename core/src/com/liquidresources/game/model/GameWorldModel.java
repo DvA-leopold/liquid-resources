@@ -29,7 +29,7 @@ public class GameWorldModel {
         waterPump = new WaterPump(0.09f);
         mainAIModel = new MainAIModel(
                 mainAIPosition,
-                new Vector2(Gdx.graphics.getWidth() * 0.01f, Gdx.graphics.getHeight() * 0.05f)
+                new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f)
         );
 
         worldState = GameStates.GAME_PREPARING;
@@ -44,7 +44,7 @@ public class GameWorldModel {
                         oilPump1.getResources(delta) + oilPump2.getResources(delta),
                         waterPump.getResources(delta)
                 );
-                for (Body body : bodyFactoryWrapper.getDynamicObjects()) {
+                for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
                     ((UpdatableBody) body.getUserData()).update(body, delta);
                 }
                 bodyFactoryWrapper.updateWorld();

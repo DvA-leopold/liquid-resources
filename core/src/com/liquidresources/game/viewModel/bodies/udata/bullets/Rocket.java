@@ -22,7 +22,8 @@ public class Rocket extends Bullet {
         rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
         rocketSprite.setSize(rocketSize.x, rocketSize.y);
 
-        forceY = MathUtils.random(80, 90);
+        forceX = 100;
+        forceY = MathUtils.random(90, 110);
     }
 
     @Override
@@ -30,6 +31,7 @@ public class Rocket extends Bullet {
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x, defaultPosition.y);
         bodyDef.type = bodyType;
+        bodyDef.bullet = true;
 
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(bulletSize.x * 0.5f, bulletSize.y * 0.5f);
@@ -56,7 +58,7 @@ public class Rocket extends Bullet {
     @Override
     public void update(final Body body, float delta) {
         forceY -= delta * 25;
-        body.applyForceToCenter(40, forceY, true);
+        body.applyForceToCenter(forceX, forceY, true);
     }
 
     @Override
@@ -78,6 +80,6 @@ public class Rocket extends Bullet {
     }
 
 
-    private float forceY;
+    private float forceX, forceY;
     final private Sprite rocketSprite;
 }

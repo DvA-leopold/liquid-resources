@@ -31,7 +31,7 @@ public class ShipFactory {
                                     new Bomber(basePosition, shipSize, bombersDefaultHealth), false
                             );
                         }
-                        System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
+                        System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
                     }
                 };
 
@@ -43,13 +43,13 @@ public class ShipFactory {
                             bodyFactoryWrapper.createBody(
                                     new Fighter(basePosition, shipSize, fighterDefaultHealth), false
                             );
-                            System.out.println(bodyFactoryWrapper.getDynamicObjects().size());
+                            System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
                         }
                     }
                 };
+            default:
+                return null;
         }
-        System.err.println("such ship do not exist");
-        return null;
     }
 
     public enum ShipType {

@@ -16,7 +16,10 @@ import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgets
 public class GameScreen implements Screen {
     public GameScreen() {
         bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -9.8f));
-        gameRenderer = new GameRenderer(new Vector2(100f, 80f), bodyFactoryWrapper);
+        gameRenderer = new GameRenderer(
+                new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f),
+                bodyFactoryWrapper
+        );
 
         gameWorldModel = new GameWorldModel(
                 bodyFactoryWrapper,

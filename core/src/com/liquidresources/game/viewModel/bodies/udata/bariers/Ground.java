@@ -17,7 +17,7 @@ public class Ground implements UniversalBody {
         bodyDef.type = BodyDef.BodyType.KinematicBody;
 
         PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(1, Gdx.graphics.getWidth() * 1.2f);
+        bodyShape.setAsBox(Gdx.graphics.getWidth() * 5, 1);
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;

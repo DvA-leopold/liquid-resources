@@ -15,7 +15,6 @@ public class IonShield extends Building {
 
     @Override
     protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
-
         bodyDef = new BodyDef();
         bodyDef.position.set(endPosition.x, startPosition.y + buildingSize.y - 10);
         bodyDef.type = BodyDef.BodyType.StaticBody;
