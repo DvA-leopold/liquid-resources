@@ -38,7 +38,7 @@ public abstract class BaseFacade {
 
     public enum BaseType {
         ALLIED_BASE,
-        ENEMY_BASE;
+        ENEMY_BASE
     }
 
 
