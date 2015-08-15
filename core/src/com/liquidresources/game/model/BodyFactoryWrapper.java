@@ -3,7 +3,6 @@ package com.liquidresources.game.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.HashSet;
@@ -19,18 +18,18 @@ public class BodyFactoryWrapper {
         physicsWorld.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                /*WorldManifold manifold = contact.getWorldManifold();
-                if (contact.getFixtureA().getBody().getUserData() != null) {
-                    System.out.println(((UpdatableBody) contact.getFixtureA().getBody().getUserData()).getBodyType());
-                } else {
-                    System.out.println("null data A");
-                }
-
-                if (contact.getFixtureB().getBody().getUserData() != null) {
-                    System.out.println(((UpdatableBody) contact.getFixtureB().getBody().getUserData()).getBodyType());
-                } else {
-                    System.out.println("null data B");
-                }*/
+//                WorldManifold manifold = contact.getWorldManifold();
+//                if (contact.getFixtureA().getBody().getUserData() != null) {
+//                    System.out.println(((UpdatableBody) contact.getFixtureA().getBody().getUserData()).getBodyType());
+//                } else {
+//                    System.out.println("null data A");
+//                }
+//
+//                if (contact.getFixtureB().getBody().getUserData() != null) {
+//                    System.out.println(((UpdatableBody) contact.getFixtureB().getBody().getUserData()).getBodyType());
+//                } else {
+//                    System.out.println("null data B");
+//                }
                 ((UpdatableBody) contact.getFixtureA().getBody().getUserData()).
                         beginCollisionContact(contact.getFixtureB().getBody());
 

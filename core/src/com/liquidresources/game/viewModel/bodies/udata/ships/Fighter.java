@@ -49,7 +49,7 @@ public class Fighter extends Ship {
 
     @Override
     public Vector2 getSize() {
-        return null;
+        return new Vector2(shipSprite.getWidth(), shipSprite.getHeight());
     }
 
     @Override

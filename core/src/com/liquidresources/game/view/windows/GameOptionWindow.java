@@ -78,7 +78,7 @@ public class GameOptionWindow extends Window {
     }
 
 
-    private TextButton exitButton;
-    private Button resumeButton;
-    private CheckBox musicButton, soundButton;
+    final private TextButton exitButton;
+    final private Button resumeButton;
+    final private CheckBox musicButton, soundButton;
 }

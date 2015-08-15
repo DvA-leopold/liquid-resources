@@ -21,7 +21,7 @@ public class GameWorldModel {
 
         shipFactory = new ShipFactory(
                 shipFactoryPosition,
-                new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.05f),
+                new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f),
                 100, 30);
 
         oilPump1 = new OilPump(0.04f);

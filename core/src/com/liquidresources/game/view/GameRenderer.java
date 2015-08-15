@@ -3,7 +3,6 @@ package com.liquidresources.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,55 +14,39 @@ import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.base.MainAIModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.viewModel.bases.AlliedBase;
+import com.liquidresources.game.viewModel.bases.BaseFacade;
+import com.liquidresources.game.viewModel.bases.EnemyBase;
 import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.MainAI;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
 public class GameRenderer {
-    public GameRenderer(final Vector2 initCoords, final BodyFactoryWrapper bodyFactoryWrapper) {
+    public GameRenderer(final Vector2 initAllyCoords,
+                        final Vector2 initEnemyCoords,
+                        final BodyFactoryWrapper bodyFactoryWrapper) {
+        this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
         this.bodyFactoryWrapper = bodyFactoryWrapper;
-        final Vector2 endCoords = new Vector2(initCoords);
+        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
+
+        alliedBase = new AlliedBase(initAllyCoords, graphicSize, bodyFactoryWrapper);
+        enemyBase = new EnemyBase(initEnemyCoords, graphicSize, bodyFactoryWrapper);
 
         worldRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
-
-        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
-        final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
 
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
         blackFont = (BitmapFont) ResourceManager.getInstance().get("fonts/blackFont.fnt");
 
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
 
-        Ground ground = new Ground(initCoords);
-        bodyFactoryWrapper.createBody(ground, true);
-
-        oilPompFacade = new OilPumpFacade(0.3f, endCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG);
-        bodyFactoryWrapper.createBody(oilPompFacade, true);
-
-        endCoords.x += oilPompFacade.getSize().x + buildingsPositionDelimiter;
-        mainAI = new MainAI(endCoords, graphicSize);
-        bodyFactoryWrapper.createBody(mainAI, true);
-
-        endCoords.x += mainAI.getSize().x + buildingsPositionDelimiter;
-        shipFactoryFacade = new ShipFactoryViewFacade(endCoords, graphicSize);
-        bodyFactoryWrapper.createBody(shipFactoryFacade, true);
-
-        initCoords.x -= buildingsPositionDelimiter;
-        endCoords.x -= mainAI.getSize().x * 0.5f;
-        IonShield baseShield = new IonShield(initCoords, endCoords, graphicSize);
-        bodyFactoryWrapper.createBody(baseShield, true);
+        bodyFactoryWrapper.createBody(new Ground(initAllyCoords), true);
     }
 
     public void show() {
-        shipFactoryFacade.getSmokeParticles().startEffect();
+        //alliedBase.show();
+        enemyBase.show();
     }
 
     public void render(float delta) {
@@ -158,17 +141,19 @@ public class GameRenderer {
 
     }
 
-    public Vector2 getShipFactoryPosition() {
-        return shipFactoryFacade.getShipFactoryPosition();
-    }
-
-    public Vector2 getMainAIPosition() {
-        return mainAI.getPosition();
+    public BaseFacade getBase(BaseFacade.BaseType baseType) {
+        switch (baseType) {
+            case ENEMY_BASE:
+                return enemyBase;
+            case ALLIED_BASE:
+            default:
+                return alliedBase;
+        }
     }
 
     public void hide() {
-        shipFactoryFacade.getSmokeParticles().resetEffect();
-        shipFactoryFacade.getSmokeParticles().stopEffect();
+        //alliedBase.hide();
+        enemyBase.hide();
     }
 
 
@@ -179,9 +164,9 @@ public class GameRenderer {
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
     final private SymbolsRenderer symbolsRenderer;
-    final private OilPumpFacade oilPompFacade;
-    final private ShipFactoryViewFacade shipFactoryFacade;
-    final private MainAI mainAI;
+
+    final AlliedBase alliedBase;
+    final EnemyBase enemyBase;
 
     private Texture desertBackground;
 

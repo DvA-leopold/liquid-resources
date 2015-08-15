@@ -125,7 +125,7 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
 
     final private Stage stage;
 
-    //TODO try to make non static buttons
+    //TODO make not static buttons
     static private Button optionWindowButton;
 
     static private CheckBox ionShieldButton;
