@@ -33,13 +33,9 @@ public class AlliedBase extends BaseFacade {
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
 
         initCoords.x -= buildingsPositionDelimiter;
-        endCoords.x -= mainAI.getSize().x * 0.5f; //TODO разобраться почему 0.5
+        endCoords.x -= graphicSize.x * 0.5f; //TODO разобраться почему 0.5
         baseShield = new IonShield(initCoords, endCoords, graphicSize);
         bodyFactoryWrapper.createBody(baseShield, true);
-    }
-
-    public void dispose() {
-
     }
 
 
