@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.liquidresources.game.model.BodyType;
-import com.liquidresources.game.model.game.world.base.MainAIModel;
+import com.liquidresources.game.model.game.world.base.AMainBaseModel;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 
 public class IonShield extends Building {
-    public IonShield(final Vector2 startPosition, final Vector2 endPosition, final Vector2 buildingSize) {
-        super(startPosition, endPosition, buildingSize);
+    public IonShield(final Vector2 startPosition,
+                     final Vector2 endPosition,
+                     final Vector2 buildingSize,
+                     final RelationTypes relationType) {
+        super(startPosition, endPosition, buildingSize, relationType);
     }
 
     @Override
@@ -56,7 +60,7 @@ public class IonShield extends Building {
 
     @Override
     public boolean isActive() {
-        return MainAIModel.getShieldStatus();
+        return AMainBaseModel.getShieldStatus();
     }
 
     @Override

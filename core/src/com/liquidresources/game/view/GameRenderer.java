@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
-import com.liquidresources.game.model.game.world.base.MainAIModel;
+import com.liquidresources.game.model.game.world.base.AMainBaseModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.bases.AlliedBase;
@@ -98,8 +98,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-        symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, AMainBaseModel.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, AMainBaseModel.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -121,8 +121,8 @@ public class GameRenderer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        symbolsRenderer.renderNumber(batch, MainAIModel.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, MainAIModel.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, AMainBaseModel.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, AMainBaseModel.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -141,13 +141,11 @@ public class GameRenderer {
 
     }
 
-    public BaseFacade getBase(BaseFacade.BaseType baseType) {
-        switch (baseType) {
-            case ENEMY_BASE:
-                return enemyBase;
-            case ALLIED_BASE:
-            default:
-                return alliedBase;
+    public BaseFacade getBase(boolean alliedBaseFlag) {
+        if (alliedBaseFlag) {
+            return alliedBase;
+        } else {
+            return enemyBase;
         }
     }
 

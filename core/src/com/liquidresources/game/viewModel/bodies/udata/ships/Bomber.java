@@ -9,13 +9,17 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 import java.util.Vector;
 
 public class Bomber extends Ship {
-    public Bomber(final Vector2 defaultPosition, final Vector2 shipSize, int defaultHealth) {
-        super(defaultPosition, shipSize, defaultHealth);
+    public Bomber(final Vector2 defaultPosition,
+                  final Vector2 shipSize,
+                  int defaultHealth,
+                  RelationTypes relationType) {
+        super(defaultPosition, shipSize, defaultHealth, relationType);
 
         shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/bomber.png"));
         shipSprite.setPosition(defaultPosition.x - shipSize.x * 0.5f, defaultPosition.y - shipSize.y * 0.5f);

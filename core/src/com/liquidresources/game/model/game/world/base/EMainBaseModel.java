@@ -1,6 +1,5 @@
 package com.liquidresources.game.model.game.world.base;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,22 +8,21 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Rocket;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
-public class MainAIModel {
+public class EMainBaseModel {
     static {
-        //TODO возможно лучше сделать нестатический вариант
         oilBarrels = 0;
         waterBarrels = 0;
         shieldOnOffStatus = false;
     }
 
-    public MainAIModel(final Vector2 position, final Vector2 rocketSize) {
+    public EMainBaseModel(final Vector2 position, final Vector2 rocketSize) {
         this.position = position;
         this.rocketSize = rocketSize;
     }
 
     public static boolean changeOil(int oilBarrels) {
-        if (MainAIModel.oilBarrels + oilBarrels >= 0) {
-            MainAIModel.oilBarrels += oilBarrels;
+        if (EMainBaseModel.oilBarrels + oilBarrels >= 0) {
+            EMainBaseModel.oilBarrels += oilBarrels;
             return true;
         } else {
             return false;
@@ -32,8 +30,8 @@ public class MainAIModel {
     }
 
     public static boolean changeWater(int waterBarrels) {
-        if (MainAIModel.waterBarrels + waterBarrels >= 0) {
-            MainAIModel.waterBarrels += waterBarrels;
+        if (EMainBaseModel.waterBarrels + waterBarrels >= 0) {
+            EMainBaseModel.waterBarrels += waterBarrels;
             return true;
         } else {
             return false;
@@ -43,19 +41,19 @@ public class MainAIModel {
     /**
      * this mainAI is a storage for all useful resources and convert resources from one to another
      * update method just add obtained resources from different factories
-     *  @param oilBarrels   passed from the oil factory class
+     * @param oilBarrels   passed from the oil factory class
      * @param waterBarrels passed from the water factory class*/
-    public static void update(int oilBarrels, short waterBarrels) {
-        MainAIModel.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
-                ? MainAIModel.oilBarrels + oilBarrels
+    public void update(int oilBarrels, short waterBarrels) {
+        EMainBaseModel.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
+                ? EMainBaseModel.oilBarrels + oilBarrels
                 : Long.MAX_VALUE - 1;
 
-        MainAIModel.waterBarrels = MainAIModel.waterBarrels + waterBarrels < Long.MAX_VALUE
-                ? MainAIModel.waterBarrels + waterBarrels
+        EMainBaseModel.waterBarrels = EMainBaseModel.waterBarrels + waterBarrels < Long.MAX_VALUE
+                ? EMainBaseModel.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
 
-        if (shieldOnOffStatus && MainAIModel.oilBarrels > 0) {
-            MainAIModel.oilBarrels -= 1;
+        if (shieldOnOffStatus && EMainBaseModel.oilBarrels > 0) {
+            EMainBaseModel.oilBarrels -= 1;
         } else {
             shieldOnOffStatus = false;
             GameScreenWidgetsGroup.setIONChecked(false);
@@ -81,7 +79,7 @@ public class MainAIModel {
             public void clicked(InputEvent event, float x, float y) {
                 if (changeOil(-20)) {
                     bodyFactoryWrapper.createBody(
-                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize), false
+                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ENEMY), false
                     );
                 }
             }
@@ -101,12 +99,13 @@ public class MainAIModel {
     }
 
     public static boolean getShieldStatus() {
-         return shieldOnOffStatus;
+        return shieldOnOffStatus;
     }
 
 
-    final private Vector2 position;
-    final private Vector2 rocketSize;
     private static long oilBarrels, waterBarrels;
     private static boolean shieldOnOffStatus;
+
+    final private Vector2 position;
+    final private Vector2 rocketSize;
 }

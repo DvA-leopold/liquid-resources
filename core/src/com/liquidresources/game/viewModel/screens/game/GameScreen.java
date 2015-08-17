@@ -18,15 +18,17 @@ public class GameScreen implements Screen {
     public GameScreen() {
         bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -9.8f));
         gameRenderer = new GameRenderer(
-                new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f),
+                new Vector2(Gdx.graphics.getWidth() * 0.1f, Gdx.graphics.getHeight() * 0.35f),
                 new Vector2(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.35f),
                 bodyFactoryWrapper
         );
 
         gameWorldModel = new GameWorldModel(
                 bodyFactoryWrapper,
-                gameRenderer.getBase(BaseFacade.BaseType.ALLIED_BASE).getShipFactoryPosition(),
-                gameRenderer.getBase(BaseFacade.BaseType.ALLIED_BASE).getMainAIPosition()
+                gameRenderer.getBase(true).getShipFactoryPosition(),
+                gameRenderer.getBase(true).getMainBasePosition(),
+                gameRenderer.getBase(false).getShipFactoryPosition(),
+                gameRenderer.getBase(false).getMainBasePosition()
         );
 
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();

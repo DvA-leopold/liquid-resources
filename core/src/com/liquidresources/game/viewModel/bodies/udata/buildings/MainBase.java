@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
-public class MainAI extends Building {
-    public MainAI(final Vector2 defaultPosition, final Vector2 buildingSize) {
-        super(defaultPosition, null, buildingSize);
+public class MainBase extends Building {
+    public MainBase(final Vector2 defaultPosition,
+                    final Vector2 buildingSize,
+                    final RelationTypes relationType) {
+        super(defaultPosition, null, buildingSize, relationType);
+
         mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));
         mainAI.setPosition(defaultPosition.x, defaultPosition.y);
         mainAI.setSize(buildingSize.x, buildingSize.y * 2);
@@ -25,7 +29,6 @@ public class MainAI extends Building {
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y);
 
-        //TODO change to normal values later
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
         fixtureDef.isSensor = true;

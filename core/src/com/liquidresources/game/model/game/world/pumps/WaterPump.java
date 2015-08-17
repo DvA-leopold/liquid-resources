@@ -12,7 +12,4 @@ public class WaterPump extends Pump {
     public void upgrade() {
 
     }
-
-
-    private Body waterPumpBody;
 }

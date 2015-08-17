@@ -7,16 +7,22 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.UpdatableBody;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.view.DrawableBody;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public class Bomb extends Bullet {
-    public Bomb(final Vector2 defaultPosition, final Vector2 bulletSize, BodyDef.BodyType bodyType) {
-        super(defaultPosition, bulletSize, bodyType);
+    public Bomb(final Vector2 defaultPosition,
+                final Vector2 bulletSize,
+                final BodyDef.BodyType bodyType,
+                final RelationTypes parentRelation) {
+        super(defaultPosition, bulletSize, bodyType, parentRelation);
     }
 
     @Override
-    protected void initBodyDefAndFixture(Vector2 defaultPosition, Vector2 bulletSize, BodyDef.BodyType bodyType) {
+    protected void initBodyDefAndFixture(final Vector2 defaultPosition,
+                                         final Vector2 bulletSize,
+                                         final BodyDef.BodyType bodyType) {
 
     }
 

@@ -10,14 +10,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class OilPumpFacade extends Building {
     public OilPumpFacade(float defaultAnimationSpeed,
                          final Vector2 defaultPosition,
                          final Vector2 buildingSize,
-                         Animation.PlayMode animationPlayMode) {
-        super(defaultPosition, null, buildingSize);
+                         Animation.PlayMode animationPlayMode,
+                         RelationTypes relationType) {
+        super(defaultPosition, null, buildingSize, relationType);
         this.buildingSize = buildingSize;
 
         this.defaultAnimationSpeed = defaultAnimationSpeed;

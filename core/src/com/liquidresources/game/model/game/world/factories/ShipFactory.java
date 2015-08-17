@@ -5,15 +5,18 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.game.world.base.MainAIModel;
+import com.liquidresources.game.model.game.world.base.AMainBaseModel;
+import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Bomber;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 
 public class ShipFactory {
-    public ShipFactory(Vector2 basePosition,
-                       Vector2 shipSize,
+    public ShipFactory(final Vector2 basePosition,
+                       final Vector2 shipSize,
                        int bombersDefaultHealth,
-                       int fighterDefaultHealth) {
+                       int fighterDefaultHealth,
+                       final RelationTypes relationType) {
+        this.relationType = relationType;
         this.basePosition = basePosition;
         this.bombersDefaultHealth = bombersDefaultHealth;
         this.fighterDefaultHealth = fighterDefaultHealth;
@@ -26,9 +29,9 @@ public class ShipFactory {
                 return new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if(MainAIModel.changeOil(-122)) {
+                        if(AMainBaseModel.changeOil(-122)) {
                             bodyFactoryWrapper.createBody(
-                                    new Bomber(basePosition, shipSize, bombersDefaultHealth), false
+                                    new Bomber(basePosition, shipSize, bombersDefaultHealth, relationType), false
                             );
                         }
                         System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
@@ -39,16 +42,16 @@ public class ShipFactory {
                 return new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if(MainAIModel.changeOil(-55)) {
+                        if(AMainBaseModel.changeOil(-55)) {
                             bodyFactoryWrapper.createBody(
-                                    new Fighter(basePosition, shipSize, fighterDefaultHealth), false
+                                    new Fighter(basePosition, shipSize, fighterDefaultHealth, relationType), false
                             );
                             System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
                         }
                     }
                 };
             default:
-                return null;
+                throw new TypeNotPresentException(" default ", new Throwable());
         }
     }
 
@@ -60,4 +63,6 @@ public class ShipFactory {
 
     final private Vector2 basePosition, shipSize;
     private int bombersDefaultHealth, fighterDefaultHealth;
+
+    final private RelationTypes relationType;
 }
