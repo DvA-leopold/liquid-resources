@@ -25,10 +25,10 @@ public class GameScreen implements Screen {
 
         gameWorldModel = new GameWorldModel(
                 bodyFactoryWrapper,
-                gameRenderer.getBase(true).getShipFactoryPosition(),
                 gameRenderer.getBase(true).getMainBasePosition(),
-                gameRenderer.getBase(false).getShipFactoryPosition(),
-                gameRenderer.getBase(false).getMainBasePosition()
+                gameRenderer.getBase(true).getShipFactoryPosition(),
+                gameRenderer.getBase(false).getMainBasePosition(),
+                gameRenderer.getBase(false).getShipFactoryPosition()
         );
 
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();

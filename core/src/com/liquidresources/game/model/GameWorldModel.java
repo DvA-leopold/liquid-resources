@@ -17,11 +17,16 @@ import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgets
 public class GameWorldModel {
     public GameWorldModel(
             final BodyFactoryWrapper bodyFactoryWrapper,
-            final Vector2 aShipFactoryPosition,
-            final Vector2 eShipFactoryPosition,
             final Vector2 aMainBasePosition,
-            final Vector2 eMainBasePosition) {
+            final Vector2 aShipFactoryPosition,
+            final Vector2 eMainBasePosition,
+            final Vector2 eShipFactoryPosition) {
+
         this.bodyFactoryWrapper = bodyFactoryWrapper;
+
+        final Vector2 rocketSize = new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
+        aMainBaseModel = new AMainBaseModel(aMainBasePosition, rocketSize);
+        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
 
         final Vector2 shipSize = new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
         aShipFactory = new ShipFactory(aShipFactoryPosition, shipSize, 100, 30, RelationTypes.ALLY);
@@ -31,9 +36,6 @@ public class GameWorldModel {
         oilPump2 = new OilPump(0.04f);
         waterPump = new WaterPump(0.09f);
 
-        final Vector2 rocketSize = new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
-        aMainBaseModel = new AMainBaseModel(aMainBasePosition, rocketSize);
-        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
 
         worldState = GameStates.GAME_PREPARING;
     }

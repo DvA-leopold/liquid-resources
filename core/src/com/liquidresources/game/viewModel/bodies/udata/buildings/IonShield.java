@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.game.world.base.AMainBaseModel;
+import com.liquidresources.game.model.game.world.base.EMainBaseModel;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 
 public class IonShield extends Building {
@@ -60,7 +61,11 @@ public class IonShield extends Building {
 
     @Override
     public boolean isActive() {
-        return AMainBaseModel.getShieldStatus();
+        if (getRelation() == RelationTypes.ALLY) {
+            return AMainBaseModel.getShieldStatus();
+        } else {
+            return EMainBaseModel.getShieldStatus();
+        }
     }
 
     @Override
