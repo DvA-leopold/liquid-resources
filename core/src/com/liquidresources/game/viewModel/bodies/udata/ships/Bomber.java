@@ -12,8 +12,6 @@ import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
-import java.util.Vector;
-
 public class Bomber extends Ship {
     public Bomber(final Vector2 defaultPosition,
                   final Vector2 shipSize,
