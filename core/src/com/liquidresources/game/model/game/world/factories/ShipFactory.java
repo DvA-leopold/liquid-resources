@@ -34,7 +34,6 @@ public class ShipFactory {
                                     new Bomber(basePosition, shipSize, bombersDefaultHealth, relationType), false
                             );
                         }
-                        System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
                     }
                 };
 
@@ -46,7 +45,6 @@ public class ShipFactory {
                             bodyFactoryWrapper.createBody(
                                     new Fighter(basePosition, shipSize, fighterDefaultHealth, relationType), false
                             );
-                            System.out.println(bodyFactoryWrapper.getDynamicBodies().size());
                         }
                     }
                 };

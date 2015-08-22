@@ -12,9 +12,10 @@ import com.liquidresources.game.model.game.world.pumps.OilPump;
 import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
 import com.liquidresources.game.viewModel.GameStates;
-import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
-public class GameWorldModel {
+import java.util.Observable;
+
+public class GameWorldModel extends Observable {
     public GameWorldModel(
             final BodyFactoryWrapper bodyFactoryWrapper,
             final Vector2 aMainBasePosition,
@@ -36,23 +37,16 @@ public class GameWorldModel {
         oilPump2 = new OilPump(0.04f);
         waterPump = new WaterPump(0.09f);
 
-
         worldState = GameStates.GAME_PREPARING;
     }
 
     public void update(float delta) {
         switch (worldState) {
             case GAME_PREPARING:
+                updatePreparingState(delta);
                 break;
             case GAME_RUNNING:
-                aMainBaseModel.update(
-                        oilPump1.getResources(delta) + oilPump2.getResources(delta),
-                        waterPump.getResources(delta)
-                );
-                for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
-                    ((UpdatableBody) body.getUserData()).update(body, delta);
-                }
-                bodyFactoryWrapper.updateWorld();
+                updateRunningState(delta);
                 break;
             case GAME_PAUSED:
                 break;
@@ -61,6 +55,23 @@ public class GameWorldModel {
             case GAME_OVER:
                 break;
         }
+    }
+
+    public void updatePreparingState(float delta) {
+        if (Gdx.input.justTouched()) {
+            changeWorldState(GameStates.GAME_RUNNING);
+        }
+    }
+
+    public void updateRunningState(float delta) {
+        aMainBaseModel.update(
+                oilPump1.getResources(delta) + oilPump2.getResources(delta),
+                waterPump.getResources(delta)
+        );
+        for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
+            ((UpdatableBody) body.getUserData()).update(body, delta);
+        }
+        bodyFactoryWrapper.updateWorld();
     }
 
     public void pause() {
@@ -73,7 +84,7 @@ public class GameWorldModel {
         return aShipFactory.getShipButtonListener(bodyFactoryWrapper, shipType);
     }
 
-    public EventListener getMainAIListener() {
+    public EventListener getIONShieldListener() {
         return aMainBaseModel.switchIONShield();
     }
 
@@ -81,27 +92,14 @@ public class GameWorldModel {
         return aMainBaseModel.fireRocketLaunch(bodyFactoryWrapper);
     }
 
-    public static GameStates getWorldState() {
-        return worldState;
-    }
-
-    public static void changeWorldState(GameStates newWorldState) {
+    public void changeWorldState(GameStates newWorldState) {
         worldState = newWorldState;
-        switch (newWorldState) {
-            case GAME_PREPARING:
-                GameScreenWidgetsGroup.setButtonVisible(false);
-                break;
-            case GAME_RUNNING:
-                GameScreenWidgetsGroup.setButtonVisible(true);
-                break;
-            case GAME_EXIT:
-                AMainBaseModel.dropAllData();
-                break;
-        }
+        setChanged();
+        notifyObservers(worldState);
     }
 
 
-    private static GameStates worldState;
+    private GameStates worldState;
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 

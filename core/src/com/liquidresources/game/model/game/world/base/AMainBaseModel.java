@@ -8,11 +8,13 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Rocket;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
+import java.util.Observable;
+
 public class AMainBaseModel {
     static {
-        oilBarrels = 0;
-        waterBarrels = 0;
-        shieldOnOffStatus = false;
+        aOilBarrels = 0;
+        aWaterBarrels = 0;
+        aShieldStatus = false;
     }
 
     public AMainBaseModel(final Vector2 position, final Vector2 rocketSize) {
@@ -21,8 +23,8 @@ public class AMainBaseModel {
     }
 
     public static boolean changeOil(int oilBarrels) {
-        if (AMainBaseModel.oilBarrels + oilBarrels >= 0) {
-            AMainBaseModel.oilBarrels += oilBarrels;
+        if (AMainBaseModel.aOilBarrels + oilBarrels >= 0) {
+            AMainBaseModel.aOilBarrels += oilBarrels;
             return true;
         } else {
             return false;
@@ -30,8 +32,8 @@ public class AMainBaseModel {
     }
 
     public static boolean changeWater(int waterBarrels) {
-        if (AMainBaseModel.waterBarrels + waterBarrels >= 0) {
-            AMainBaseModel.waterBarrels += waterBarrels;
+        if (AMainBaseModel.aWaterBarrels + waterBarrels >= 0) {
+            AMainBaseModel.aWaterBarrels += waterBarrels;
             return true;
         } else {
             return false;
@@ -44,19 +46,20 @@ public class AMainBaseModel {
      * @param oilBarrels   passed from the oil factory class
      * @param waterBarrels passed from the water factory class*/
     public void update(int oilBarrels, short waterBarrels) {
-        AMainBaseModel.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
-                ? AMainBaseModel.oilBarrels + oilBarrels
+        AMainBaseModel.aOilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
+                ? AMainBaseModel.aOilBarrels + oilBarrels
                 : Long.MAX_VALUE - 1;
 
-        AMainBaseModel.waterBarrels = AMainBaseModel.waterBarrels + waterBarrels < Long.MAX_VALUE
-                ? AMainBaseModel.waterBarrels + waterBarrels
+        AMainBaseModel.aWaterBarrels = AMainBaseModel.aWaterBarrels + waterBarrels < Long.MAX_VALUE
+                ? AMainBaseModel.aWaterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
 
-        if (shieldOnOffStatus && AMainBaseModel.oilBarrels > 0) {
-            AMainBaseModel.oilBarrels -= 1;
+        if (aShieldStatus && AMainBaseModel.aOilBarrels > 0) {
+            AMainBaseModel.aOilBarrels -= 1;
         } else {
-            shieldOnOffStatus = false;
-            GameScreenWidgetsGroup.setIONChecked(false);
+            aShieldStatus = false;
+            // TODO сброс кнопки если ресурсы закончились.
+//            GameScreenWidgetsGroup.setIONChecked(false);
         }
     }
 
@@ -64,10 +67,10 @@ public class AMainBaseModel {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!shieldOnOffStatus && oilBarrels > 0) {
-                    shieldOnOffStatus = true;
-                } else if (shieldOnOffStatus) {
-                    shieldOnOffStatus = false;
+                if (!aShieldStatus && aOilBarrels > 0) {
+                    aShieldStatus = true;
+                } else if (aShieldStatus) {
+                    aShieldStatus = false;
                 }
             }
         };
@@ -87,25 +90,25 @@ public class AMainBaseModel {
     }
 
     public static void dropAllData() {
-        oilBarrels = waterBarrels = 0;
+        aOilBarrels = aWaterBarrels = 0;
     }
 
     public static long getOilBarrels() {
-        return oilBarrels;
+        return aOilBarrels;
     }
 
     public static long getWaterBarrels() {
-        return waterBarrels;
+        return aWaterBarrels;
     }
 
     public static boolean getShieldStatus() {
-         return shieldOnOffStatus;
+        return aShieldStatus;
     }
 
 
     final private Vector2 position;
     final private Vector2 rocketSize;
 
-    private static long oilBarrels, waterBarrels;
-    private static boolean shieldOnOffStatus;
+    private static long aOilBarrels, aWaterBarrels;
+    private static boolean aShieldStatus;
 }

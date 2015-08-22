@@ -7,10 +7,8 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
-import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.view.GameRenderer;
-import com.liquidresources.game.viewModel.Actions;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameScreen implements Screen {
@@ -32,6 +30,9 @@ public class GameScreen implements Screen {
 
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();
 
+        gameWorldModel.addObserver(gameScreenWidgetGroup);
+        gameWorldModel.addObserver(gameRenderer);
+
         //camera = new OrthographicCamera();
         //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -41,25 +42,7 @@ public class GameScreen implements Screen {
         Box2D.init();
 
         gameRenderer.show();
-        gameScreenWidgetGroup.addListener(null, Actions.ADDITION_INIT_ACTION);
-
-        gameScreenWidgetGroup.addListener(
-                gameWorldModel.getRocketFireEventListener(), Actions.ROCKET_FIRE_ACTION
-        );
-
-        gameScreenWidgetGroup.addListener(
-                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER),
-                Actions.CREATE_BOMBER_ACTION
-        );
-
-        gameScreenWidgetGroup.addListener(
-                gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER),
-                Actions.CREATE_FIGHTER_ACTION
-        );
-
-        gameScreenWidgetGroup.addListener(
-                gameWorldModel.getMainAIListener(), Actions.ION_SHIELD_ACTION
-        );
+        gameScreenWidgetGroup.initWorldListeners(gameWorldModel);
 
         ((LiquidResources) Gdx.app.getApplicationListener()).
                 getMusicManager().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
@@ -98,6 +81,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         gameScreenWidgetGroup.dispose();
         bodyFactoryWrapper.dispose();
+        gameWorldModel.deleteObservers();
     }
 
 

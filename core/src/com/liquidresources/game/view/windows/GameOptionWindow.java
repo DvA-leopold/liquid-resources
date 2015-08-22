@@ -40,7 +40,7 @@ public class GameOptionWindow extends Window {
         this.debug();
     }
 
-    public void setListeners() {
+    public void setListeners(final GameWorldModel gameWorldModel) {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -64,7 +64,7 @@ public class GameOptionWindow extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
-                GameWorldModel.changeWorldState(GameStates.GAME_EXIT);
+//                GameWorldModel.changeWorldState(GameStates.GAME_EXIT);
             }
         });
 
@@ -72,7 +72,7 @@ public class GameOptionWindow extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setVisible(false);
-                GameWorldModel.changeWorldState(GameStates.GAME_RUNNING);
+                gameWorldModel.changeWorldState(GameStates.GAME_RUNNING);
             }
         });
     }

@@ -1,7 +1,6 @@
 package com.liquidresources.game.viewModel.screens.game.buttons;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -12,13 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
+import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.view.windows.GameOptionWindow;
-import com.liquidresources.game.viewModel.Actions;
 import com.liquidresources.game.viewModel.GameStates;
-import com.liquidresources.game.viewModel.WidgetsGroup;
 
-public class GameScreenWidgetsGroup implements WidgetsGroup {
+import java.util.Observable;
+import java.util.Observer;
+
+public class GameScreenWidgetsGroup implements Observer {
     public GameScreenWidgetsGroup() {
         final float buttonWidth = Gdx.graphics.getWidth() * 0.1f;
         final float buttonHeight = Gdx.graphics.getWidth() * 0.1f;
@@ -63,58 +64,49 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
         actionTable.debug();
     }
 
-    @Override
     public void render() {
         stage.act();
         stage.draw();
     }
 
-    @Override
-    public void addListener(EventListener listener, Actions action) {
-        switch (action) {
-            case ION_SHIELD_ACTION:
-                ionShieldButton.addListener(listener);
-                break;
-            case ROCKET_FIRE_ACTION:
-                rocketFire.addListener(listener);
-                break;
-            case CREATE_BOMBER_ACTION:
-                bomberButton.addListener(listener);
-                break;
-            case CREATE_FIGHTER_ACTION:
-                fighterButton.addListener(listener);
-                break;
-            case ADDITION_INIT_ACTION:
-                gameOptionWindow.setListeners();
-                optionWindowButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        gameOptionWindow.setVisible(true);
-                        setButtonVisible(false);
-                        GameWorldModel.changeWorldState(GameStates.GAME_PAUSED);
-                    }
-                });
+    public void initWorldListeners(final GameWorldModel gameWorldModel) {
+        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
+        rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
+        bomberButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER));
+        fighterButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER));
 
-                Gdx.input.setInputProcessor(stage);
-                break;
-        }
+        optionWindowButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameOptionWindow.setVisible(true);
+                gameWorldModel.changeWorldState(GameStates.GAME_PAUSED);
+            }
+        });
+        gameOptionWindow.setListeners(gameWorldModel);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
-    public static void setIONChecked(boolean isChecked) {
-        ionShieldButton.setChecked(isChecked);
-    }
-
-    @Override
     public void dispose() {
         stage.dispose();
     }
 
     @Override
-    public Stage getStage() {
-        return stage;
+    public void update(Observable o, Object arg) {
+        switch ((GameStates) arg) {
+            case GAME_PREPARING:
+                setVisible(false);
+                break;
+            case GAME_RUNNING:
+                setVisible(true);
+                break;
+            case GAME_PAUSED:
+                setVisible(false);
+                break;
+        }
     }
 
-    public static void setButtonVisible(boolean visible) {
+    private void setVisible(boolean visible) {
         rocketFire.setVisible(visible);
         fighterButton.setVisible(visible);
         bomberButton.setVisible(visible);
@@ -125,13 +117,12 @@ public class GameScreenWidgetsGroup implements WidgetsGroup {
 
     final private Stage stage;
 
-    //TODO make not static buttons
-    static private Button optionWindowButton;
+    final private CheckBox ionShieldButton;
+    final private Button optionWindowButton;
+    final private Button rocketFire;
+    final private Button fighterButton;
 
-    static private CheckBox ionShieldButton;
-    static private Button rocketFire;
-    static private Button fighterButton;
-    static private Button bomberButton;
+    final private Button bomberButton;
 
     private GameOptionWindow gameOptionWindow;
 }

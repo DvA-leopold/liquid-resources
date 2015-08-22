@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.game.world.base.AMainBaseModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
@@ -21,14 +20,19 @@ import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
-public class GameRenderer {
+import java.util.Observable;
+import java.util.Observer;
+
+public class GameRenderer implements Observer {
     public GameRenderer(final Vector2 initAllyCoords,
                         final Vector2 initEnemyCoords,
                         final BodyFactoryWrapper bodyFactoryWrapper) {
         this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
         this.bodyFactoryWrapper = bodyFactoryWrapper;
-        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
 
+        gameState = GameStates.GAME_PREPARING;
+
+        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
         alliedBase = new AlliedBase(initAllyCoords, graphicSize, bodyFactoryWrapper);
         enemyBase = new EnemyBase(initEnemyCoords, graphicSize, bodyFactoryWrapper);
 
@@ -50,7 +54,7 @@ public class GameRenderer {
     }
 
     public void render(float delta) {
-        switch (GameWorldModel.getWorldState()) {
+        switch (gameState) {
             case GAME_PREPARING:
                 renderPreparingState(delta);
                 break;
@@ -81,10 +85,6 @@ public class GameRenderer {
         );
 
         batch.end();
-
-        if (Gdx.input.justTouched()) {
-            GameWorldModel.changeWorldState(GameStates.GAME_RUNNING);
-        }
     }
 
     private void renderRunState(float delta) {
@@ -154,16 +154,23 @@ public class GameRenderer {
         enemyBase.hide();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        gameState = (GameStates) arg;
+    }
 
+
+    private GameStates gameState;
     final private Box2DDebugRenderer worldRenderer;
+
     final private OrthographicCamera camera;
 
     final private BitmapFont blackFont;
-
     final private BodyFactoryWrapper bodyFactoryWrapper;
-    final private SymbolsRenderer symbolsRenderer;
 
+    final private SymbolsRenderer symbolsRenderer;
     final AlliedBase alliedBase;
+
     final EnemyBase enemyBase;
 
     private Texture desertBackground;

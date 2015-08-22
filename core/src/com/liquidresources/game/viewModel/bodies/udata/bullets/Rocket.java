@@ -78,7 +78,9 @@ public class Rocket extends Bullet {
         }
 
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD &&
-                ((UpdatableBody) bodyA.getUserData()).getRelation() != this.getRelation()) {
+                ((UpdatableBody) bodyA.getUserData()).getRelation() != this.getRelation() &&
+                ((UpdatableBody) bodyA.getUserData()).isActive()) {
+
             isActive = false;
             BodyFactoryWrapper.destroyBody();
         }

@@ -52,12 +52,11 @@ public class EMainBaseModel {
                 ? EMainBaseModel.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
 
-        if (shieldOnOffStatus && EMainBaseModel.oilBarrels > 0) {
-            EMainBaseModel.oilBarrels -= 1;
-        } else {
-            shieldOnOffStatus = false;
-            GameScreenWidgetsGroup.setIONChecked(false);
-        }
+//        if (shieldOnOffStatus && EMainBaseModel.oilBarrels > 0) {
+//            EMainBaseModel.oilBarrels -= 1;
+//        } else {
+//            shieldOnOffStatus = false;
+//        }
     }
 
     public EventListener switchIONShield() {
