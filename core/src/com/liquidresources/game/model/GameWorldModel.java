@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.liquidresources.game.model.game.world.base.AMainBaseModel;
-import com.liquidresources.game.model.game.world.base.EMainBaseModel;
+import com.liquidresources.game.model.game.world.base.MainBaseModel;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
@@ -26,8 +25,8 @@ public class GameWorldModel extends Observable {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         final Vector2 rocketSize = new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
-        aMainBaseModel = new AMainBaseModel(aMainBasePosition, rocketSize);
-        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
+        mainBaseModel = new MainBaseModel(aMainBasePosition, rocketSize);
+//        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
 
         final Vector2 shipSize = new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
         aShipFactory = new ShipFactory(aShipFactoryPosition, shipSize, 100, 30, RelationTypes.ALLY);
@@ -64,7 +63,7 @@ public class GameWorldModel extends Observable {
     }
 
     public void updateRunningState(float delta) {
-        aMainBaseModel.update(
+        mainBaseModel.update(
                 oilPump1.getResources(delta) + oilPump2.getResources(delta),
                 waterPump.getResources(delta)
         );
@@ -81,15 +80,15 @@ public class GameWorldModel extends Observable {
     }
 
     public EventListener getShipFactoryListeners(ShipFactory.ShipType shipType) {
-        return aShipFactory.getShipButtonListener(bodyFactoryWrapper, shipType);
-    }
-
-    public EventListener getIONShieldListener() {
-        return aMainBaseModel.switchIONShield();
+        return aShipFactory.getShipButtonListener(bodyFactoryWrapper, mainBaseModel, shipType);
     }
 
     public EventListener getRocketFireEventListener() {
-        return aMainBaseModel.fireRocketLaunch(bodyFactoryWrapper);
+        return mainBaseModel.fireRocketLaunch(bodyFactoryWrapper);
+    }
+
+    public MainBaseModel getMainBaseModel() {
+        return mainBaseModel;
     }
 
     public void changeWorldState(GameStates newWorldState) {
@@ -103,8 +102,7 @@ public class GameWorldModel extends Observable {
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 
-    final private AMainBaseModel aMainBaseModel;
-    final private EMainBaseModel eMainBaseModel;
+    final private MainBaseModel mainBaseModel;
 
     final private Pump oilPump1, oilPump2;
     final private Pump waterPump;

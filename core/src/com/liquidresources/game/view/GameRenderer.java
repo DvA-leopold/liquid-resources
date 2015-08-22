@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.game.world.base.AMainBaseModel;
+import com.liquidresources.game.model.game.world.base.MainBaseModel;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.viewModel.bases.AlliedBase;
@@ -36,7 +36,7 @@ public class GameRenderer implements Observer {
         alliedBase = new AlliedBase(initAllyCoords, graphicSize, bodyFactoryWrapper);
         enemyBase = new EnemyBase(initEnemyCoords, graphicSize, bodyFactoryWrapper);
 
-        worldRenderer = new Box2DDebugRenderer();
+        worldDebugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -46,6 +46,10 @@ public class GameRenderer implements Observer {
         symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
 
         bodyFactoryWrapper.createBody(new Ground(initAllyCoords), true);
+    }
+
+    public void setMainBasePtr(MainBaseModel temp) {
+        this.temp = temp;
     }
 
     public void show() {
@@ -98,8 +102,8 @@ public class GameRenderer implements Observer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-        symbolsRenderer.renderNumber(batch, AMainBaseModel.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, AMainBaseModel.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, temp.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, temp.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -107,7 +111,7 @@ public class GameRenderer implements Observer {
 
         batch.end();
 
-        worldRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
+        worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
     private void renderPauseState(float delta) {
@@ -121,8 +125,8 @@ public class GameRenderer implements Observer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        symbolsRenderer.renderNumber(batch, AMainBaseModel.getOilBarrels());
-        symbolsRenderer.renderNumber(batch, AMainBaseModel.getWaterBarrels(), 0, -40);
+        symbolsRenderer.renderNumber(batch, temp.getOilBarrels());
+        symbolsRenderer.renderNumber(batch, temp.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -130,7 +134,7 @@ public class GameRenderer implements Observer {
 
         batch.end();
 
-        worldRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
+        worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
     private void renderExitState(float delta) {
@@ -160,21 +164,24 @@ public class GameRenderer implements Observer {
     }
 
 
+    //////////////////////////////////////////
+    //TODO временное решение
+    MainBaseModel temp;
+    //////////////////////////////////////////
+
     private GameStates gameState;
-    final private Box2DDebugRenderer worldRenderer;
+    final private Box2DDebugRenderer worldDebugRenderer;
 
     final private OrthographicCamera camera;
 
     final private BitmapFont blackFont;
-    final private BodyFactoryWrapper bodyFactoryWrapper;
-
     final private SymbolsRenderer symbolsRenderer;
-    final AlliedBase alliedBase;
 
+    final private BodyFactoryWrapper bodyFactoryWrapper;
+    final AlliedBase alliedBase;
     final EnemyBase enemyBase;
 
     private Texture desertBackground;
-
     final private SpriteBatch batch;
 }
 

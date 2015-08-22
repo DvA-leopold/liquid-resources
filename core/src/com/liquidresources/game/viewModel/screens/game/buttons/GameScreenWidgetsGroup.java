@@ -70,7 +70,7 @@ public class GameScreenWidgetsGroup implements Observer {
     }
 
     public void initWorldListeners(final GameWorldModel gameWorldModel) {
-        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
+//        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
         rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
         bomberButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER));
         fighterButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER));

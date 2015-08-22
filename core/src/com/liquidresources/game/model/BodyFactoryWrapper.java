@@ -138,6 +138,5 @@ public class BodyFactoryWrapper {
 
     final private World physicsWorld;
     final private HashSet<Body> dynamicObjects;
-
     final private HashSet<Body> staticConstructions;
 }
