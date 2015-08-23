@@ -40,4 +40,8 @@ public class AlliedBase extends BaseFacade {
         baseShield = new IonShield(initCoords, endCoords, graphicSize, RelationTypes.ALLY);
         bodyFactoryWrapper.createBody(baseShield, true);
     }
+
+    public void setShieldActive(boolean isActive) {
+        baseShield.setActive(isActive);
+    }
 }

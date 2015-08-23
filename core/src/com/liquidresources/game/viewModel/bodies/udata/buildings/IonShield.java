@@ -54,13 +54,15 @@ public class IonShield extends Building {
     }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) {
-//        System.out.println("shield collision");
-    }
+    public void beginCollisionContact(final Body bodyA) { }
 
     @Override
     public BodyType getBodyType() {
         return BodyType.ION_SHIELD;
+    }
+
+    public void setActive(boolean isActive) {
+        super.isActive = isActive;
     }
 
     private void shieldAnimation() {

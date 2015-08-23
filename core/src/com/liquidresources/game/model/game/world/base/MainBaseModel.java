@@ -11,6 +11,7 @@ public class MainBaseModel {
     public MainBaseModel(final Vector2 position, final Vector2 rocketSize) {
         oilBarrels = 0;
         waterBarrels = 0;
+        shieldStatus = true;
 
         this.position = position;
         this.rocketSize = rocketSize;
@@ -47,14 +48,6 @@ public class MainBaseModel {
         this.waterBarrels = this.waterBarrels + waterBarrels < Long.MAX_VALUE
                 ? this.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
-//
-//        if (shieldStatus && this.oilBarrels > 0) {
-//            this.oilBarrels -= 1;
-//        } else {
-//            shieldStatus = false;
-//            // TODO сброс кнопки если ресурсы закончились.
-////            GameScreenWidgetsGroup.setIONChecked(false);
-//        }
     }
 
     public EventListener fireRocketLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
@@ -63,7 +56,8 @@ public class MainBaseModel {
             public void clicked(InputEvent event, float x, float y) {
                 if (changeOil(-20)) {
                     bodyFactoryWrapper.createBody(
-                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ALLY), false
+                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ALLY),
+                            false
                     );
                 }
             }
@@ -83,4 +77,5 @@ public class MainBaseModel {
     final private Vector2 rocketSize;
 
     private long oilBarrels, waterBarrels;
+    private boolean shieldStatus;
 }

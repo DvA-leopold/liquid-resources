@@ -3,6 +3,7 @@ package com.liquidresources.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -72,6 +74,15 @@ public class GameRenderer implements Observer {
         }
     }
 
+    public void statisticRender(long oilStatistic, long waterStatistic) {
+        batch.begin();
+
+        symbolsRenderer.renderNumber(batch, oilStatistic);
+        symbolsRenderer.renderNumber(batch, waterStatistic, 0, -40);
+
+        batch.end();
+    }
+
     private void renderPreparingState(float delta) {
         batch.begin();
 
@@ -97,9 +108,6 @@ public class GameRenderer implements Observer {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
         }
 
-//        symbolsRenderer.renderNumber(batch, temp.getOilBarrels());
-//        symbolsRenderer.renderNumber(batch, temp.getWaterBarrels(), 0, -40);
-
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
         }
@@ -119,9 +127,6 @@ public class GameRenderer implements Observer {
         for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
-
-//        symbolsRenderer.renderNumber(batch, temp.getOilBarrels());
-//        symbolsRenderer.renderNumber(batch, temp.getWaterBarrels(), 0, -40);
 
         for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
@@ -158,11 +163,6 @@ public class GameRenderer implements Observer {
         gameState = (GameStates) arg;
     }
 
-
-    //////////////////////////////////////////
-    //TODO временное решение
-//    MainBaseModel temp;
-    //////////////////////////////////////////
 
     private GameStates gameState;
     final private Box2DDebugRenderer worldDebugRenderer;

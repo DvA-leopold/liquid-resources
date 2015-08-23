@@ -29,8 +29,8 @@ public class GameWorldModel extends Observable {
 //        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
 
         final Vector2 shipSize = new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
-        aShipFactory = new ShipFactory(aShipFactoryPosition, shipSize, 100, 30, RelationTypes.ALLY);
-        eShipFactory = new ShipFactory(eShipFactoryPosition, shipSize, 100, 30, RelationTypes.ENEMY);
+        shipFactory = new ShipFactory(aShipFactoryPosition, shipSize, 100, 30, RelationTypes.ALLY);
+//        eShipFactory = new ShipFactory(eShipFactoryPosition, shipSize, 100, 30, RelationTypes.ENEMY);
 
         oilPump1 = new OilPump(0.04f);
         oilPump2 = new OilPump(0.04f);
@@ -63,10 +63,8 @@ public class GameWorldModel extends Observable {
     }
 
     public void updateRunningState(float delta) {
-        mainBaseModel.update(
-                oilPump1.getResources(delta) + oilPump2.getResources(delta),
-                waterPump.getResources(delta)
-        );
+        mainBaseModel.update(oilPump1.getResources(delta) + oilPump2.getResources(delta), waterPump.getResources(delta));
+
         for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
             ((UpdatableBody) body.getUserData()).update(body, delta);
         }
@@ -80,15 +78,19 @@ public class GameWorldModel extends Observable {
     }
 
     public EventListener getShipFactoryListeners(ShipFactory.ShipType shipType) {
-        return aShipFactory.getShipButtonListener(bodyFactoryWrapper, mainBaseModel, shipType);
+        return shipFactory.getShipButtonListener(bodyFactoryWrapper, mainBaseModel, shipType);
     }
 
     public EventListener getRocketFireEventListener() {
         return mainBaseModel.fireRocketLaunch(bodyFactoryWrapper);
     }
 
-    public MainBaseModel getMainBaseModel() {
-        return mainBaseModel;
+    public long getOil() {
+        return mainBaseModel.getOilBarrels();
+    }
+
+    public long getWater() {
+        return mainBaseModel.getWaterBarrels();
     }
 
     public void changeWorldState(GameStates newWorldState) {
@@ -106,5 +108,5 @@ public class GameWorldModel extends Observable {
 
     final private Pump oilPump1, oilPump2;
     final private Pump waterPump;
-    final private ShipFactory aShipFactory, eShipFactory;
+    final private ShipFactory shipFactory;
 }

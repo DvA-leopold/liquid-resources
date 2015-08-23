@@ -54,6 +54,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         gameRenderer.render(delta);
+        gameRenderer.statisticRender(gameWorldModel.getOil(), gameWorldModel.getWater());
         gameScreenWidgetGroup.render();
 
         gameWorldModel.update(delta);

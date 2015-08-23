@@ -34,7 +34,6 @@ public class MainBase extends Building {
         fixtureDef.isSensor = true;
 
 //        bodyShape.dispose(); //TODO memory leakage bodies shape dispose
-        //TODO сделать нормальную работу с размерами спрайта
     }
 
     @Override
