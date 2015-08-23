@@ -45,7 +45,7 @@ public class ShipFactory {
                         if(mainBaseModel.changeOil(-55)) {
                             bodyFactoryWrapper.createBody(
                                     new Fighter(basePosition, shipSize, fighterDefaultHealth, relationType), false
-                            );
+                            );a
                         }
                     }
                 };

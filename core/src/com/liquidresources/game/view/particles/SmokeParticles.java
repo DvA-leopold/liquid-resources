@@ -11,7 +11,7 @@ public class SmokeParticles {
     public SmokeParticles(Vector2 smokePosition, boolean isContinuous) {
         listOfParticleEffects = new ArrayList<>(numberOfParticleEffects);
         for (int i = 0; i < numberOfParticleEffects; ++i) {
-            listOfParticleEffects.add((ParticleEffect) ResourceManager.getInstance().get("particles/smoke.p"));
+            listOfParticleEffects.add(new ParticleEffect((ParticleEffect) ResourceManager.getInstance().get("particles/smoke.p")));
             listOfParticleEffects.get(i).findEmitter("smoke"/* + Integer.toString(i)*/).setContinuous(isContinuous);
             listOfParticleEffects.get(i).scaleEffect(0.7f);
             listOfParticleEffects.get(i).setPosition(smokePosition.x, smokePosition.y);

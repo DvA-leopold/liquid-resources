@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
         gameWorldModel.addObserver(gameRenderer);
 
         //TODO это временный dirty hack
-        gameRenderer.setMainBasePtr(gameWorldModel.getMainBaseModel());
+//        gameRenderer.setMainBasePtr(gameWorldModel.getMainBaseModel());
 
         //camera = new OrthographicCamera();
         //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
