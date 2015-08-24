@@ -3,7 +3,6 @@ package com.liquidresources.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +19,6 @@ import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
 
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -176,7 +174,7 @@ public class GameRenderer implements Observer {
     final AlliedBase alliedBase;
     final EnemyBase enemyBase;
 
-    private Texture desertBackground;
+    final private Texture desertBackground;
     final private SpriteBatch batch;
 }
 
