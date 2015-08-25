@@ -1,6 +1,5 @@
 package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,20 +15,18 @@ import com.liquidresources.game.model.UpdatableBody;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
-public class Rocket extends Bullet {
-    public Rocket(final Vector2 defaultPosition,
-                  final Vector2 rocketSize,
-                  final RelationTypes parentRelation) {
+public class Missile extends Bullet {
+    public Missile(final Vector2 defaultPosition,
+                   final Vector2 rocketSize,
+                   final RelationTypes parentRelation) {
         super(defaultPosition, rocketSize, BodyDef.BodyType.DynamicBody, parentRelation);
 
         rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
         rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
         rocketSprite.setSize(rocketSize.x, rocketSize.y);
 
-        forceX = 35;
-        forceY = MathUtils.random(
-                Gdx.graphics.getWidth() * 0.085f - Gdx.graphics.getWidth() * 0.015f,
-                Gdx.graphics.getWidth() * 0.085f + Gdx.graphics.getWidth() * 0.015f);
+        forceX = 75;
+        forceY = MathUtils.random(100, 120);
     }
 
     @Override
@@ -66,8 +63,10 @@ public class Rocket extends Bullet {
     @Override
     public void update(final Body body, float delta) {
         forceY -= delta * 25;
+        if(forceY < -30) {
+            forceY -= 2;
+        }
         body.applyForceToCenter(forceX, forceY, true);
-        //body.setTransform(body.getPosition(), rotationAngle);
     }
 
     @Override

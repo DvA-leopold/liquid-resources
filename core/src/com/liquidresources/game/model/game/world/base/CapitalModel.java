@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.viewModel.bodies.udata.bullets.Rocket;
+import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
 
-public class MainBaseModel {
-    public MainBaseModel(final Vector2 position, final Vector2 rocketSize) {
+public class CapitalModel {
+    public CapitalModel(final Vector2 position, final Vector2 rocketSize) {
         oilBarrels = 0;
         waterBarrels = 0;
         shieldStatus = true;
@@ -56,7 +56,7 @@ public class MainBaseModel {
             public void clicked(InputEvent event, float x, float y) {
                 if (changeOil(-20)) {
                     bodyFactoryWrapper.createBody(
-                            new Rocket(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ALLY),
+                            new Missile(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ALLY),
                             false
                     );
                 }

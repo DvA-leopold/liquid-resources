@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.MainBase;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 
@@ -29,10 +29,10 @@ public class EnemyBase extends BaseFacade {
         bodyFactoryWrapper.createBody(oilPompFacade, true);
 
         endCoords.x -= oilPompFacade.getSize().x + buildingsPositionDelimiter;
-        mainBase = new MainBase(endCoords, graphicSize, RelationTypes.ENEMY);
-        bodyFactoryWrapper.createBody(mainBase, true);
+        capital = new Capital(endCoords, graphicSize, RelationTypes.ENEMY);
+        bodyFactoryWrapper.createBody(capital, true);
 
-        endCoords.x -= mainBase.getSize().x + buildingsPositionDelimiter;
+        endCoords.x -= capital.getSize().x + buildingsPositionDelimiter;
         shipFactoryFacade = new ShipFactoryViewFacade(endCoords, graphicSize, RelationTypes.ENEMY);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
 

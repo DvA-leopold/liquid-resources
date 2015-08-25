@@ -3,7 +3,7 @@ package com.liquidresources.game.viewModel.bases;
 import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.MainBase;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 
@@ -29,7 +29,7 @@ public abstract class BaseFacade {
     }
 
     public Vector2 getMainBasePosition() {
-        return mainBase.getPosition();
+        return capital.getPosition();
     }
 
     protected abstract void baseInit(final Vector2 initCoords,
@@ -40,5 +40,5 @@ public abstract class BaseFacade {
     protected IonShield baseShield;
     protected OilPumpFacade oilPompFacade;
     protected ShipFactoryViewFacade shipFactoryFacade;
-    protected MainBase mainBase;
+    protected Capital capital;
 }

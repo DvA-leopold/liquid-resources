@@ -9,10 +9,10 @@ import com.liquidresources.game.model.BodyType;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
-public class MainBase extends Building {
-    public MainBase(final Vector2 defaultPosition,
-                    final Vector2 buildingSize,
-                    final RelationTypes relationType) {
+public class Capital extends Building {
+    public Capital(final Vector2 defaultPosition,
+                   final Vector2 buildingSize,
+                   final RelationTypes relationType) {
         super(defaultPosition, null, buildingSize, relationType);
 
         mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.liquidresources.game.model.game.world.base.MainBaseModel;
+import com.liquidresources.game.model.game.world.base.CapitalModel;
 import com.liquidresources.game.model.game.world.base.RelationTypes;
 import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
@@ -25,7 +25,7 @@ public class GameWorldModel extends Observable {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         final Vector2 rocketSize = new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
-        mainBaseModel = new MainBaseModel(aMainBasePosition, rocketSize);
+        capitalModel = new CapitalModel(aMainBasePosition, rocketSize);
 //        eMainBaseModel = new EMainBaseModel(eMainBasePosition, rocketSize);
 
         final Vector2 shipSize = new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
@@ -63,7 +63,7 @@ public class GameWorldModel extends Observable {
     }
 
     public void updateRunningState(float delta) {
-        mainBaseModel.update(oilPump1.getResources(delta) + oilPump2.getResources(delta), waterPump.getResources(delta));
+        capitalModel.update(oilPump1.getResources(delta) + oilPump2.getResources(delta), waterPump.getResources(delta));
 
         for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
             ((UpdatableBody) body.getUserData()).update(body, delta);
@@ -78,19 +78,19 @@ public class GameWorldModel extends Observable {
     }
 
     public EventListener getShipFactoryListeners(ShipFactory.ShipType shipType) {
-        return shipFactory.getShipButtonListener(bodyFactoryWrapper, mainBaseModel, shipType);
+        return shipFactory.getShipButtonListener(bodyFactoryWrapper, capitalModel, shipType);
     }
 
     public EventListener getRocketFireEventListener() {
-        return mainBaseModel.fireRocketLaunch(bodyFactoryWrapper);
+        return capitalModel.fireRocketLaunch(bodyFactoryWrapper);
     }
 
     public long getOil() {
-        return mainBaseModel.getOilBarrels();
+        return capitalModel.getOilBarrels();
     }
 
     public long getWater() {
-        return mainBaseModel.getWaterBarrels();
+        return capitalModel.getWaterBarrels();
     }
 
     public void changeWorldState(GameStates newWorldState) {
@@ -104,7 +104,7 @@ public class GameWorldModel extends Observable {
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 
-    final private MainBaseModel mainBaseModel;
+    final private CapitalModel capitalModel;
 
     final private Pump oilPump1, oilPump2;
     final private Pump waterPump;
