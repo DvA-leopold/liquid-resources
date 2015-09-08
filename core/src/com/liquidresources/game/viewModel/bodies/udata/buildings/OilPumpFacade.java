@@ -9,8 +9,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.liquidresources.game.model.BodyType;
-import com.liquidresources.game.model.game.world.base.RelationTypes;
+import com.liquidresources.game.model.types.BodyTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class OilPumpFacade extends Building {
@@ -87,8 +87,8 @@ public class OilPumpFacade extends Building {
     }
 
     @Override
-    public BodyType getBodyType() {
-        return BodyType.OIL_POMP;
+    public BodyTypes getBodyType() {
+        return BodyTypes.OIL_POMP;
     }
 
     public void resetAnimation(boolean isStoped) {

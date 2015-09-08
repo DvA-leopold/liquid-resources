@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.liquidresources.game.model.BodyType;
-import com.liquidresources.game.model.game.world.base.RelationTypes;
+import com.liquidresources.game.model.types.BodyTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 
 public class IonShield extends Building {
     public IonShield(final Vector2 startPosition,
@@ -57,8 +57,8 @@ public class IonShield extends Building {
     public void beginCollisionContact(final Body bodyA) { }
 
     @Override
-    public BodyType getBodyType() {
-        return BodyType.ION_SHIELD;
+    public BodyTypes getBodyType() {
+        return BodyTypes.ION_SHIELD;
     }
 
     public void setActive(boolean isActive) {

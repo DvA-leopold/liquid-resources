@@ -35,7 +35,6 @@ public class BodyFactoryWrapper {
 
                 ((UpdatableBody) contact.getFixtureB().getBody().getUserData()).
                         beginCollisionContact(contact.getFixtureA().getBody());
-
             }
 
             @Override

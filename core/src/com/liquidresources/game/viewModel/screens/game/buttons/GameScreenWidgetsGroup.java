@@ -11,8 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
-import com.liquidresources.game.model.game.world.factories.ShipFactory;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.model.types.ShipTypes;
 import com.liquidresources.game.view.windows.GameOptionWindow;
 import com.liquidresources.game.viewModel.GameStates;
 
@@ -72,8 +73,8 @@ public class GameScreenWidgetsGroup implements Observer {
     public void initWorldListeners(final GameWorldModel gameWorldModel) {
 //        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
         rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
-        bomberButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.BOMBER));
-        fighterButton.addListener(gameWorldModel.getShipFactoryListeners(ShipFactory.ShipType.FIGHTER));
+        bomberButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.BOMBER, RelationTypes.ALLY));
+        fighterButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.FIGHTER, RelationTypes.ALLY));
 
         optionWindowButton.addListener(new ClickListener() {
             @Override

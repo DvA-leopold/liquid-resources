@@ -13,7 +13,7 @@ import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgets
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -9.8f));
+        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, 0));
         gameRenderer = new GameRenderer(
                 new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f),
                 new Vector2(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.35f),
@@ -32,9 +32,6 @@ public class GameScreen implements Screen {
 
         gameWorldModel.addObserver(gameScreenWidgetGroup);
         gameWorldModel.addObserver(gameRenderer);
-
-        //TODO это временный dirty hack
-//        gameRenderer.setMainBasePtr(gameWorldModel.getMainBaseModel());
 
         //camera = new OrthographicCamera();
         //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

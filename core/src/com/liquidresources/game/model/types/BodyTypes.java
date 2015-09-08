@@ -1,6 +1,6 @@
-package com.liquidresources.game.model;
+package com.liquidresources.game.model.types;
 
-public enum BodyType {
+public enum BodyTypes {
     MAIN_AI,
     OIL_POMP,
     SHIP_FACTORY,

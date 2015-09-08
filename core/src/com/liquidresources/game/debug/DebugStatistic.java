@@ -7,11 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class DebugStatistic {
     public DebugStatistic() {
         fontStandard  = new BitmapFont(Gdx.files.internal("fonts/whiteFont.fnt"));
-        if (isWindows()) {
-            debugBatch = new SpriteBatch(5000, DebugShader.createDefaultShader());
-        } else {
-            debugBatch = new SpriteBatch();
-        }
+        debugBatch = new SpriteBatch();
     }
 
     public void render(final SpriteBatch batch) {
@@ -22,11 +18,6 @@ public class DebugStatistic {
         debugBatch.end();
     }
 
-    public boolean isWindows() {
-        final String os = System.getProperty("os.name").toLowerCase();
-        return (os.contains("win") && System.getProperty("os.name") != null);
-    }
-
     public void dispose() {
         debugBatch.dispose();
     }
@@ -34,5 +25,4 @@ public class DebugStatistic {
 
     private BitmapFont fontStandard;
     private SpriteBatch debugBatch;
-
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
 
 public class CapitalModel {

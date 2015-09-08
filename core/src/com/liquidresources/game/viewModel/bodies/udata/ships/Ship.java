@@ -3,7 +3,7 @@ package com.liquidresources.game.viewModel.bodies.udata.ships;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.liquidresources.game.model.game.world.base.RelationTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 public abstract class Ship implements UniversalBody {

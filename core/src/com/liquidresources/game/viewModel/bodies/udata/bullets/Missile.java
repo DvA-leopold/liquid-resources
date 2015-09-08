@@ -10,9 +10,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.BodyType;
+import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.UpdatableBody;
-import com.liquidresources.game.model.game.world.base.RelationTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class Missile extends Bullet {
@@ -71,12 +71,12 @@ public class Missile extends Bullet {
 
     @Override
     public void beginCollisionContact(final Body bodyA) {
-        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.GROUND) {
+        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyTypes.GROUND) {
             isActive = false;
             BodyFactoryWrapper.destroyBody();
         }
 
-        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyType.ION_SHIELD &&
+        if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyTypes.ION_SHIELD &&
                 ((UpdatableBody) bodyA.getUserData()).getRelation() != this.getRelation() &&
                 ((UpdatableBody) bodyA.getUserData()).isActive()) {
 
@@ -86,8 +86,8 @@ public class Missile extends Bullet {
     }
 
     @Override
-    public BodyType getBodyType() {
-        return BodyType.ROCKET;
+    public BodyTypes getBodyType() {
+        return BodyTypes.ROCKET;
     }
 
 

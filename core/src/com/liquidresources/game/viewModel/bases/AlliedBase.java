@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.game.world.base.RelationTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;

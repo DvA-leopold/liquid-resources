@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.liquidresources.game.debug.DebugShader;
 import com.liquidresources.game.debug.DebugStatistic;
 import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
@@ -16,11 +15,7 @@ public final class LiquidResources extends Game {
 	@Override
 	public void create() {
         statistic = new DebugStatistic();
-        if (statistic.isWindows()){
-            mainBatch = new SpriteBatch(5000, DebugShader.createDefaultShader());
-        } else {
-            mainBatch = new SpriteBatch();
-        }
+        mainBatch = new SpriteBatch();
         musicManager = new MusicManager();
 
         setScreen(new LoadingScreen());
