@@ -32,8 +32,8 @@ public class GameWorldModel extends Observable {
         final Vector2 rocketSize = UConverter.M2P(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
         capitalModel = new CapitalModel(aMainBasePosition, rocketSize);
 
-        shipSize = UConverter.M2P(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
-        shipCreationPosition = UConverter.M2P(aShipsCreationPosition);
+        shipSize = UConverter.M2P(Gdx.graphics.getWidth() * 0.04f, Gdx.graphics.getHeight() * 0.04f);
+        shipCreationPosition = aShipsCreationPosition;
         bombersDefaultHealth = 100;
         fighterDefaultHealth = 20;
 

@@ -36,10 +36,9 @@ public class Bomber extends Ship {
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(shipSize.x * 0.5f, shipSize.y * 0.5f);
 
-        //TODO change to normal values later
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
-        fixtureDef.isSensor = true;
+        fixtureDef.isSensor = false;
     }
 
     @Override

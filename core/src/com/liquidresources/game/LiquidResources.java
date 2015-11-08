@@ -105,10 +105,9 @@ public final class LiquidResources extends Game {
 
     private void initFontGenerator() {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AllerDisplay.ttf"));
-
         FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
 
-        fontParameter.size = Gdx.graphics.getHeight() * 32 / Gdx.graphics.getWidth();
+        fontParameter.size = Gdx.graphics.getHeight() * 64 / Gdx.graphics.getWidth();
         mainFonts = fontGenerator.generateFont(fontParameter);
 
         fontParameter.color = Color.BLACK;
