@@ -28,6 +28,7 @@ public class Missile extends Bullet {
         );
         rocketSprite.setSize(missileSize.x, missileSize.y);
 
+        // TODO расчет силы для любых размеров экрана
         rocketForceX = MathUtils.random(28, 38);
         rocketForceY = MathUtils.random(45, 55);
     }

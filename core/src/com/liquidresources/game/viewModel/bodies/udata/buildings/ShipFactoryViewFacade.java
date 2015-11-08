@@ -26,7 +26,7 @@ public class ShipFactoryViewFacade extends Building {
         shipFactory.setPosition(defaultPosition.x, defaultPosition.y);
         shipFactory.setSize(buildingSize.x, buildingSize.y);
 
-        smokeParticles = new SmokeParticles( //TODO разобраться положением дыма
+        smokeParticles = new SmokeParticles( //TODO разобраться c положением дыма
                 new Vector2(
                         defaultPosition.x + UConverter.M2P(35),
                         defaultPosition.y + shipFactory.getHeight() * 0.8f),

@@ -94,10 +94,15 @@ public class GameRenderer implements Observer {
         );
         batch.enableBlending();
 
+        batch.setProjectionMatrix(camera.combined.cpy().scale(
+                1 / UConverter.getPMCoefficient(),
+                1 / UConverter.getPMCoefficient(),
+                1)
+        );
         mainFonts.draw(batch,
                 I18NBundleManager.getString("prepare"),
-                M2P(Gdx.graphics.getWidth() * 0.2f),
-                M2P(Gdx.graphics.getHeight() * 0.8f)
+                Gdx.graphics.getWidth() * 0.2f,
+                Gdx.graphics.getHeight() * 0.8f
         );
 
         batch.end();

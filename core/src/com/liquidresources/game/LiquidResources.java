@@ -53,6 +53,11 @@ public final class LiquidResources extends Game {
         mainBatch.setProjectionMatrix(camera.combined);
 
         super.render();
+        mainBatch.setProjectionMatrix(camera.combined.cpy().scale(
+                1 / UConverter.getPMCoefficient(),
+                1 / UConverter.getPMCoefficient(),
+                1)
+        );
         versionHandler.render(mainBatch);
         statistic.render(mainBatch);
     }

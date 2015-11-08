@@ -158,7 +158,7 @@ public class ResourceManager {
     }
 
     public long getCurrentStorageSize() {
-        return currentStorageSize;
+        return currentStorageSize / 1024 / 1024;
     }
 
     private static class SingletonHolder {
