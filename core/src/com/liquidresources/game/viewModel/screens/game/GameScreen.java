@@ -8,12 +8,13 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.music.manager.MusicManager;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.view.GameRenderer;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, 0));
+        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -20.0f));
         gameRenderer = new GameRenderer(
                 new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f),
                 new Vector2(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.35f),
@@ -22,19 +23,16 @@ public class GameScreen implements Screen {
 
         gameWorldModel = new GameWorldModel(
                 bodyFactoryWrapper,
-                gameRenderer.getBase(true).getMainBasePosition(),
-                gameRenderer.getBase(true).getShipFactoryPosition(),
-                gameRenderer.getBase(false).getMainBasePosition(),
-                gameRenderer.getBase(false).getShipFactoryPosition()
+                gameRenderer.getBase(RelationTypes.ALLY).getMainBasePosition(),
+                gameRenderer.getBase(RelationTypes.ALLY).getShipFactoryPosition(),
+                gameRenderer.getBase(RelationTypes.ENEMY).getMainBasePosition(),
+                gameRenderer.getBase(RelationTypes.ENEMY).getShipFactoryPosition()
         );
 
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();
 
         gameWorldModel.addObserver(gameScreenWidgetGroup);
         gameWorldModel.addObserver(gameRenderer);
-
-        //camera = new OrthographicCamera();
-        //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -51,7 +49,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         gameRenderer.render(delta);
-        gameRenderer.statisticRender(gameWorldModel.getOil(), gameWorldModel.getWater());
+        gameRenderer.renderStatistic(gameWorldModel.getOil(), gameWorldModel.getWater());
         gameScreenWidgetGroup.render();
 
         gameWorldModel.update(delta);

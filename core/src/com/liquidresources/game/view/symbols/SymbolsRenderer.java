@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.view.UConverter;
 
 import java.util.ArrayList;
 
@@ -32,8 +33,8 @@ public class SymbolsRenderer {
         for (int i = numberOfDigits; i > 0; --i) {
             batch.draw(
                     texturesNumbersArray.get((int) (number % 10)),
-                    xDefaultPosition + width * i + xOffset,
-                    yDefaultPosition + yOffset, width, height);
+                    xDefaultPosition + width * i + UConverter.M2P(xOffset),
+                    yDefaultPosition + UConverter.M2P(yOffset), width, height);
             number /= 10;
         }
     }

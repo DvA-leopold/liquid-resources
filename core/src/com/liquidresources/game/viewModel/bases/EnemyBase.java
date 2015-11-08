@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
+import com.liquidresources.game.view.UConverter;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 
@@ -21,24 +22,25 @@ public class EnemyBase extends BaseFacade {
     protected void baseInit(final Vector2 initCoords,
                             final Vector2 graphicSize,
                             final BodyFactoryWrapper bodyFactoryWrapper) {
-        final Vector2 endCoords = new Vector2(initCoords);
-        final float buildingsPositionDelimiter = Gdx.graphics.getWidth() * 0.005f;
+        final float buildingsPositionDelimiter = UConverter.M2P(Gdx.graphics.getWidth() * 0.005f);
+        final Vector2 endPosition = new Vector2(initCoords);
 
-        endCoords.x -= graphicSize.x;
-        oilPompFacade = new OilPumpFacade(0.3f, endCoords, graphicSize, Animation.PlayMode.LOOP_PINGPONG, RelationTypes.ENEMY);
+        endPosition.x -= graphicSize.x;
+        oilPompFacade = new OilPumpFacade(0.3f, endPosition, graphicSize, Animation.PlayMode.LOOP_PINGPONG, RelationTypes.ENEMY);
         bodyFactoryWrapper.createBody(oilPompFacade, true);
 
-        endCoords.x -= oilPompFacade.getSize().x + buildingsPositionDelimiter;
-        capital = new Capital(endCoords, graphicSize, RelationTypes.ENEMY);
+        endPosition.x -= oilPompFacade.getSize().x + buildingsPositionDelimiter;
+        capital = new Capital(endPosition, graphicSize, RelationTypes.ENEMY);
         bodyFactoryWrapper.createBody(capital, true);
 
-        endCoords.x -= capital.getSize().x + buildingsPositionDelimiter;
-        shipFactoryFacade = new ShipFactoryViewFacade(endCoords, graphicSize, RelationTypes.ENEMY);
+        endPosition.x -= capital.getSize().x + buildingsPositionDelimiter;
+        shipFactoryFacade = new ShipFactoryViewFacade(endPosition, graphicSize, RelationTypes.ENEMY);
         bodyFactoryWrapper.createBody(shipFactoryFacade, true);
 
         initCoords.x += buildingsPositionDelimiter;
-        endCoords.x += graphicSize.x * 1.5f; //TODO разобраться почему 1.5
-        baseShield = new IonShield(initCoords, endCoords, graphicSize, RelationTypes.ENEMY);
+        endPosition.x += graphicSize.x * 1.5f; //TODO 1.5 ??
+        Vector2 shieldEndPosition = new Vector2(endPosition.x + buildingsPositionDelimiter, endPosition.y);
+        baseShield = new IonShield(initCoords, shieldEndPosition, graphicSize, RelationTypes.ENEMY);
         bodyFactoryWrapper.createBody(baseShield, true);
     }
 }

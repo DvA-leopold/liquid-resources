@@ -8,9 +8,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.view.UConverter;
 import com.liquidresources.game.view.particles.SmokeParticles;
 
 public class ShipFactoryViewFacade extends Building {
@@ -25,8 +26,10 @@ public class ShipFactoryViewFacade extends Building {
         shipFactory.setPosition(defaultPosition.x, defaultPosition.y);
         shipFactory.setSize(buildingSize.x, buildingSize.y);
 
-        smokeParticles = new SmokeParticles( //TODO настроить позицию дыма
-                new Vector2(defaultPosition.x + 35, defaultPosition.y + shipFactory.getHeight() * 0.8f),
+        smokeParticles = new SmokeParticles( //TODO разобраться положением дыма
+                new Vector2(
+                        defaultPosition.x + UConverter.M2P(35),
+                        defaultPosition.y + shipFactory.getHeight() * 0.8f),
                 true
         );
     }

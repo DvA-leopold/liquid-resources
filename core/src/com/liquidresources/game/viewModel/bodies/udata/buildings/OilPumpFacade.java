@@ -9,9 +9,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class OilPumpFacade extends Building {
     public OilPumpFacade(float defaultAnimationSpeed,
@@ -41,19 +41,18 @@ public class OilPumpFacade extends Building {
     @Override
     protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(startPosition.x + buildingSize.x * 0.5f, startPosition.y + buildingSize.y * 0.5f);
+        bodyDef.position.set(
+                startPosition.x + buildingSize.x * 0.5f,
+                startPosition.y + buildingSize.y * 0.5f
+        );
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape bodyShape = new PolygonShape();
         bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y * 0.5f);
 
-        //TODO change to normal values later
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
-        fixtureDef.density = 0.4f;
-        fixtureDef.friction = 0.3f;
-        fixtureDef.restitution = 0.1f;
-        fixtureDef.isSensor = true;
+        fixtureDef.isSensor = false;
     }
 
     @Override

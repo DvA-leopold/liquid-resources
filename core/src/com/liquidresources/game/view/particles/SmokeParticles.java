@@ -13,7 +13,8 @@ public class SmokeParticles {
         for (int i = 0; i < numberOfParticleEffects; ++i) {
             listOfParticleEffects.add(new ParticleEffect((ParticleEffect) ResourceManager.getInstance().get("particles/smoke.p")));
             listOfParticleEffects.get(i).findEmitter("smoke"/* + Integer.toString(i)*/).setContinuous(isContinuous);
-            listOfParticleEffects.get(i).scaleEffect(0.7f);
+
+            listOfParticleEffects.get(i).scaleEffect(0.05f);
             listOfParticleEffects.get(i).setPosition(smokePosition.x, smokePosition.y);
         }
     }

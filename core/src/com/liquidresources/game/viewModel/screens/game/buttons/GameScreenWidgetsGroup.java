@@ -29,8 +29,10 @@ public class GameScreenWidgetsGroup implements Observer {
                 new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),
                 ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch()
         );
-        Skin skin = (Skin) ResourceManager.
-                getInstance().get("skins/game_screen/gameSkin.json");
+        Skin skin = (Skin) ResourceManager.getInstance().get("skins/game_screen/gameSkin.json");
+        // workaround, replace default font with generated ones via runtime, cos json can load this
+        //skin.add("whiteFont", ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts(), BitmapFont.class);
+        //skin.getFont("whiteFont").setColor(Color.BLACK);
 
         optionWindowButton = new Button(skin, "optionButton");
         optionWindowButton.setSize(buttonWidth, buttonHeight);

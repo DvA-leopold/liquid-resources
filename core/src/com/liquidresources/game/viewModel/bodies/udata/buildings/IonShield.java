@@ -4,9 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.view.UConverter;
 
 public class IonShield extends Building {
     public IonShield(final Vector2 startPosition,
@@ -21,11 +25,11 @@ public class IonShield extends Building {
                                          final Vector2 endPosition,
                                          final Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(endPosition.x, startPosition.y + buildingSize.y - 10);
+        bodyDef.position.set(endPosition.x, startPosition.y + buildingSize.y - UConverter.M2P(10));
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         PolygonShape ionShieldShape = new PolygonShape();
-        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + 20);
+        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + UConverter.M2P(20));
 
 //        ChainShape ionShieldShape = new ChainShape();
 //        Vector2[] shapeChain = new Vector2[50];

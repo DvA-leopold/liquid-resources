@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class VersionHandler {
-    static {
-        fontStandard = new BitmapFont(Gdx.files.internal("fonts/whiteFont.fnt"));
+    public VersionHandler(final BitmapFont mainFont) {
+        this.mainFont = mainFont;
         FileHandle versionFile = Gdx.files.internal("version/version.properties");
         if (versionFile.exists()) {
             int equalIndex = versionFile.readString().indexOf("\n");
@@ -17,19 +17,18 @@ public class VersionHandler {
                     replaceAll("minor=", ".").
                     replaceAll("patch=", ".").
                     replaceAll("\n", "");
-
         } else {
             version = "";
         }
     }
 
-    public static void render(final SpriteBatch batch) {
+    public void render(final SpriteBatch batch) {
         batch.begin();
-        fontStandard.draw(batch, version, 10, Gdx.graphics.getHeight() * 0.05f);
+        mainFont.draw(batch, version, 10, Gdx.graphics.getHeight() * 0.05f);
         batch.end();
     }
 
 
-    private static final String version;
-    public static BitmapFont fontStandard;
+    final private String version;
+    final private BitmapFont mainFont;
 }

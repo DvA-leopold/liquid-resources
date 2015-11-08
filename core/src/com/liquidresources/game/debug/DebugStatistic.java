@@ -5,24 +5,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DebugStatistic {
-    public DebugStatistic() {
-        fontStandard  = new BitmapFont(Gdx.files.internal("fonts/whiteFont.fnt"));
-        debugBatch = new SpriteBatch();
+    public DebugStatistic(final BitmapFont mainFont) {
+        this.mainFont = mainFont;
     }
 
     public void render(final SpriteBatch batch) {
-        debugBatch.begin();
-        fontStandard.draw(debugBatch,
-                "DC:" + batch.renderCalls +
-                        " fps:" + Gdx.graphics.getFramesPerSecond(), 10, Gdx.graphics.getHeight() * 0.1f);
-        debugBatch.end();
-    }
-
-    public void dispose() {
-        debugBatch.dispose();
+        batch.begin();
+        mainFont.draw(
+                batch, "fps:" + Gdx.graphics.getFramesPerSecond(),
+                10, Gdx.graphics.getHeight() * 0.08f);
+        batch.end();
     }
 
 
-    private BitmapFont fontStandard;
-    private SpriteBatch debugBatch;
+    final private BitmapFont mainFont;
 }

@@ -51,13 +51,15 @@ public class CapitalModel {
                 : Long.MAX_VALUE - 1;
     }
 
-    public EventListener fireRocketLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
+    public EventListener missileLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (changeOil(-20)) {
                     bodyFactoryWrapper.createBody(
-                            new Missile(new Vector2(position.x, position.y + rocketSize.y + 5), rocketSize, RelationTypes.ALLY),
+                            new Missile(
+                                    new Vector2(position.x, position.y + rocketSize.y + 5),
+                                    rocketSize, RelationTypes.ALLY),
                             false
                     );
                 }

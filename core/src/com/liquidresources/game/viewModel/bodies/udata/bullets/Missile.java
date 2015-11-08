@@ -10,23 +10,26 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.UpdatableBody;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.model.types.BodyTypes;
+import com.liquidresources.game.model.types.RelationTypes;
 
 public class Missile extends Bullet {
     public Missile(final Vector2 defaultPosition,
-                   final Vector2 rocketSize,
+                   final Vector2 missileSize,
                    final RelationTypes parentRelation) {
-        super(defaultPosition, rocketSize, BodyDef.BodyType.DynamicBody, parentRelation);
+        super(defaultPosition, missileSize, BodyDef.BodyType.DynamicBody, parentRelation);
 
         rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
-        rocketSprite.setPosition(defaultPosition.x - rocketSize.x * 0.5f, defaultPosition.y - rocketSize.y * 0.5f);
-        rocketSprite.setSize(rocketSize.x, rocketSize.y);
+        rocketSprite.setPosition(
+                defaultPosition.x - missileSize.x * 0.5f,
+                defaultPosition.y - missileSize.y * 0.5f
+        );
+        rocketSprite.setSize(missileSize.x, missileSize.y);
 
-        forceX = 75;
-        forceY = MathUtils.random(100, 120);
+        rocketForceX = MathUtils.random(28, 38);
+        rocketForceY = MathUtils.random(45, 55);
     }
 
     @Override
@@ -62,11 +65,11 @@ public class Missile extends Bullet {
 
     @Override
     public void update(final Body body, float delta) {
-        forceY -= delta * 25;
-        if(forceY < -30) {
-            forceY -= 2;
+        if (rocketFuel > 0) {
+            body.applyForceToCenter(rocketForceX, rocketForceY, true);
+            rocketFuel--;
         }
-        body.applyForceToCenter(forceX, forceY, true);
+        // установка колличества горючего на полет ракеты
     }
 
     @Override
@@ -91,7 +94,8 @@ public class Missile extends Bullet {
     }
 
 
-    private float forceX, forceY;
+    final private int rocketForceX, rocketForceY;
+    private int rocketFuel = 40;
 
     final private Sprite rocketSprite;
 }

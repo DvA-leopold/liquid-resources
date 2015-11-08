@@ -1,7 +1,7 @@
 package com.liquidresources.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,15 +12,18 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
+import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.view.symbols.SymbolsRenderer;
+import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.bases.AlliedBase;
 import com.liquidresources.game.viewModel.bases.BaseFacade;
 import com.liquidresources.game.viewModel.bases.EnemyBase;
 import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
-import com.liquidresources.game.view.symbols.SymbolsRenderer;
-import com.liquidresources.game.viewModel.GameStates;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import static com.liquidresources.game.view.UConverter.M2P;
 
 public class GameRenderer implements Observer {
     public GameRenderer(final Vector2 initAllyCoords,
@@ -31,18 +34,17 @@ public class GameRenderer implements Observer {
 
         gameState = GameStates.GAME_PREPARING;
 
-        final Vector2 graphicSize = new Vector2(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
-        alliedBase = new AlliedBase(initAllyCoords, graphicSize, bodyFactoryWrapper);
-        enemyBase = new EnemyBase(initEnemyCoords, graphicSize, bodyFactoryWrapper);
+        final Vector2 graphicSize = M2P(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
+        alliedBase = new AlliedBase(M2P(initAllyCoords), graphicSize, bodyFactoryWrapper);
+        enemyBase = new EnemyBase(M2P(initEnemyCoords), graphicSize, bodyFactoryWrapper);
 
         worldDebugRenderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = ((LiquidResources) Gdx.app.getApplicationListener()).getCamera();
 
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
-        blackFont = (BitmapFont) ResourceManager.getInstance().get("fonts/blackFont.fnt");
+        mainFonts = ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts();
 
-        symbolsRenderer = new SymbolsRenderer(0, Gdx.graphics.getHeight() - 60, 20, 45); // TODO dynamic size
+        symbolsRenderer = new SymbolsRenderer(0, M2P(Gdx.graphics.getHeight() - 60), M2P(20), M2P(45));
 
         bodyFactoryWrapper.createBody(new Ground(initAllyCoords), true);
     }
@@ -72,7 +74,7 @@ public class GameRenderer implements Observer {
         }
     }
 
-    public void statisticRender(long oilStatistic, long waterStatistic) {
+    public void renderStatistic(long oilStatistic, long waterStatistic) {
         batch.begin();
 
         symbolsRenderer.renderNumber(batch, oilStatistic);
@@ -85,11 +87,17 @@ public class GameRenderer implements Observer {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(
+                desertBackground, 0, 0,
+                M2P(Gdx.graphics.getWidth()),
+                M2P(Gdx.graphics.getHeight())
+        );
         batch.enableBlending();
 
-        blackFont.draw(batch, I18NBundleManager.getString("prepare"),
-                Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight() * 0.8f
+        mainFonts.draw(batch,
+                I18NBundleManager.getString("prepare"),
+                M2P(Gdx.graphics.getWidth() * 0.2f),
+                M2P(Gdx.graphics.getHeight() * 0.8f)
         );
 
         batch.end();
@@ -99,7 +107,11 @@ public class GameRenderer implements Observer {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(
+                desertBackground, 0, 0,
+                M2P(Gdx.graphics.getWidth()),
+                M2P(Gdx.graphics.getHeight())
+        );
         batch.enableBlending();
 
         for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
@@ -119,7 +131,11 @@ public class GameRenderer implements Observer {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(desertBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(
+                desertBackground, 0, 0,
+                M2P(Gdx.graphics.getWidth()),
+                M2P(Gdx.graphics.getHeight())
+        );
         batch.enableBlending();
 
         for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
@@ -143,11 +159,14 @@ public class GameRenderer implements Observer {
 
     }
 
-    public BaseFacade getBase(boolean alliedBaseFlag) {
-        if (alliedBaseFlag) {
-            return alliedBase;
-        } else {
-            return enemyBase;
+    public BaseFacade getBase(RelationTypes relationType) {
+        switch (relationType) {
+            case ALLY:
+                return alliedBase;
+            case ENEMY:
+                return enemyBase;
+            default:
+                return null;
         }
     }
 
@@ -165,9 +184,9 @@ public class GameRenderer implements Observer {
     private GameStates gameState;
     final private Box2DDebugRenderer worldDebugRenderer;
 
-    final private OrthographicCamera camera;
+    final private Camera camera;
 
-    final private BitmapFont blackFont;
+    final private BitmapFont mainFonts;
     final private SymbolsRenderer symbolsRenderer;
 
     final private BodyFactoryWrapper bodyFactoryWrapper;

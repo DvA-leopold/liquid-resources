@@ -8,16 +8,16 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class Fighter extends Ship {
     public Fighter(final Vector2 defaultPosition,
                    final Vector2 shipSize,
                    int defaultHealth,
                    final RelationTypes relationType) {
-        super(defaultPosition, shipSize, defaultHealth, relationType);
+        super(defaultPosition, shipSize, defaultHealth, false, 1.0f, relationType);
 
         shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/fighter.png"));
         shipSprite.setPosition(defaultPosition.x - shipSize.x * 0.5f, defaultPosition.y - shipSize.y * 0.5f);

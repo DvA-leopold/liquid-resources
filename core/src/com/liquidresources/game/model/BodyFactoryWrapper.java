@@ -54,11 +54,11 @@ public class BodyFactoryWrapper {
         });
     }
 
-    public void createBody(final UniversalBody universalBody, boolean isBodyStatic) {
-        Body bodyForCreate = physicsWorld.createBody(universalBody.getBodyDef());
-        bodyForCreate.createFixture(universalBody.getFixtureDef());
-        bodyForCreate.setUserData(universalBody);
-        boolean debug; //TODO remove in release
+    public void createBody(final UniversalBody universalBodyUserData, boolean isBodyStatic) {
+        Body bodyForCreate = physicsWorld.createBody(universalBodyUserData.getBodyDef());
+        bodyForCreate.createFixture(universalBodyUserData.getFixtureDef());
+        bodyForCreate.setUserData(universalBodyUserData);
+        boolean debug;
 
         if (isBodyStatic) {
             debug = staticConstructions.add(bodyForCreate);
@@ -72,7 +72,6 @@ public class BodyFactoryWrapper {
     }
 
     public void destroyBody(Body bodyForDestroy, boolean isBodyStatic) {
-        //bodyForDestroy.setActive(false);
         physicsWorld.destroyBody(bodyForDestroy);
 
         boolean debug;

@@ -11,6 +11,8 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
+import static com.liquidresources.game.view.UConverter.M2P;
+
 public class Ground implements UniversalBody {
     public Ground(final Vector2 groundPosition) {
         bodyDef = new BodyDef();
@@ -18,7 +20,7 @@ public class Ground implements UniversalBody {
         bodyDef.type = BodyDef.BodyType.KinematicBody;
 
         PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(Gdx.graphics.getWidth() * 5, 1);
+        bodyShape.setAsBox(M2P(Gdx.graphics.getWidth() * 5), M2P(1));
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;

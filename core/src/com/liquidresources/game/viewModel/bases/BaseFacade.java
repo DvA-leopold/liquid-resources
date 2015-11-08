@@ -2,8 +2,8 @@ package com.liquidresources.game.viewModel.bases;
 
 import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
-import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 
@@ -15,7 +15,6 @@ public abstract class BaseFacade {
     }
 
     public void show() {
-        //TODO разобраться почему не работают несколько эффектов сразу
         shipFactoryFacade.getSmokeParticles().startEffect();
     }
 

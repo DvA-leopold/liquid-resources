@@ -13,7 +13,7 @@ import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
 
 public class GameOptionWindow extends Window {
-    public GameOptionWindow(String title, Skin skin) {
+    public GameOptionWindow(String title, final Skin skin) {
         super(title, skin);
         float   buttonHeight = Gdx.graphics.getHeight() * 0.1f,
                 buttonWidth = Gdx.graphics.getWidth() * 0.3f;
@@ -26,9 +26,10 @@ public class GameOptionWindow extends Window {
         musicButton = new CheckBox("", skin, "musicCheckBox");
         musicButton.setChecked(!MusicManager.isMusicEnable());
         soundButton = new CheckBox("", skin, "soundCheckBox");
-        soundButton.setChecked(!SoundManager.isIsSoundEnable());
+        soundButton.setChecked(!SoundManager.isSoundEnable());
 
         exitButton = new TextButton(I18NBundleManager.getString("exit"), skin, "exitButton");
+//        exitButton.getStyle().font = ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts();
         resumeButton = new Button(skin, "resumeButton");
 
         this.add(musicButton).width(buttonWidth * 0.5f).height(buttonHeight).padTop(Gdx.graphics.getHeight() * 0.4f);

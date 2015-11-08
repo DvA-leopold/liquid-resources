@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 public class Capital extends Building {
     public Capital(final Vector2 defaultPosition,
@@ -15,9 +18,9 @@ public class Capital extends Building {
                    final RelationTypes relationType) {
         super(defaultPosition, null, buildingSize, relationType);
 
-        mainAI = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/mainAI.png"));
-        mainAI.setPosition(defaultPosition.x, defaultPosition.y);
-        mainAI.setSize(buildingSize.x, buildingSize.y * 2);
+        capitalSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/capitalSprite.png"));
+        capitalSprite.setPosition(defaultPosition.x, defaultPosition.y);
+        capitalSprite.setSize(buildingSize.x, buildingSize.y * 2);
     }
 
     @Override
@@ -38,7 +41,7 @@ public class Capital extends Building {
 
     @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
-        mainAI.draw(batch);
+        capitalSprite.draw(batch);
     }
 
     @Override
@@ -57,14 +60,14 @@ public class Capital extends Building {
     }
 
     public Vector2 getPosition() {
-        return new Vector2(mainAI.getX(), mainAI.getY());
+        return new Vector2(capitalSprite.getX(), capitalSprite.getY());
     }
 
     @Override
     public Vector2 getSize() {
-        return new Vector2(mainAI.getWidth(), mainAI.getHeight());
+        return new Vector2(capitalSprite.getWidth(), capitalSprite.getHeight());
     }
 
 
-    final private Sprite mainAI;
+    final private Sprite capitalSprite;
 }

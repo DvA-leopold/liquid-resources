@@ -3,6 +3,7 @@ package com.liquidresources.game.model.resource.manager;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +21,7 @@ import java.util.Queue;
 public class ResourceManager {
     private ResourceManager() {
         currentStorageSize = 0;
-        mimeFileTypes = new Hashtable<>(11);
+        mimeFileTypes = new Hashtable<>();
         assetManager = new AssetManager();
 
         mimeFileTypes.put("png", Texture.class);
@@ -150,6 +151,10 @@ public class ResourceManager {
         FileHandle[] filesListArray = new FileHandle[filesList.size()];
         filesList.toArray(filesListArray);
         return filesListArray;
+    }
+
+    public void setSkinLoader(SkinLoader newSkinLoader) {
+        assetManager.setLoader(Skin.class, newSkinLoader);
     }
 
     public long getCurrentStorageSize() {

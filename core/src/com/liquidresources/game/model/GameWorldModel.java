@@ -7,11 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.game.world.base.CapitalModel;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.game.world.pumps.OilPump;
 import com.liquidresources.game.model.game.world.pumps.Pump;
 import com.liquidresources.game.model.game.world.pumps.WaterPump;
+import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.types.ShipTypes;
+import com.liquidresources.game.view.UConverter;
 import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Bomber;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
@@ -28,11 +29,11 @@ public class GameWorldModel extends Observable {
 
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
-        final Vector2 rocketSize = new Vector2(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
+        final Vector2 rocketSize = UConverter.M2P(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
         capitalModel = new CapitalModel(aMainBasePosition, rocketSize);
 
-        shipSize = new Vector2(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
-        shipCreationPosition = aShipsCreationPosition;
+        shipSize = UConverter.M2P(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
+        shipCreationPosition = UConverter.M2P(aShipsCreationPosition);
         bombersDefaultHealth = 100;
         fighterDefaultHealth = 20;
 
@@ -111,7 +112,7 @@ public class GameWorldModel extends Observable {
     }
 
     public EventListener getRocketFireEventListener() {
-        return capitalModel.fireRocketLaunch(bodyFactoryWrapper);
+        return capitalModel.missileLaunch(bodyFactoryWrapper);
     }
 
     public long getOil() {
