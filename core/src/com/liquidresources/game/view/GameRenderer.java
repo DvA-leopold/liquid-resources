@@ -182,7 +182,9 @@ public class GameRenderer implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        gameState = (GameStates) arg;
+        if (arg instanceof GameStates) {
+            gameState = (GameStates) arg;
+        }
     }
 
 

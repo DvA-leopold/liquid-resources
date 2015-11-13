@@ -47,7 +47,7 @@ public class GameWorldModel extends Observable {
     public void update(float delta) {
         switch (worldState) {
             case GAME_PREPARING:
-                updatePreparingState(delta);
+                updatePreparingState();
                 break;
             case GAME_RUNNING:
                 updateRunningState(delta);
@@ -61,14 +61,18 @@ public class GameWorldModel extends Observable {
         }
     }
 
-    public void updatePreparingState(float delta) {
+    public void updatePreparingState() {
         if (Gdx.input.justTouched()) {
             changeWorldState(GameStates.GAME_RUNNING);
         }
     }
 
     public void updateRunningState(float delta) {
-        capitalModel.update(oilPump1.getResources(delta) + oilPump2.getResources(delta), waterPump.getResources(delta));
+        if (!capitalModel.update(oilPump1.getResources(delta) + oilPump2.getResources(delta),
+                waterPump.getResources(delta))) {
+            setChanged();
+            notifyObservers(capitalModel.getShieldStatus());
+        }
 
         for (Body body : bodyFactoryWrapper.getDynamicBodies()) {
             ((UpdatableBody) body.getUserData()).update(body, delta);
@@ -82,7 +86,8 @@ public class GameWorldModel extends Observable {
         }
     }
 
-    public EventListener getShipsCreationEventListener(ShipTypes shipType, final RelationTypes relationType) {
+    public EventListener getShipsCreationEventListener(ShipTypes shipType,
+                                                       final RelationTypes relationType) throws TypeNotPresentException {
         switch (shipType) {
             case BOMBER:
                 return new ClickListener() {
@@ -115,12 +120,8 @@ public class GameWorldModel extends Observable {
         return capitalModel.missileLaunch(bodyFactoryWrapper);
     }
 
-    public long getOil() {
-        return capitalModel.getOilBarrels();
-    }
-
-    public long getWater() {
-        return capitalModel.getWaterBarrels();
+    public EventListener getIONShieldListener() {
+        return capitalModel.getIONShieldListener();
     }
 
     public void changeWorldState(GameStates newWorldState) {
@@ -129,16 +130,24 @@ public class GameWorldModel extends Observable {
         notifyObservers(worldState);
     }
 
+    public long getOil() {
+        return capitalModel.getOilBarrels();
+    }
+
+    public long getWater() {
+        return capitalModel.getWaterBarrels();
+    }
+
 
     private GameStates worldState;
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 
     final private CapitalModel capitalModel;
-
     final private Pump oilPump1, oilPump2;
-    final private Pump waterPump;
 
+    final private Pump waterPump;
     final Vector2 shipCreationPosition, shipSize;
+
     int fighterDefaultHealth, bombersDefaultHealth;
 }

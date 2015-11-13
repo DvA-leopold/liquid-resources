@@ -30,9 +30,6 @@ public class GameScreenWidgetsGroup implements Observer {
                 ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch()
         );
         Skin skin = (Skin) ResourceManager.getInstance().get("skins/game_screen/gameSkin.json");
-        // workaround, replace default font with generated ones via runtime, cos json can load this
-        //skin.add("whiteFont", ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts(), BitmapFont.class);
-        //skin.getFont("whiteFont").setColor(Color.BLACK);
 
         optionWindowButton = new Button(skin, "optionButton");
         optionWindowButton.setSize(buttonWidth, buttonHeight);
@@ -73,11 +70,15 @@ public class GameScreenWidgetsGroup implements Observer {
     }
 
     public void initWorldListeners(final GameWorldModel gameWorldModel) {
-//        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
-        rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
-        bomberButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.BOMBER, RelationTypes.ALLY));
-        fighterButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.FIGHTER, RelationTypes.ALLY));
+        try {
+            bomberButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.BOMBER, RelationTypes.ALLY));
+            fighterButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.FIGHTER, RelationTypes.ALLY));
+        } catch (TypeNotPresentException err) {
+            Gdx.app.error("Ships creation listener error: ", err.getMessage());
+        }
 
+        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
+        rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
         optionWindowButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -96,16 +97,20 @@ public class GameScreenWidgetsGroup implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        switch ((GameStates) arg) {
-            case GAME_PREPARING:
-                setVisible(false);
-                break;
-            case GAME_RUNNING:
-                setVisible(true);
-                break;
-            case GAME_PAUSED:
-                setVisible(false);
-                break;
+        if (arg instanceof Boolean) {
+            ionShieldButton.setChecked(false);
+        } else if (arg instanceof GameStates) {
+            switch ((GameStates) arg) {
+                case GAME_PREPARING:
+                    setVisible(false);
+                    break;
+                case GAME_RUNNING:
+                    setVisible(true);
+                    break;
+                case GAME_PAUSED:
+                    setVisible(false);
+                    break;
+            }
         }
     }
 

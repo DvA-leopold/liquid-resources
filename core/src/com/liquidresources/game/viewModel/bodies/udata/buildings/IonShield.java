@@ -1,7 +1,5 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -67,21 +65,5 @@ public class IonShield extends Building {
 
     public void setActive(boolean isActive) {
         super.isActive = isActive;
-    }
-
-    private void shieldAnimation() {
-        Pixmap mask = new Pixmap(128, 128, Pixmap.Format.Alpha);
-        Pixmap.setBlending(Pixmap.Blending.None);
-        mask.setColor(Color.RED);
-        mask.fill();
-        mask.fillRectangle(0, 0, 128, 128);
-
-//        Pixmap fg = new Pixmap(Gdx.files.internal("buildings/shield.jpg"));
-//        mask.drawPixmap(fg, mask.getWidth(), mask.getHeight());
-//        Pixmap.setBlending(Pixmap.Blending.SourceOver);
-
-//        shield = new Sprite(new Texture(mask, mask.getFormat(), false));
-//        shield.setPosition(x, y);
-//        shield.setSize(width, height);
     }
 }

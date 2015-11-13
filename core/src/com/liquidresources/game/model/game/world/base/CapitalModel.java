@@ -12,7 +12,7 @@ public class CapitalModel {
     public CapitalModel(final Vector2 position, final Vector2 rocketSize) {
         oilBarrels = 0;
         waterBarrels = 0;
-        shieldStatus = true;
+        shieldStatus = false;
 
         this.position = position;
         this.rocketSize = rocketSize;
@@ -37,11 +37,12 @@ public class CapitalModel {
     }
 
     /**
-     * this mainAI is a storage for all useful resources and convert resources from one to another
+     * this capital is a storage for all useful resources and convert resources from one to another
      * update method just add obtained resources from different factories
+     * and control ION shield activity status
      * @param oilBarrels   passed from the oil factory class
      * @param waterBarrels passed from the water factory class*/
-    public void update(int oilBarrels, short waterBarrels) {
+    public boolean update(int oilBarrels, short waterBarrels) {
         this.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
                 ? this.oilBarrels + oilBarrels
                 : Long.MAX_VALUE - 1;
@@ -49,6 +50,16 @@ public class CapitalModel {
         this.waterBarrels = this.waterBarrels + waterBarrels < Long.MAX_VALUE
                 ? this.waterBarrels + waterBarrels
                 : Long.MAX_VALUE - 1;
+
+        if (shieldStatus) {
+            if (this.waterBarrels <= 0) {
+                shieldStatus = false;
+                return false;
+            } else {
+                this.waterBarrels -= 1;
+            }
+        }
+        return true;
     }
 
     public EventListener missileLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
@@ -67,6 +78,15 @@ public class CapitalModel {
         };
     }
 
+    public EventListener getIONShieldListener() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shieldStatus = !shieldStatus;
+            }
+        };
+    }
+
     public long getOilBarrels() {
         return oilBarrels;
     }
@@ -75,10 +95,15 @@ public class CapitalModel {
         return waterBarrels;
     }
 
+    public boolean getShieldStatus() {
+        return shieldStatus;
+    }
+
 
     final private Vector2 position;
     final private Vector2 rocketSize;
 
     private long oilBarrels, waterBarrels;
+
     private boolean shieldStatus;
 }
