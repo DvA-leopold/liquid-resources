@@ -7,10 +7,11 @@ import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BodyFactoryWrapper {
     public BodyFactoryWrapper(final Vector2 worldGravity) {
-        bodyForDestroy = 0;
+        bodyForDestroy = new AtomicInteger(0);
         physicsWorld = new World(worldGravity, true);
         dynamicObjects = new HashSet<>();
         staticConstructions = new HashSet<>();
@@ -30,11 +31,11 @@ public class BodyFactoryWrapper {
 //                } else {
 //                    System.out.println("null data B");
 //                }
-                ((UpdatableBody) contact.getFixtureA().getBody().getUserData()).
-                        beginCollisionContact(contact.getFixtureB().getBody());
+                ((UpdatableBody) contact.getFixtureA().getBody().getUserData())
+                        .beginCollisionContact(contact.getFixtureB().getBody());
 
-                ((UpdatableBody) contact.getFixtureB().getBody().getUserData()).
-                        beginCollisionContact(contact.getFixtureA().getBody());
+                ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
+                        .beginCollisionContact(contact.getFixtureA().getBody());
             }
 
             @Override
@@ -114,25 +115,25 @@ public class BodyFactoryWrapper {
     }
 
     public static void destroyBody() {
-        bodyForDestroy++;
+        bodyForDestroy.getAndIncrement();
     }
 
     private void collectGarbage() {
-        if (bodyForDestroy > 0) {
+        if (bodyForDestroy.get() > 0) {
             Iterator<Body> bodyIterator = dynamicObjects.iterator(); // TODO добавить уничтожение тел другого типа
-            while (bodyIterator.hasNext() && bodyForDestroy > 0) {
+            while (bodyIterator.hasNext() && bodyForDestroy.get() > 0) {
                 Body tempBody = bodyIterator.next();
                 if (!((UpdatableBody) tempBody.getUserData()).isActive()) {
                     physicsWorld.destroyBody(tempBody);
                     bodyIterator.remove();
-                    bodyForDestroy--;
+                    bodyForDestroy.getAndDecrement();
                 }
             }
         }
     }
 
 
-    private static short bodyForDestroy;
+    private static AtomicInteger bodyForDestroy;
 
     final private World physicsWorld;
     final private HashSet<Body> dynamicObjects;

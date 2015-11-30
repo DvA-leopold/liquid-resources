@@ -94,6 +94,7 @@ public class GameRenderer implements Observer {
         );
         batch.enableBlending();
 
+        // TODO оптимизировать, не создавать новую копию камеры заново
         batch.setProjectionMatrix(camera.combined.cpy().scale(
                 1 / UConverter.getPMCoefficient(),
                 1 / UConverter.getPMCoefficient(),

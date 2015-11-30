@@ -6,13 +6,15 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public abstract class Bullet implements UniversalBody {
     public Bullet(final Vector2 defaultPosition,
                   final Vector2 bulletSize,
                   final BodyDef.BodyType bodyType,
                   final RelationTypes parentRelation) {
         this.parentRelation = parentRelation;
-        isActive = true;
+        isActive = new AtomicBoolean(true);
         initBodyDefAndFixture(defaultPosition, bulletSize, bodyType);
     }
 
@@ -28,7 +30,7 @@ public abstract class Bullet implements UniversalBody {
 
     @Override
     public boolean isActive() {
-        return isActive;
+        return isActive.get();
     }
 
     @Override
@@ -43,7 +45,7 @@ public abstract class Bullet implements UniversalBody {
     );
 
 
-    protected boolean isActive;
+    protected AtomicBoolean isActive;
 
     protected BodyDef bodyDef;
     protected FixtureDef fixtureDef;

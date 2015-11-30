@@ -46,7 +46,7 @@ public abstract class Ship implements UniversalBody, Steerable<Vector2> {
 
     /**
      * this method must initialize <code>bodyDef</code>, <code>polygonShape</code> and
-     * <code>fixtureDef</code>
+     * <code>fixtureDef</code> for different types of ships
      */
     protected abstract void initBodyDefAndFixture(
             final Vector2 defaultPosition,

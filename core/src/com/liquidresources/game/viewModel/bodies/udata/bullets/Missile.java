@@ -1,5 +1,6 @@
 package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,8 +30,8 @@ public class Missile extends Bullet {
         rocketSprite.setSize(missileSize.x, missileSize.y);
 
         // TODO расчет силы для любых размеров экрана
-        rocketForceX = MathUtils.random(28, 38);
-        rocketForceY = MathUtils.random(45, 55);
+        rocketForceX = MathUtils.random(Gdx.graphics.getWidth() / 50, Gdx.graphics.getWidth() / 40);
+        rocketForceY = MathUtils.random(Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight() / 15);
     }
 
     @Override
@@ -70,21 +71,19 @@ public class Missile extends Bullet {
             body.applyForceToCenter(rocketForceX, rocketForceY, true);
             rocketFuel--;
         }
-        // установка колличества горючего на полет ракеты
     }
 
     @Override
     public void beginCollisionContact(final Body bodyA) {
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyTypes.GROUND) {
-            isActive = false;
+            isActive.set(false);
             BodyFactoryWrapper.destroyBody();
         }
 
         if (((UpdatableBody) bodyA.getUserData()).getBodyType() == BodyTypes.ION_SHIELD &&
                 ((UpdatableBody) bodyA.getUserData()).getRelation() != this.getRelation() &&
                 ((UpdatableBody) bodyA.getUserData()).isActive()) {
-
-            isActive = false;
+            isActive.set(false);
             BodyFactoryWrapper.destroyBody();
         }
     }
@@ -96,7 +95,7 @@ public class Missile extends Bullet {
 
 
     final private int rocketForceX, rocketForceY;
-    private int rocketFuel = 40;
+    private int rocketFuel = 40; // TODO set fuel
 
     final private Sprite rocketSprite;
 }
