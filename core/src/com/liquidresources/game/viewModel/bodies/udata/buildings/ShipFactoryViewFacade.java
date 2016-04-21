@@ -1,5 +1,6 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,30 +9,47 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.view.UConverter;
+import com.liquidresources.game.model.common.utils.UConverter;
 import com.liquidresources.game.view.particles.SmokeParticles;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
-public class ShipFactoryViewFacade extends Building {
-    public ShipFactoryViewFacade(final Vector2 defaultPosition,
-                                 final Vector2 buildingSize,
-                                 final RelationTypes relationType) {
-        super(defaultPosition, null, buildingSize, relationType);
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
+public class ShipFactoryViewFacade extends SteerableBodyImpl {
+    static {
+        shipFactorySize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
+    }
+
+    public ShipFactoryViewFacade(final Vector2 defaultPosition, final RelationTypes relationType) {
+        super(relationType, 100);
         Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
 
         shipFactory = new Sprite(factoryTexture);
         shipFactory.setPosition(defaultPosition.x, defaultPosition.y);
-        shipFactory.setSize(buildingSize.x, buildingSize.y);
+        shipFactory.setSize(shipFactorySize.x, shipFactorySize.y);
 
         smokeParticles = new SmokeParticles( //TODO разобраться c положением дыма
-                new Vector2(
-                        defaultPosition.x + UConverter.M2P(35),
-                        defaultPosition.y + shipFactory.getHeight() * 0.8f),
+                new Vector2(defaultPosition.x + m2p(35), defaultPosition.y + shipFactory.getHeight() * 0.8f),
                 true
         );
+
+        bodyDef = new BodyDef();
+        bodyDef.position.set(defaultPosition.x + shipFactorySize.x * 0.5f, defaultPosition.y + shipFactorySize.y * 0.5f);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+
+        if (bodyShape == null) {
+            bodyShape = new PolygonShape();
+            bodyShape.setAsBox(shipFactorySize.x * 0.5f, shipFactorySize.y * 0.5f);
+        }
+
+        if (fixtureDef == null) {
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = bodyShape;
+        }
     }
 
     /**
@@ -52,7 +70,7 @@ public class ShipFactoryViewFacade extends Building {
     }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) {
+    public void beginCollisionContact(final Body bodyA, BodyFactoryWrapper bodyFactoryWrapper) {
 
     }
 
@@ -62,17 +80,13 @@ public class ShipFactoryViewFacade extends Building {
     }
 
     @Override
-    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
-        bodyDef = new BodyDef();
-        bodyDef.position.set(startPosition.x + buildingSize.x * 0.5f, startPosition.y + buildingSize.y * 0.5f);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+    public BodyDef getBodyDef() {
+        return bodyDef;
+    }
 
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y * 0.5f);
-
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = bodyShape;
-        fixtureDef.isSensor = true;
+    @Override
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
     }
 
     public SmokeParticles getSmokeParticles() {
@@ -81,15 +95,23 @@ public class ShipFactoryViewFacade extends Building {
 
     @Override
     public Vector2 getSize() {
-        return new Vector2(shipFactory.getWidth(), shipFactory.getHeight());
+        return shipFactorySize;
     }
 
-    public Vector2 getShipFactoryPosition() {
-        return bodyDef.position;
+    static public void dispose() {
+        if (bodyShape != null) {
+            bodyShape.dispose();
+        }
     }
 
+
+    static final private Vector2 shipFactorySize;
 
     final private Sprite shipFactory;
 
     final private SmokeParticles smokeParticles;
+
+    private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape bodyShape;
 }

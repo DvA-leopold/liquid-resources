@@ -1,33 +1,37 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.view.UConverter;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
-public class IonShield extends Building {
-    public IonShield(final Vector2 startPosition,
-                     final Vector2 endPosition,
-                     final Vector2 buildingSize,
-                     final RelationTypes relationType) {
-        super(startPosition, endPosition, buildingSize, relationType);
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+
+public class IonShield extends SteerableBodyImpl {
+    static {
+        ionShieldSize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
     }
 
-    @Override
-    protected void initBodyDefAndFixture(final Vector2 startPosition,
-                                         final Vector2 endPosition,
-                                         final Vector2 buildingSize) {
+    public IonShield(final Vector2 startPosition,
+                     final Vector2 endPosition,
+                     final RelationTypes relationType) {
+        super(relationType, 100);
+
         bodyDef = new BodyDef();
-        bodyDef.position.set(endPosition.x, startPosition.y + buildingSize.y - UConverter.M2P(10));
+        bodyDef.position.set(endPosition.x, startPosition.y + ionShieldSize.y - m2p(10));
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        PolygonShape ionShieldShape = new PolygonShape();
-        ionShieldShape.setAsBox(endPosition.x - startPosition.x, buildingSize.y + UConverter.M2P(20));
+        if (ionShieldShape == null) {
+            ionShieldShape = new PolygonShape();
+            ionShieldShape.setAsBox(endPosition.x - startPosition.x, ionShieldSize.y + m2p(20));
+        }
 
 //        ChainShape ionShieldShape = new ChainShape();
 //        Vector2[] shapeChain = new Vector2[50];
@@ -36,9 +40,11 @@ public class IonShield extends Building {
 //        }
 //        ionShieldShape.createChain(shapeChain);
 
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = ionShieldShape;
-        fixtureDef.isSensor = true;
+        if (fixtureDef == null) {
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = ionShieldShape;
+            fixtureDef.isSensor = true;
+        }
     }
 
     @Override
@@ -48,22 +54,40 @@ public class IonShield extends Building {
 
     @Override
     public Vector2 getSize() {
-        return null;
+        return ionShieldSize;
     }
 
     @Override
-    public void update(final Body body, float delta) {
-    }
+    public void update(final Body body, float delta) { }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) { }
+    public void beginCollisionContact(final Body bodyA, BodyFactoryWrapper bodyFactoryWrapper) { }
 
     @Override
     public BodyTypes getBodyType() {
         return BodyTypes.ION_SHIELD;
     }
 
-    public void setActive(boolean isActive) {
-        super.isActive = isActive;
+    @Override
+    public BodyDef getBodyDef() {
+        return bodyDef;
     }
+
+    @Override
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    public static void dispose() {
+        if (ionShieldShape != null) {
+            ionShieldShape.dispose();
+        }
+    }
+
+
+    static final private Vector2 ionShieldSize;
+
+    private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape ionShieldShape;
 }

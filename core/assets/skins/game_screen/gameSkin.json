@@ -12,12 +12,6 @@
       "pressedOffsetX": 1,
       "pressedOffsetY": -2
     },
-    "bombersAction": {
-      "up": "bombers_up",
-      "down": "bombers_down",
-      "pressedOffsetX": 1,
-      "pressedOffsetY": -2
-    },
     "fightersAction": {
       "up": "fighters_up",
       "down": "fighters_down",

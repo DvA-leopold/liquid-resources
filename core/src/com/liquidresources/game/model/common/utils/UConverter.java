@@ -1,29 +1,29 @@
-package com.liquidresources.game.view;
+package com.liquidresources.game.model.common.utils;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class UConverter {
-    public static Vector2 P2M(final Vector2 pPosition) {
+final public class UConverter {  // TODO p2m and m2p change definitions and reformat code
+    public static Vector2 p2m(final Vector2 pPosition) {
         pPosition.x *= PMCoefficient;
         pPosition.y *= PMCoefficient;
         return pPosition;
     }
 
-    public static Vector2 M2P(final Vector2 mPosition) {
+    public static Vector2 m2p(final Vector2 mPosition) {
         mPosition.x /= PMCoefficient;
         mPosition.y /= PMCoefficient;
         return mPosition;
     }
 
-    public static float M2P(float oneDimensionCoord) {
+    public static float m2p(float oneDimensionCoord) {
         return oneDimensionCoord / PMCoefficient;
     }
 
-    public static float P2M(float oneDemensionCoord) {
-        return oneDemensionCoord * PMCoefficient;
+    public static float p2m(float oneDimensionCoord) {
+        return oneDimensionCoord * PMCoefficient;
     }
 
-    public static Vector2 M2P(float xCoord, float yCoord) {
+    public static Vector2 m2p(float xCoord, float yCoord) {
         return new Vector2(xCoord / PMCoefficient, yCoord / PMCoefficient);
     }
 

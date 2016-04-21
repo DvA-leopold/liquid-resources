@@ -13,9 +13,9 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.types.ShipTypes;
 import com.liquidresources.game.view.windows.GameOptionWindow;
 import com.liquidresources.game.viewModel.GameStates;
+import com.liquidresources.game.viewModel.bases.BaseFacade;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -43,8 +43,6 @@ public class GameScreenWidgetsGroup implements Observer {
         ionShieldButton.setVisible(false);
         rocketFire = new Button(skin, "rocketAction");
         rocketFire.setVisible(false);
-        bomberButton = new Button(skin, "bombersAction");
-        bomberButton.setVisible(false);
         fighterButton = new Button(skin, "fightersAction");
         fighterButton.setVisible(false);
 
@@ -52,7 +50,6 @@ public class GameScreenWidgetsGroup implements Observer {
         actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.1f);
         actionTable.add(ionShieldButton).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(rocketFire).width(buttonWidth).height(buttonHeight).pad(10);
-        actionTable.add(bomberButton).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(fighterButton).width(buttonWidth).height(buttonHeight).pad(10);
 
         gameOptionWindow = new GameOptionWindow("", skin);
@@ -69,16 +66,26 @@ public class GameScreenWidgetsGroup implements Observer {
         stage.draw();
     }
 
-    public void initWorldListeners(final GameWorldModel gameWorldModel) {
-        try {
-            bomberButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.BOMBER, RelationTypes.ALLY));
-            fighterButton.addListener(gameWorldModel.getShipsCreationEventListener(ShipTypes.FIGHTER, RelationTypes.ALLY));
-        } catch (TypeNotPresentException err) {
-            Gdx.app.error("Ships creation listener error: ", err.getMessage());
-        }
+    public void initGameButtonsListeners(final BaseFacade baseFacade, final GameWorldModel gameWorldModel) {
+        fighterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                baseFacade.createShip(-55);
+            }
+        });
+        ionShieldButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                baseFacade.switchIONShield();
+            }
+        });
+        rocketFire.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                baseFacade.missileLaunch(-22);
+            }
+        });
 
-        ionShieldButton.addListener(gameWorldModel.getIONShieldListener());
-        rocketFire.addListener(gameWorldModel.getRocketFireEventListener());
         optionWindowButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -117,7 +124,6 @@ public class GameScreenWidgetsGroup implements Observer {
     private void setVisible(boolean visible) {
         rocketFire.setVisible(visible);
         fighterButton.setVisible(visible);
-        bomberButton.setVisible(visible);
         optionWindowButton.setVisible(visible);
         ionShieldButton.setVisible(visible);
     }
@@ -130,7 +136,5 @@ public class GameScreenWidgetsGroup implements Observer {
     final private Button rocketFire;
     final private Button fighterButton;
 
-    final private Button bomberButton;
-
-    private GameOptionWindow gameOptionWindow;
+    final private GameOptionWindow gameOptionWindow;
 }

@@ -1,31 +1,19 @@
 package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class Bullet implements UniversalBody {
-    public Bullet(final Vector2 defaultPosition,
-                  final Vector2 bulletSize,
-                  final BodyDef.BodyType bodyType,
-                  final RelationTypes parentRelation) {
+abstract class Bullet implements UniversalBody {
+    Bullet(final Vector2 targetPosition,
+           final RelationTypes parentRelation) {
         this.parentRelation = parentRelation;
+        this.targetPosition = targetPosition;
         isActive = new AtomicBoolean(true);
-        initBodyDefAndFixture(defaultPosition, bulletSize, bodyType);
-    }
-
-    @Override
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
-
-    @Override
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
     }
 
     @Override
@@ -38,17 +26,27 @@ public abstract class Bullet implements UniversalBody {
         return parentRelation;
     }
 
-    protected abstract void initBodyDefAndFixture(
-            final Vector2 defaultPosition,
-            final Vector2 bulletSize,
-            BodyDef.BodyType bodyType
-    );
+    @Override
+    public Vector2 getPosition() {
+        return thisBody.getPosition();
+    }
+
+    @Override
+    public void setBody(final Body body) {
+        thisBody = body;
+    }
+
+    void selfDestroy(final BodyFactoryWrapper bodyFactoryWrapper) {
+        if (isActive.getAndSet(false)) {
+            bodyFactoryWrapper.destroyBody(getBodyType(), thisBody);
+        }
+    }
 
 
-    protected AtomicBoolean isActive;
+    private Body thisBody;
+    private AtomicBoolean isActive;
 
-    protected BodyDef bodyDef;
-    protected FixtureDef fixtureDef;
+    final Vector2 targetPosition;
 
     final private RelationTypes parentRelation;
 }

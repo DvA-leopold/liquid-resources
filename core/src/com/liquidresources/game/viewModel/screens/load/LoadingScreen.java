@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.view.UConverter;
+import com.liquidresources.game.model.common.utils.UConverter;
 import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
 
 public class LoadingScreen implements Screen {
@@ -35,8 +35,8 @@ public class LoadingScreen implements Screen {
         batch.begin();
         for (int i = 0; i < progress / 8; ++i) {
             batch.draw(barHorizontalMid,
-                    UConverter.M2P(Gdx.graphics.getWidth() - 70),
-                    UConverter.M2P(position));
+                    UConverter.m2p(Gdx.graphics.getWidth() - 70),
+                    UConverter.m2p(position));
             position += barHorizontalWidth;
         }
         batch.end();

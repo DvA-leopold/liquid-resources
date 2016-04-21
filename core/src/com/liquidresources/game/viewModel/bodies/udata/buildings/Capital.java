@@ -1,5 +1,6 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,35 +9,37 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
-public class Capital extends Building {
-    public Capital(final Vector2 defaultPosition,
-                   final Vector2 buildingSize,
-                   final RelationTypes relationType) {
-        super(defaultPosition, null, buildingSize, relationType);
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
-        capitalSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/capitalSprite.png"));
-        capitalSprite.setPosition(defaultPosition.x, defaultPosition.y);
-        capitalSprite.setSize(buildingSize.x, buildingSize.y * 2);
+public class Capital extends SteerableBodyImpl {
+    static {
+        capitalSize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.16f);
     }
 
-    @Override
-    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
+    public Capital(final Vector2 defaultPosition, final RelationTypes relationType) {
+        super(relationType, 100);
+        capitalSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/capitalSprite.png"));
+        capitalSprite.setPosition(defaultPosition.x, defaultPosition.y);
+        capitalSprite.setSize(capitalSize.x, capitalSize.y);
+
         bodyDef = new BodyDef();
-        bodyDef.position.set(startPosition.x + buildingSize.x * 0.5f, startPosition.y + buildingSize.y);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(defaultPosition.x + capitalSize.x * 0.5f, defaultPosition.y + capitalSize.y);
 
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y);
-
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = bodyShape;
-        fixtureDef.isSensor = true;
-
-//        bodyShape.dispose(); //TODO memory leakage bodies shape dispose
+        if (bodyShape == null) {
+            bodyShape = new PolygonShape();
+            bodyShape.setAsBox(capitalSize.x * 0.5f, capitalSize.y);
+        }
+        if (fixtureDef == null) {
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = bodyShape;
+            fixtureDef.isSensor = true;
+        }
     }
 
     @Override
@@ -45,29 +48,42 @@ public class Capital extends Building {
     }
 
     @Override
-    public void update(final Body body, float delta) {
-
+    public Vector2 getSize() {
+        return capitalSize;
     }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) {
+    public void update(final Body body, float delta) { }
 
-    }
+    @Override
+    public void beginCollisionContact(final Body bodyA, final BodyFactoryWrapper bodyFactoryWrapper) { }
 
     @Override
     public BodyTypes getBodyType() {
-        return BodyTypes.MAIN_AI;
-    }
-
-    public Vector2 getPosition() {
-        return new Vector2(capitalSprite.getX(), capitalSprite.getY());
+        return BodyTypes.CAPITAL;
     }
 
     @Override
-    public Vector2 getSize() {
-        return new Vector2(capitalSprite.getWidth(), capitalSprite.getHeight());
+    public BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    @Override
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    public static void dispose() {
+        if (bodyShape != null) {
+            bodyShape.dispose();
+        }
     }
 
 
+    static final private Vector2 capitalSize;
     final private Sprite capitalSprite;
+
+    private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape bodyShape;
 }

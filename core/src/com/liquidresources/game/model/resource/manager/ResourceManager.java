@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 public class ResourceManager {
@@ -50,7 +50,7 @@ public class ResourceManager {
      * @param section path to the folder
      * @param sync if this is true then we will wait till all files are load
      */
-    public void loadSection(String section, boolean sync) {
+    public void loadSection(String section, boolean sync) {  // TODO check this code
         FileHandle sectionRoot = Gdx.files.internal(section);
         FileHandle[] allFiles = new FileHandle[0];
         try {
@@ -60,7 +60,7 @@ public class ResourceManager {
         }
         for (FileHandle file : allFiles) {
             String fileName = file.file().getName();
-            String extension = FilenameUtils.getExtension(fileName);
+            String extension = getExtension(fileName);
             if (mimeFileTypes.containsKey(extension)) {
                 getInstance().assetManager.load(file.path(), mimeFileTypes.get(extension));
                 currentStorageSize += file.length();
@@ -77,15 +77,14 @@ public class ResourceManager {
      */
     public void unloadSection(String section) {
         FileHandle sectionRoot = Gdx.files.internal(section);
-        FileHandle[] allFiles = new FileHandle[0];
         try {
-            allFiles = getFiles(sectionRoot);
+            FileHandle[] allFiles = getFiles(sectionRoot);
+            for (FileHandle allFile : allFiles) {
+                assetManager.unload(allFile.path());
+                currentStorageSize -= allFile.length();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        for (FileHandle allFile : allFiles) {
-            assetManager.unload(allFile.path());
-            currentStorageSize -= allFile.length();
         }
     }
 
@@ -96,7 +95,7 @@ public class ResourceManager {
      * @throws FileNotFoundException if no such extension in <code>mimeFileType</code> exist
      */
     public void loadFile(String fileName, boolean sync) throws FileNotFoundException {
-        String fileExtension = FilenameUtils.getExtension(fileName);
+        String fileExtension = getExtension(fileName);
         if (mimeFileTypes.containsKey(fileExtension)) {
             assetManager.load(fileName, mimeFileTypes.get(fileExtension));
             currentStorageSize += new FileHandle(fileName).length();
@@ -155,6 +154,14 @@ public class ResourceManager {
 
     public void setSkinLoader(SkinLoader newSkinLoader) {
         assetManager.setLoader(Skin.class, newSkinLoader);
+    }
+
+    private String getExtension(String filePath) {
+        int index = filePath.lastIndexOf(".");
+        if (index == -1) {
+            throw new NoSuchElementException("this file have no extension");
+        }
+        return filePath.substring(index + 1);
     }
 
     public long getCurrentStorageSize() {

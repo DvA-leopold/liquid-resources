@@ -5,38 +5,29 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.view.symbols.SymbolsRenderer;
 import com.liquidresources.game.viewModel.GameStates;
-import com.liquidresources.game.viewModel.bases.AlliedBase;
-import com.liquidresources.game.viewModel.bases.BaseFacade;
-import com.liquidresources.game.viewModel.bases.EnemyBase;
-import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import static com.liquidresources.game.view.UConverter.M2P;
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+import static com.liquidresources.game.model.common.utils.UConverter.getPMCoefficient;
 
 public class GameRenderer implements Observer {
-    public GameRenderer(final Vector2 initAllyCoords,
-                        final Vector2 initEnemyCoords,
-                        final BodyFactoryWrapper bodyFactoryWrapper) {
+    public GameRenderer(final BodyFactoryWrapper bodyFactoryWrapper) {
         this.batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         gameState = GameStates.GAME_PREPARING;
 
-        final Vector2 graphicSize = M2P(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
-        alliedBase = new AlliedBase(M2P(initAllyCoords), graphicSize, bodyFactoryWrapper);
-        enemyBase = new EnemyBase(M2P(initEnemyCoords), graphicSize, bodyFactoryWrapper);
 
         worldDebugRenderer = new Box2DDebugRenderer();
         camera = ((LiquidResources) Gdx.app.getApplicationListener()).getCamera();
@@ -44,20 +35,15 @@ public class GameRenderer implements Observer {
         desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
         mainFonts = ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts();
 
-        symbolsRenderer = new SymbolsRenderer(0, M2P(Gdx.graphics.getHeight() - 60), M2P(20), M2P(45));
+        symbolsRenderer = new SymbolsRenderer(0, m2p(Gdx.graphics.getHeight() - 60), m2p(20), m2p(45));
 
-        bodyFactoryWrapper.createBody(new Ground(initAllyCoords), true);
-    }
-
-    public void show() {
-        alliedBase.show();
-        enemyBase.show();
+        scaledProjectionMatrix = camera.combined.cpy().scale(1 / getPMCoefficient(), 1 / getPMCoefficient(), 1);
     }
 
     public void render(float delta) {
         switch (gameState) {
             case GAME_PREPARING:
-                renderPreparingState(delta);
+                renderPreparingState();
                 break;
             case GAME_RUNNING:
                 renderRunState(delta);
@@ -66,12 +52,14 @@ public class GameRenderer implements Observer {
                 renderPauseState(delta);
                 break;
             case GAME_EXIT:
-                renderExitState(delta);
+                renderExitState();
                 break;
             case GAME_OVER:
-                renderOverState(delta);
+                renderOverState();
                 break;
         }
+
+        worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
     public void renderStatistic(long oilStatistic, long waterStatistic) {
@@ -83,27 +71,18 @@ public class GameRenderer implements Observer {
         batch.end();
     }
 
-    private void renderPreparingState(float delta) {
+    private void renderPreparingState() {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(
-                desertBackground, 0, 0,
-                M2P(Gdx.graphics.getWidth()),
-                M2P(Gdx.graphics.getHeight())
-        );
+        batch.draw(desertBackground, 0, 0, m2p(Gdx.graphics.getWidth()), m2p(Gdx.graphics.getHeight()));
         batch.enableBlending();
 
-        // TODO оптимизировать, не создавать новую копию камеры заново
-        batch.setProjectionMatrix(camera.combined.cpy().scale(
-                1 / UConverter.getPMCoefficient(),
-                1 / UConverter.getPMCoefficient(),
-                1)
-        );
+        batch.setProjectionMatrix(scaledProjectionMatrix);
         mainFonts.draw(batch,
-                I18NBundleManager.getString("prepare"),
-                Gdx.graphics.getWidth() * 0.2f,
-                Gdx.graphics.getHeight() * 0.8f
+                       I18NBundleManager.getString("prepare"),
+                       Gdx.graphics.getWidth() * 0.2f,
+                       Gdx.graphics.getHeight() * 0.8f
         );
 
         batch.end();
@@ -113,42 +92,36 @@ public class GameRenderer implements Observer {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(
-                desertBackground, 0, 0,
-                M2P(Gdx.graphics.getWidth()),
-                M2P(Gdx.graphics.getHeight())
-        );
+        batch.draw(desertBackground, 0, 0, m2p(Gdx.graphics.getWidth()), m2p(Gdx.graphics.getHeight()));
         batch.enableBlending();
 
-        for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
-            ((DrawableBody) staticBody.getUserData()).draw(batch, null, delta);
+        for (Body building : bodyFactoryWrapper.getBuildingsBodies()) {
+            ((DrawableBody) building.getUserData()).draw(batch, null, delta);
         }
 
-        for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
-            ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
+        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
+            ((DrawableBody) ship.getUserData()).draw(batch, ship.getPosition(), delta);
+        }
+
+        for (Body bullet : bodyFactoryWrapper.getBulletBodies()) {
+            ((DrawableBody) bullet.getUserData()).draw(batch, bullet.getPosition(), delta);
         }
 
         batch.end();
-
-        worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
     private void renderPauseState(float delta) {
         batch.begin();
 
         batch.disableBlending();
-        batch.draw(
-                desertBackground, 0, 0,
-                M2P(Gdx.graphics.getWidth()),
-                M2P(Gdx.graphics.getHeight())
-        );
+        batch.draw(desertBackground, 0, 0, m2p(Gdx.graphics.getWidth()), m2p(Gdx.graphics.getHeight()));
         batch.enableBlending();
 
-        for (Body staticBody : bodyFactoryWrapper.getConstructionsBodies()) {
+        for (Body staticBody : bodyFactoryWrapper.getBuildingsBodies()) {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        for (Body dynamicBody : bodyFactoryWrapper.getDynamicBodies()) {
+        for (Body dynamicBody : bodyFactoryWrapper.getShipsBodies()) {
             ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
         }
 
@@ -157,28 +130,12 @@ public class GameRenderer implements Observer {
         worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
-    private void renderExitState(float delta) {
+    private void renderExitState() {
 
     }
 
-    private void renderOverState(float delta) {
+    private void renderOverState() {
 
-    }
-
-    public BaseFacade getBase(RelationTypes relationType) {
-        switch (relationType) {
-            case ALLY:
-                return alliedBase;
-            case ENEMY:
-                return enemyBase;
-            default:
-                return null;
-        }
-    }
-
-    public void hide() {
-        alliedBase.hide();
-        enemyBase.hide();
     }
 
     @Override
@@ -189,6 +146,8 @@ public class GameRenderer implements Observer {
     }
 
 
+    private Matrix4 scaledProjectionMatrix;
+
     private GameStates gameState;
     final private Box2DDebugRenderer worldDebugRenderer;
 
@@ -198,8 +157,7 @@ public class GameRenderer implements Observer {
     final private SymbolsRenderer symbolsRenderer;
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
-    final AlliedBase alliedBase;
-    final EnemyBase enemyBase;
+
 
     final private Texture desertBackground;
     final private SpriteBatch batch;

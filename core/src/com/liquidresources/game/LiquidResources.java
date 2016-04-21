@@ -16,7 +16,7 @@ import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.model.resource.manager.FreeTypeFontSkinLoader;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.version.VersionHandler;
-import com.liquidresources.game.view.UConverter;
+import com.liquidresources.game.model.common.utils.UConverter;
 import com.liquidresources.game.viewModel.screens.load.LoadingScreen;
 
 import java.util.HashMap;
@@ -67,7 +67,6 @@ public final class LiquidResources extends Game {
         super.dispose();
         musicManager.dispose();
         mainBatch.dispose();
-        // mainFonts.dispose(); already disposed
         ResourceManager.getInstance().dispose();
     }
 

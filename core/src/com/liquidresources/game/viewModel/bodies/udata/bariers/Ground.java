@@ -7,11 +7,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
-import static com.liquidresources.game.view.UConverter.M2P;
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
 public class Ground implements UniversalBody {
     public Ground(final Vector2 groundPosition) {
@@ -20,11 +21,14 @@ public class Ground implements UniversalBody {
         bodyDef.type = BodyDef.BodyType.KinematicBody;
 
         PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(M2P(Gdx.graphics.getWidth() * 5), M2P(1));
+        bodyShape.setAsBox(m2p(Gdx.graphics.getWidth() * 5), m2p(1));
 
         fixtureDef = new FixtureDef();
         fixtureDef.shape = bodyShape;
+
+        //TODO dispose bodyShape
     }
+
     @Override
     public void draw(final Batch batch, final Vector2 position, float delta) {
 
@@ -46,18 +50,19 @@ public class Ground implements UniversalBody {
     }
 
     @Override
-    public void update(final Body body, float delta) {
-
-    }
+    public void update(final Body body, float delta) { }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) {
-
-    }
+    public void beginCollisionContact(final Body bodyA, final BodyFactoryWrapper bodyFactoryWrapper) { }
 
     @Override
     public BodyTypes getBodyType() {
         return BodyTypes.GROUND;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return null;
     }
 
     @Override
@@ -69,6 +74,9 @@ public class Ground implements UniversalBody {
     public RelationTypes getRelation() {
         return null;
     }
+
+    @Override
+    public void setBody(final Body body) { }
 
 
     final private BodyDef bodyDef;

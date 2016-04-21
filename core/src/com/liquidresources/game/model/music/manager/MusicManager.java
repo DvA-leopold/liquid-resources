@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class MusicManager {
     public MusicManager() {
-        musicEnable = true;
+        musicEnable = false; // TODO enable music
         musicManagerStarted = false;
         currentMusicType = null;
 

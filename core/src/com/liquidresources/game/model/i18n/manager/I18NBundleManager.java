@@ -16,9 +16,9 @@ public class I18NBundleManager {
         return myBundle.get(key);
     }
 
-    public static String getChainString(String key, String ...args) {
-        return myBundle.format(key, args);
-    }
+//    public static String getChainString(String key, String ...arguments) {
+//        return myBundle.format(key, arguments);
+//    }
 
     public static String getLanguageCode() {
         return languageArray.get(counter).getLanguageCode();

@@ -1,21 +1,25 @@
 package com.liquidresources.game.model.game.world.base;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
+import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
+
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+import static com.liquidresources.game.model.common.utils.UConverter.p2m;
 
 public class CapitalModel {
-    public CapitalModel(final Vector2 position, final Vector2 rocketSize) {
+    public CapitalModel(final Vector2 missileSpawnPos,
+                        final Vector2 shipsSpawnPos,
+                        final BodyFactoryWrapper bodyFactoryWrapper) {
+        this.bodyFactoryWrapper = bodyFactoryWrapper;
         oilBarrels = 0;
         waterBarrels = 0;
         shieldStatus = false;
 
-        this.position = position;
-        this.rocketSize = rocketSize;
+        this.missileSpawnPos = missileSpawnPos;
+        this.shipsSpawnPos = shipsSpawnPos;
     }
 
     public boolean changeOil(int oilBarrels) {
@@ -62,29 +66,18 @@ public class CapitalModel {
         return true;
     }
 
-    public EventListener missileLaunch(final BodyFactoryWrapper bodyFactoryWrapper) {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (changeOil(-20)) {
-                    bodyFactoryWrapper.createBody(
-                            new Missile(
-                                    new Vector2(position.x, position.y + rocketSize.y + 5),
-                                    rocketSize, RelationTypes.ALLY),
-                            false
-                    );
-                }
-            }
-        };
+    public void missileLaunch(RelationTypes relationType) {
+        Vector2 spawnPosition = new Vector2(missileSpawnPos.x, missileSpawnPos.y + m2p(20));
+        Vector2 targetPosition = null;
+        bodyFactoryWrapper.createBody(new Missile(spawnPosition, targetPosition, relationType));
     }
 
-    public EventListener getIONShieldListener() {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                shieldStatus = !shieldStatus;
-            }
-        };
+    public void createShip(RelationTypes relationType) {
+        bodyFactoryWrapper.createBody(new Fighter(shipsSpawnPos, 100, bodyFactoryWrapper, relationType));
+    }
+
+    public void switchIonShield() {
+        shieldStatus = !shieldStatus;
     }
 
     public long getOilBarrels() {
@@ -100,9 +93,9 @@ public class CapitalModel {
     }
 
 
-    final private Vector2 position;
-    final private Vector2 rocketSize;
+    final private BodyFactoryWrapper bodyFactoryWrapper;
 
+    final private Vector2 missileSpawnPos, shipsSpawnPos;
     private long oilBarrels, waterBarrels;
 
     private boolean shieldStatus;

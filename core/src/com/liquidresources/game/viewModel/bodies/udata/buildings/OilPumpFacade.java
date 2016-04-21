@@ -1,27 +1,30 @@
 package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
+import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
-public class OilPumpFacade extends Building {
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+
+public class OilPumpFacade extends SteerableBodyImpl {
+    static {
+        oilPumpSize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
+    }
+
     public OilPumpFacade(float defaultAnimationSpeed,
                          final Vector2 defaultPosition,
-                         final Vector2 buildingSize,
                          Animation.PlayMode animationPlayMode,
                          RelationTypes relationType) {
-        super(defaultPosition, null, buildingSize, relationType);
-        this.buildingSize = buildingSize;
-
+        super(relationType, 100);
         this.defaultAnimationSpeed = defaultAnimationSpeed;
         workSpeed = defaultAnimationSpeed / 2;
 
@@ -36,23 +39,20 @@ public class OilPumpFacade extends Building {
 
         pompAnimation = new Animation(workSpeed, pompFrames);
         pompAnimation.setPlayMode(animationPlayMode);
-    }
 
-    @Override
-    protected void initBodyDefAndFixture(Vector2 startPosition, Vector2 endPosition, Vector2 buildingSize) {
         bodyDef = new BodyDef();
-        bodyDef.position.set(
-                startPosition.x + buildingSize.x * 0.5f,
-                startPosition.y + buildingSize.y * 0.5f
-        );
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(defaultPosition.x + oilPumpSize.x * 0.5f, defaultPosition.y + oilPumpSize.y * 0.5f);
 
-        PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(buildingSize.x * 0.5f, buildingSize.y * 0.5f);
+        if (bodyShape == null) {
+            bodyShape = new PolygonShape();
+            bodyShape.setAsBox(oilPumpSize.x * 0.5f, oilPumpSize.y * 0.5f);
+        }
 
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = bodyShape;
-        fixtureDef.isSensor = false;
+        if (fixtureDef == null) {
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = bodyShape;
+            fixtureDef.isSensor = false;
+        }
     }
 
     @Override
@@ -65,14 +65,14 @@ public class OilPumpFacade extends Building {
 
         batch.draw(
                 pompAnimation.getKeyFrame(stateTime, true),
-                bodyDef.position.x - buildingSize.x * 0.5f, bodyDef.position.y - buildingSize.y * 0.5f,
-                buildingSize.x, buildingSize.y
+                bodyDef.position.x - oilPumpSize.x * 0.5f, bodyDef.position.y - oilPumpSize.y * 0.5f,
+                oilPumpSize.x, oilPumpSize.y
         );
     }
 
     @Override
     public Vector2 getSize() {
-        return buildingSize;
+        return oilPumpSize;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class OilPumpFacade extends Building {
     }
 
     @Override
-    public void beginCollisionContact(final Body bodyA) {
+    public void beginCollisionContact(final Body bodyA, BodyFactoryWrapper bodyFactoryWrapper) {
 
     }
 
@@ -90,18 +90,38 @@ public class OilPumpFacade extends Building {
         return BodyTypes.OIL_POMP;
     }
 
+    @Override
+    public BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    @Override
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
     public void resetAnimation(boolean isStoped) {
         this.isStoped = isStoped;
         workSpeed = defaultAnimationSpeed;
     }
 
+    public static void dispose() {
+        if (bodyShape != null) {
+            bodyShape.dispose();
+        }
+    }
+
 
     final private float defaultAnimationSpeed;
-    final private Vector2 buildingSize;
+    static final private Vector2 oilPumpSize;
 
     private float workSpeed;
     private boolean isStoped;
     private float stateTime = 0f;
 
     private Animation pompAnimation;
+
+    private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape bodyShape;
 }

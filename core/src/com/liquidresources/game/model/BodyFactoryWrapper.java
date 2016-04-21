@@ -3,91 +3,75 @@ package com.liquidresources.game.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BodyFactoryWrapper {
     public BodyFactoryWrapper(final Vector2 worldGravity) {
-        bodyForDestroy = new AtomicInteger(0);
+        bodiesForDestruction = new ArrayList<>(5);
         physicsWorld = new World(worldGravity, true);
-        dynamicObjects = new HashSet<>();
-        staticConstructions = new HashSet<>();
+
+        shipsBodies = new HashSet<>();
+        buildingsBodies = new HashSet<>();
+        bulletBodies = new HashSet<>();
 
         physicsWorld.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-//                WorldManifold manifold = contact.getWorldManifold();
-//                if (contact.getFixtureA().getBody().getUserData() != null) {
-//                    System.out.println(((UpdatableBody) contact.getFixtureA().getBody().getUserData()).getBodyType());
-//                } else {
-//                    System.out.println("null data A");
-//                }
-//
-//                if (contact.getFixtureB().getBody().getUserData() != null) {
-//                    System.out.println(((UpdatableBody) contact.getFixtureB().getBody().getUserData()).getBodyType());
-//                } else {
-//                    System.out.println("null data B");
-//                }
                 ((UpdatableBody) contact.getFixtureA().getBody().getUserData())
-                        .beginCollisionContact(contact.getFixtureB().getBody());
+                        .beginCollisionContact(contact.getFixtureB().getBody(), BodyFactoryWrapper.this);
 
                 ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
-                        .beginCollisionContact(contact.getFixtureA().getBody());
+                        .beginCollisionContact(contact.getFixtureA().getBody(), BodyFactoryWrapper.this);
             }
 
             @Override
-            public void endContact(Contact contact) {
-                //System.out.println("end");
-            }
+            public void endContact(Contact contact) { }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-                //System.out.println("pre");
-            }
+            public void preSolve(Contact contact, Manifold oldManifold) { }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-                //System.out.println("post");
-            }
+            public void postSolve(Contact contact, ContactImpulse impulse) { }
         });
     }
 
-    public void createBody(final UniversalBody universalBodyUserData, boolean isBodyStatic) {
+    public void createBody(final UniversalBody universalBodyUserData) {
         Body bodyForCreate = physicsWorld.createBody(universalBodyUserData.getBodyDef());
         bodyForCreate.createFixture(universalBodyUserData.getFixtureDef());
         bodyForCreate.setUserData(universalBodyUserData);
-        boolean debug;
+        universalBodyUserData.setBody(bodyForCreate);
+        boolean success = false;
 
-        if (isBodyStatic) {
-            debug = staticConstructions.add(bodyForCreate);
-        } else {
-            debug = dynamicObjects.add(bodyForCreate);
+        switch(universalBodyUserData.getBodyType()) {
+            case BOMB:
+            case LASER:
+            case MISSILE:
+                success = bulletBodies.add(bodyForCreate);
+                break;
+            case CAPITAL:
+            case OIL_POMP:
+            case SHIP_FACTORY:
+            case ION_SHIELD:
+            case GROUND:
+                success = buildingsBodies.add(bodyForCreate);
+                break;
+            case FIGHTER_SHIP:
+                success = shipsBodies.add(bodyForCreate);
+                break;
+            default:
+                System.err.print("no such type");
         }
 
-        if (!debug) {
-            System.err.println("Error, container already have such element " + isBodyStatic);
+        if (!success) {
+            System.err.println("Error, container already have such element ");
         }
     }
 
-    public void destroyBody(Body bodyForDestroy, boolean isBodyStatic) {
-        physicsWorld.destroyBody(bodyForDestroy);
-
-        boolean debug;
-        if (isBodyStatic) {
-            debug = staticConstructions.remove(bodyForDestroy);
-        } else {
-            debug = dynamicObjects.remove(bodyForDestroy);
-        }
-
-        if (!debug) {
-            System.err.println("no such body in a set! " + isBodyStatic);
-        }
-    }
-
-    public void updateWorld() {
+    void updateWorld() {
         physicsWorld.step(1 / 60f, 6, 2);
         collectGarbage();
     }
@@ -102,40 +86,51 @@ public class BodyFactoryWrapper {
         physicsWorld.dispose();
     }
 
-    public HashSet<Body> getDynamicBodies() {
-        return dynamicObjects;
+    public HashSet<Body> getShipsBodies() {
+        return shipsBodies;
     }
 
-    public HashSet<Body> getConstructionsBodies() {
-        return staticConstructions;
+    public HashSet<Body> getBuildingsBodies() {
+        return buildingsBodies;
+    }
+
+    public HashSet<Body> getBulletBodies() {
+        return bulletBodies;
     }
 
     public World getPhysicsWorld() {
         return physicsWorld;
     }
 
-    public static void destroyBody() {
-        bodyForDestroy.getAndIncrement();
+    public void destroyBody(BodyTypes destroyBodyType, final Body bodyForDestroy) {
+        switch (destroyBodyType) { // TODO thread safe access to HashSets
+            case BOMB:
+            case LASER:
+            case MISSILE:
+                bulletBodies.remove(bodyForDestroy);
+                break;
+            case FIGHTER_SHIP:
+                shipsBodies.remove(bodyForDestroy);
+                break;
+        }
+        bodiesForDestruction.add(bodyForDestroy);
     }
 
     private void collectGarbage() {
-        if (bodyForDestroy.get() > 0) {
-            Iterator<Body> bodyIterator = dynamicObjects.iterator(); // TODO добавить уничтожение тел другого типа
-            while (bodyIterator.hasNext() && bodyForDestroy.get() > 0) {
-                Body tempBody = bodyIterator.next();
-                if (!((UpdatableBody) tempBody.getUserData()).isActive()) {
-                    physicsWorld.destroyBody(tempBody);
-                    bodyIterator.remove();
-                    bodyForDestroy.getAndDecrement();
-                }
+        if (!bodiesForDestruction.isEmpty()) {
+            for (Body body: bodiesForDestruction) {
+                physicsWorld.destroyBody(body);
             }
+            bodiesForDestruction.clear();
         }
     }
 
 
-    private static AtomicInteger bodyForDestroy;
-
     final private World physicsWorld;
-    final private HashSet<Body> dynamicObjects;
-    final private HashSet<Body> staticConstructions;
+
+    private ArrayList<Body> bodiesForDestruction;
+
+    final private HashSet<Body> shipsBodies;
+    final private HashSet<Body> bulletBodies;
+    final private HashSet<Body> buildingsBodies;
 }

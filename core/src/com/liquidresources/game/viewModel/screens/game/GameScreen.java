@@ -8,27 +8,36 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.music.manager.MusicManager;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.view.GameRenderer;
+import com.liquidresources.game.viewModel.bases.AlliedBase;
+import com.liquidresources.game.viewModel.bases.EnemyBase;
+import com.liquidresources.game.viewModel.bodies.udata.bariers.Ground;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
+import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
+import com.liquidresources.game.viewModel.bodies.udata.bullets.Laser;
+import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
+import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
+
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+
 
 public class GameScreen implements Screen {
     public GameScreen() {
         bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -20.0f));
-        gameRenderer = new GameRenderer(
-                new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f),
-                new Vector2(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.35f),
-                bodyFactoryWrapper
-        );
 
-        gameWorldModel = new GameWorldModel(
-                bodyFactoryWrapper,
-                gameRenderer.getBase(RelationTypes.ALLY).getMainBasePosition(),
-                gameRenderer.getBase(RelationTypes.ALLY).getShipFactoryPosition(),
-                gameRenderer.getBase(RelationTypes.ENEMY).getMainBasePosition(),
-                gameRenderer.getBase(RelationTypes.ENEMY).getShipFactoryPosition()
-        );
+        Vector2 initAllyCoords = m2p(new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f));
+        alliedBase = new AlliedBase(initAllyCoords, bodyFactoryWrapper);
 
+        Vector2 initEnemyCoords = m2p(new Vector2(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.35f));
+        enemyBase = new EnemyBase(initEnemyCoords, bodyFactoryWrapper);
+
+        bodyFactoryWrapper.createBody(new Ground(initAllyCoords));
+
+        gameWorldModel = new GameWorldModel(bodyFactoryWrapper, alliedBase.getCapitalModel()); // TODO remove CM
+        gameRenderer = new GameRenderer(bodyFactoryWrapper);
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();
 
         gameWorldModel.addObserver(gameScreenWidgetGroup);
@@ -39,8 +48,11 @@ public class GameScreen implements Screen {
     public void show() {
         Box2D.init();
 
-        gameRenderer.show();
-        gameScreenWidgetGroup.initWorldListeners(gameWorldModel);
+        alliedBase.show();
+        enemyBase.show();
+        enemyBase.initEnemyAI();
+
+        gameScreenWidgetGroup.initGameButtonsListeners(alliedBase, gameWorldModel);
 
         ((LiquidResources) Gdx.app.getApplicationListener()).
                 getMusicManager().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
@@ -49,7 +61,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         gameRenderer.render(delta);
-        gameRenderer.renderStatistic(gameWorldModel.getOil(), gameWorldModel.getWater());
+        gameRenderer.renderStatistic(alliedBase.getOil(), alliedBase.getWater());
         gameScreenWidgetGroup.render();
 
         gameWorldModel.update(delta);
@@ -72,17 +84,29 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         //((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
-        gameRenderer.hide();
+        alliedBase.hide();
+        enemyBase.hide();
         dispose();
     }
 
     @Override
     public void dispose() {
         gameScreenWidgetGroup.dispose();
-        bodyFactoryWrapper.dispose();
         gameWorldModel.deleteObservers();
+        bodyFactoryWrapper.dispose();
+        Capital.dispose();
+        IonShield.dispose();
+        OilPumpFacade.dispose();
+        ShipFactoryViewFacade.dispose();
+//        Bomb.dispose()
+        Laser.dispose();
+        Missile.dispose();
+        Fighter.dispose();
     }
 
+
+    final private AlliedBase alliedBase;
+    final private EnemyBase enemyBase;
 
     final private GameScreenWidgetsGroup gameScreenWidgetGroup;
 
