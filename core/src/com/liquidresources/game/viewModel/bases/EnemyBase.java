@@ -17,7 +17,6 @@ import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 public class EnemyBase extends BaseFacade {
     public EnemyBase(final Vector2 initCoords, final BodyFactoryWrapper bodyFactoryWrapper) {
         super(RelationTypes.ENEMY, initCoords, bodyFactoryWrapper);
-        testTimer = new Timer();
     }
 
     @Override
@@ -46,26 +45,23 @@ public class EnemyBase extends BaseFacade {
     }
 
     public void initEnemyAI() { // TODO testing purposes only
-        Timer.Task missileLaunchTask = new Timer.Task() {
-            @Override
-            public void run() {
-                missileLaunch(0);
-                missileLaunch(0);
-            }
-        };
-
-        Timer.Task spawnShipTask = new Timer.Task() {
-            @Override
-            public void run() {
-                createShip(0);
-            }
-        };
-
-        testTimer.scheduleTask(missileLaunchTask, 0, 3, 120);
-        testTimer.scheduleTask(spawnShipTask, 5);
-        testTimer.start();
+//        Timer.Task missileLaunchTask = new Timer.Task() {
+//            @Override
+//            public void run() {
+//                missileLaunch(0);
+//                missileLaunch(0);
+//            }
+//        };
+//
+//        Timer.Task spawnShipTask = new Timer.Task() {
+//            @Override
+//            public void run() {
+//                createShip(0);
+//            }
+//        };
+//
+//        Timer.instance().scheduleTask(missileLaunchTask, 0, 3, 120);
+//        Timer.instance().scheduleTask(spawnShipTask, 5);
+//        Timer.instance().start();
     }
-
-
-    private Timer testTimer;
 }

@@ -76,6 +76,7 @@ public class Capital extends SteerableBodyImpl {
     public static void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

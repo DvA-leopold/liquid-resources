@@ -101,6 +101,7 @@ public class ShipFactoryViewFacade extends SteerableBodyImpl {
     static public void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

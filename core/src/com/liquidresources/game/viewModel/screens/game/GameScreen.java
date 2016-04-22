@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.utils.Timer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
@@ -47,7 +48,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Box2D.init();
-
         alliedBase.show();
         enemyBase.show();
         enemyBase.initEnemyAI();

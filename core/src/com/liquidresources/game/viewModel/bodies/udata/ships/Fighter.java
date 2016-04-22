@@ -38,6 +38,7 @@ public class Fighter extends SteerableBodyImpl {
         bodyDef = new BodyDef();
         bodyDef.position.set(defaultPosition.x + shipSize.x, defaultPosition.y + shipSize.y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        // TODO использовать joint для задания границ и т.п
 
         if (bodyShape == null) {
             bodyShape = new PolygonShape();
@@ -73,9 +74,9 @@ public class Fighter extends SteerableBodyImpl {
                 break;
             case ATTACK:
                 if (fighterAI.allowAttack(myself.getPosition()) && fighterAI.allowShoot(delta)) {
-                    System.out.println("shoot");
                     shoot(fighterAI.getTarget());
                 }
+                // TODO shoot
                 break;
             case RELOAD:
                 fighterAI.reload(delta);
@@ -97,6 +98,7 @@ public class Fighter extends SteerableBodyImpl {
 
             super.steeringBehavior.calculateSteering(steeringOutput);
             if (!steeringOutput.linear.isZero()) {
+                steeringOutput.linear.y += 9.8;
                 super.thisBody.applyForceToCenter(steeringOutput.linear, true);
                 anyAcceleration = true;
             }
@@ -142,14 +144,13 @@ public class Fighter extends SteerableBodyImpl {
 
     private void shoot(UniversalBody target) {
         Vector2 laserSpawnPosition = new Vector2(shipSprite.getX(), shipSprite.getY());
-        bodyFactoryWrapper.createBody(
-                new Laser(laserSpawnPosition, target.getPosition(), fighterAI.getRelationType())
-        );
+        bodyFactoryWrapper.createBody(new Laser(laserSpawnPosition, target.getPosition(), fighterAI.getRelationType()));
     }
 
     static public void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

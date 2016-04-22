@@ -108,6 +108,7 @@ public class OilPumpFacade extends SteerableBodyImpl {
     public static void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

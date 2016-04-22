@@ -13,6 +13,7 @@ public class BodyFactoryWrapper {
     public BodyFactoryWrapper(final Vector2 worldGravity) {
         bodiesForDestruction = new ArrayList<>(5);
         physicsWorld = new World(worldGravity, true);
+        System.out.println("world created");
 
         shipsBodies = new HashSet<>();
         buildingsBodies = new HashSet<>();
@@ -40,6 +41,7 @@ public class BodyFactoryWrapper {
     }
 
     public void createBody(final UniversalBody universalBodyUserData) {
+        System.out.println("world: " + physicsWorld);
         Body bodyForCreate = physicsWorld.createBody(universalBodyUserData.getBodyDef());
         bodyForCreate.createFixture(universalBodyUserData.getFixtureDef());
         bodyForCreate.setUserData(universalBodyUserData);
@@ -84,6 +86,12 @@ public class BodyFactoryWrapper {
         }
 
         physicsWorld.dispose();
+        physicsWorld = null;
+        System.out.println("world destroyed");
+
+        shipsBodies.clear();
+        bulletBodies.clear();
+        buildingsBodies.clear();
     }
 
     public HashSet<Body> getShipsBodies() {
@@ -103,7 +111,7 @@ public class BodyFactoryWrapper {
     }
 
     public void destroyBody(BodyTypes destroyBodyType, final Body bodyForDestroy) {
-        switch (destroyBodyType) { // TODO thread safe access to HashSets
+        switch (destroyBodyType) {
             case BOMB:
             case LASER:
             case MISSILE:
@@ -126,7 +134,7 @@ public class BodyFactoryWrapper {
     }
 
 
-    final private World physicsWorld;
+    private World physicsWorld;
 
     private ArrayList<Body> bodiesForDestruction;
 

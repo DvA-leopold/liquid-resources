@@ -134,6 +134,7 @@ public class Missile extends Bullet {
     static public void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

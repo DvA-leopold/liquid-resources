@@ -81,6 +81,7 @@ public class IonShield extends SteerableBodyImpl {
     public static void dispose() {
         if (ionShieldShape != null) {
             ionShieldShape.dispose();
+            ionShieldShape = null;
         }
     }
 

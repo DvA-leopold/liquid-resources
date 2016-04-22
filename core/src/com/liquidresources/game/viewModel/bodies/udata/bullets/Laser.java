@@ -90,6 +90,7 @@ public class Laser extends Bullet {
     static public void dispose() {
         if (bodyShape != null) {
             bodyShape.dispose();
+            bodyShape = null;
         }
     }
 

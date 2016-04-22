@@ -54,7 +54,7 @@ class FighterAI {
 
                 if (target == null || myPosition.dst(currentEnemyPosition) < myPosition.dst(target.getBodyDef().position)) {
                     myPosition = currentEnemyPosition;
-                    target = (SteerableBodyImpl) ship.getUserData(); // TODO return universal body
+                    target = (SteerableBodyImpl) ship.getUserData();
                 }
             }
         }
