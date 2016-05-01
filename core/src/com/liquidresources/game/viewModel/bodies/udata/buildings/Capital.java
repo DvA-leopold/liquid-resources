@@ -28,16 +28,18 @@ public class Capital extends SteerableBodyImpl {
         capitalSprite.setPosition(defaultPosition.x, defaultPosition.y);
         capitalSprite.setSize(capitalSize.x, capitalSize.y);
 
-        bodyDef = new BodyDef();
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+        }
         bodyDef.position.set(defaultPosition.x + capitalSize.x * 0.5f, defaultPosition.y + capitalSize.y);
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(capitalSize.x * 0.5f, capitalSize.y);
+        if (capitalShape == null) {
+            capitalShape = new PolygonShape();
+            capitalShape.setAsBox(capitalSize.x * 0.5f, capitalSize.y);
         }
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = capitalShape;
             fixtureDef.isSensor = true;
         }
     }
@@ -74,17 +76,20 @@ public class Capital extends SteerableBodyImpl {
     }
 
     public static void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (capitalShape != null) {
+            capitalShape.dispose();
+            capitalShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
-    static final private Vector2 capitalSize;
     final private Sprite capitalSprite;
 
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    static private PolygonShape capitalShape;
+
+    static final private Vector2 capitalSize;
 }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.utils.Timer;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
@@ -17,6 +16,7 @@ import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
+import com.liquidresources.game.viewModel.bodies.udata.bullets.Bomb;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Laser;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
@@ -27,7 +27,7 @@ import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
 public class GameScreen implements Screen {
     public GameScreen() {
-        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -20.0f));
+        bodyFactoryWrapper = new BodyFactoryWrapper(new Vector2(0, -20f));
 
         Vector2 initAllyCoords = m2p(new Vector2(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.35f));
         alliedBase = new AlliedBase(initAllyCoords, bodyFactoryWrapper);
@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
         bodyFactoryWrapper.createBody(new Ground(initAllyCoords));
 
-        gameWorldModel = new GameWorldModel(bodyFactoryWrapper, alliedBase.getCapitalModel()); // TODO remove CM
+        gameWorldModel = new GameWorldModel(bodyFactoryWrapper, alliedBase.getCapitalModel()); // TODO remove capital model
         gameRenderer = new GameRenderer(bodyFactoryWrapper);
         gameScreenWidgetGroup = new GameScreenWidgetsGroup();
 
@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Box2D.init();
+
         alliedBase.show();
         enemyBase.show();
         enemyBase.initEnemyAI();
@@ -98,7 +99,7 @@ public class GameScreen implements Screen {
         IonShield.dispose();
         OilPumpFacade.dispose();
         ShipFactoryViewFacade.dispose();
-//        Bomb.dispose()
+        Bomb.dispose();
         Laser.dispose();
         Missile.dispose();
         Fighter.dispose();

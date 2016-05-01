@@ -13,8 +13,9 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
-public class Laser extends Bullet {
+public class Laser extends SteerableBodyImpl {
     static {
         laserSize = new Vector2(Gdx.graphics.getWidth() * 0.1f, Gdx.graphics.getHeight() * 0.1f);
         speed = new Vector2(100, 100);
@@ -23,23 +24,25 @@ public class Laser extends Bullet {
     public Laser(final Vector2 spawnPosition,
                  final Vector2 targetPosition,
                  final RelationTypes parentRelation) {
-        super(targetPosition, parentRelation);
+        super(parentRelation, 1);
 
         this.laserSprite = new Sprite((Texture) ResourceManager.getInstance().get(""));  // TODO laser sprite
         this.laserSprite.setPosition(spawnPosition.x - laserSize.x * 0.5f, spawnPosition.y - laserSize.y * 0.5f);
         this.laserSprite.setSize(laserSize.x, laserSize.y);
 
-        bodyDef = new BodyDef();
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        }
         bodyDef.position.set(spawnPosition.x + laserSize.x, spawnPosition.y + laserSize.y);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(laserSize.x * 0.5f, laserSize.y * 0.5f);
+        if (laserShape == null) {
+            laserShape = new PolygonShape();
+            laserShape.setAsBox(laserSize.x * 0.5f, laserSize.y * 0.5f);
         }
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = laserShape;
             fixtureDef.isSensor = true;
         }
     }
@@ -60,11 +63,6 @@ public class Laser extends Bullet {
 
     @Override
     public void update(final Body body, float delta) { // TODO remove body from args
-        direction.set(super.targetPosition.x - body.getPosition().x, super.targetPosition.y - body.getPosition().y);
-        int xSign = (int) Math.signum(direction.x);
-        int ySign = (int) Math.signum(direction.y);
-
-        body.setLinearVelocity(speed.x * xSign, speed.y * ySign);
     }
 
     @Override
@@ -88,19 +86,20 @@ public class Laser extends Bullet {
     }
 
     static public void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (laserShape != null) {
+            laserShape.dispose();
+            laserShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
     final private Sprite laserSprite;
-    final private Vector2 direction = new Vector2();
 
-    static private Vector2 laserSize, speed;
-
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    static private PolygonShape laserShape;
+
+    static final private Vector2 laserSize, speed;
 }

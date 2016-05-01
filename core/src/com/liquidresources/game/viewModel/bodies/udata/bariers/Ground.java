@@ -66,11 +66,6 @@ public class Ground implements UniversalBody {
     }
 
     @Override
-    public boolean isActive() {
-        return true;
-    }
-
-    @Override
     public RelationTypes getRelation() {
         return null;
     }

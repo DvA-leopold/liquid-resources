@@ -68,8 +68,7 @@ public class CapitalModel {
 
     public void missileLaunch(RelationTypes relationType) {
         Vector2 spawnPosition = new Vector2(missileSpawnPos.x, missileSpawnPos.y + m2p(20));
-        Vector2 targetPosition = null;
-        bodyFactoryWrapper.createBody(new Missile(spawnPosition, targetPosition, relationType));
+        bodyFactoryWrapper.createBody(new Missile(spawnPosition, relationType));
     }
 
     public void createShip(RelationTypes relationType) {

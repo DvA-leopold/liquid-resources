@@ -27,6 +27,8 @@ public class Fighter extends SteerableBodyImpl {
                    BodyFactoryWrapper bodyFactoryWrapper,
                    final RelationTypes relationType) {
         super(relationType, defaultHealth);
+        super.setMaxLinearSpeed(15);
+        super.setMaxLinearAcceleration(100);
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
         this.shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/fighter.png"));
@@ -35,19 +37,21 @@ public class Fighter extends SteerableBodyImpl {
 
         fighterAI = new FighterAI(relationType);
 
-        bodyDef = new BodyDef();
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        }
         bodyDef.position.set(defaultPosition.x + shipSize.x, defaultPosition.y + shipSize.y);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // TODO использовать joint для задания границ и т.п
+        // TODO использовать joint для задания границ полета и т.п
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(shipSize.x * 0.5f, shipSize.y * 0.5f);
+        if (fighterShape == null) {
+            fighterShape = new PolygonShape();
+            fighterShape.setAsBox(shipSize.x * 0.5f, shipSize.y * 0.5f);
         }
 
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = fighterShape;
             fixtureDef.isSensor = true;
         }
     }
@@ -98,7 +102,7 @@ public class Fighter extends SteerableBodyImpl {
 
             super.steeringBehavior.calculateSteering(steeringOutput);
             if (!steeringOutput.linear.isZero()) {
-                steeringOutput.linear.y += 9.8;
+                steeringOutput.linear.add(0, 20); // gravity compensation
                 super.thisBody.applyForceToCenter(steeringOutput.linear, true);
                 anyAcceleration = true;
             }
@@ -106,6 +110,22 @@ public class Fighter extends SteerableBodyImpl {
             if (steeringOutput.angular != 0) {
                 super.thisBody.applyTorque(steeringOutput.angular, true);
                 anyAcceleration = true;
+            }
+
+            if (independentFacing) {
+                if (steeringOutput.angular != 0) {
+                    // this method internally scales the torque by deltaTime
+                    super.thisBody.applyTorque(steeringOutput.angular, true);
+                    anyAcceleration = true;
+                }
+            } else {
+                // If we haven't got any velocity, then we can do nothing.
+                Vector2 linVel = getLinearVelocity();
+                if (!linVel.isZero(getZeroLinearSpeedThreshold())) {
+                    float newOrientation = vectorToAngle(linVel);
+                    super.thisBody.setAngularVelocity((newOrientation - getAngularVelocity()) * delta); // this is superfluous if independentFacing is always true
+                    super.thisBody.setTransform(super.thisBody.getPosition(), newOrientation);
+                }
             }
 
             if (anyAcceleration) {
@@ -148,22 +168,26 @@ public class Fighter extends SteerableBodyImpl {
     }
 
     static public void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (fighterShape != null) {
+            fighterShape.dispose();
+            fighterShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
-    final private BodyFactoryWrapper bodyFactoryWrapper;
-
-    final private FighterAI fighterAI;
+    final private boolean independentFacing = false;
 
     final private Sprite shipSprite;
 
+    final private FighterAI fighterAI;
+
+    static private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape fighterShape;
+
     static final private Vector2 shipSize;
 
-    private BodyDef bodyDef;
-    static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    final private BodyFactoryWrapper bodyFactoryWrapper;
 }

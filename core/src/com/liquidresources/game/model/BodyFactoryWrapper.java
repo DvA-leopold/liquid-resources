@@ -41,7 +41,6 @@ public class BodyFactoryWrapper {
     }
 
     public void createBody(final UniversalBody universalBodyUserData) {
-        System.out.println("world: " + physicsWorld);
         Body bodyForCreate = physicsWorld.createBody(universalBodyUserData.getBodyDef());
         bodyForCreate.createFixture(universalBodyUserData.getFixtureDef());
         bodyForCreate.setUserData(universalBodyUserData);

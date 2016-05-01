@@ -40,17 +40,20 @@ public class OilPumpFacade extends SteerableBodyImpl {
         pompAnimation = new Animation(workSpeed, pompFrames);
         pompAnimation.setPlayMode(animationPlayMode);
 
-        bodyDef = new BodyDef();
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+        }
         bodyDef.position.set(defaultPosition.x + oilPumpSize.x * 0.5f, defaultPosition.y + oilPumpSize.y * 0.5f);
+        this.defaultPosition = new Vector2(bodyDef.position);
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(oilPumpSize.x * 0.5f, oilPumpSize.y * 0.5f);
+        if (oilPumpShape == null) {
+            oilPumpShape = new PolygonShape();
+            oilPumpShape.setAsBox(oilPumpSize.x * 0.5f, oilPumpSize.y * 0.5f);
         }
 
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = oilPumpShape;
             fixtureDef.isSensor = false;
         }
     }
@@ -65,7 +68,7 @@ public class OilPumpFacade extends SteerableBodyImpl {
 
         batch.draw(
                 pompAnimation.getKeyFrame(stateTime, true),
-                bodyDef.position.x - oilPumpSize.x * 0.5f, bodyDef.position.y - oilPumpSize.y * 0.5f,
+                defaultPosition.x - oilPumpSize.x * 0.5f, defaultPosition.y - oilPumpSize.y * 0.5f,
                 oilPumpSize.x, oilPumpSize.y
         );
     }
@@ -106,23 +109,26 @@ public class OilPumpFacade extends SteerableBodyImpl {
     }
 
     public static void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (oilPumpShape != null) {
+            oilPumpShape.dispose();
+            oilPumpShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
-    final private float defaultAnimationSpeed;
-    static final private Vector2 oilPumpSize;
-
-    private float workSpeed;
     private boolean isStoped;
+    private float workSpeed;
     private float stateTime = 0f;
+    final private float defaultAnimationSpeed;
 
     private Animation pompAnimation;
+    final private Vector2 defaultPosition;
 
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    static private PolygonShape oilPumpShape;
+
+    static final private Vector2 oilPumpSize;
 }

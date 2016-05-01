@@ -12,18 +12,18 @@ import com.liquidresources.game.model.UpdatableBody;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
-public class Missile extends Bullet {
+public class Missile implements UniversalBody {
     static {
         missileSize = m2p(Gdx.graphics.getWidth() * 0.004f, Gdx.graphics.getHeight() * 0.02f);
     }
 
     public Missile(final Vector2 spawnPosition,
-                   final Vector2 targetPosition,
                    final RelationTypes parentRelation) {
-        super(targetPosition, parentRelation);
+        this.relationType = parentRelation;
 
         rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
         rocketSprite.setPosition(
@@ -48,19 +48,21 @@ public class Missile extends Bullet {
         rocketForceY = MathUtils.random(Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight() / 15);
         this.rotateDegree = 135;
 
-        bodyDef = new BodyDef();
+        if(bodyDef == null) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.bullet = true;
+        }
         bodyDef.position.set(spawnPosition.x, spawnPosition.y);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.bullet = true;
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(missileSize.x * 0.5f, missileSize.y * 0.5f);
+        if (missileShape == null) {
+            missileShape = new PolygonShape();
+            missileShape.setAsBox(missileSize.x * 0.5f, missileSize.y * 0.5f);
         }
 
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = missileShape;
             fixtureDef.isSensor = true;
         }
     }
@@ -106,19 +108,41 @@ public class Missile extends Bullet {
         UpdatableBody externalBodyUserData = (UpdatableBody) bodyA.getUserData();
 
         if (BodyTypes.GROUND == externalBodyUserData.getBodyType()) {
-            super.selfDestroy(bodyFactoryWrapper);
+            makeDamage(bodyFactoryWrapper, Integer.MAX_VALUE);
         }
 
-        if (externalBodyUserData.isActive() &&
-                externalBodyUserData.getRelation() != this.getRelation() &&
+        if (externalBodyUserData.getRelation() != this.getRelation() &&
                 BodyTypes.ION_SHIELD == externalBodyUserData.getBodyType()) {
-            super.selfDestroy(bodyFactoryWrapper);
+            makeDamage(bodyFactoryWrapper, Integer.MAX_VALUE);
         }
+    }
+
+    private boolean makeDamage(final BodyFactoryWrapper bodyFactoryWrapper, int dmg) {
+        health -= dmg;
+        if (health <= 0) {
+            bodyFactoryWrapper.destroyBody(getBodyType(), thisBody);
+        }
+        return health <= 0;
+    }
+
+    @Override
+    public void setBody(Body body) {
+        thisBody = body;
     }
 
     @Override
     public BodyTypes getBodyType() {
         return BodyTypes.MISSILE;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return thisBody.getPosition();
+    }
+
+    @Override
+    public RelationTypes getRelation() {
+        return relationType;
     }
 
     @Override
@@ -132,10 +156,12 @@ public class Missile extends Bullet {
     }
 
     static public void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (missileShape != null) {
+            missileShape.dispose();
+            missileShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
@@ -146,11 +172,15 @@ public class Missile extends Bullet {
     private float spriteRotationDegree;
     final private int rotateDegree;
 
+    final private RelationTypes relationType;
+    private Body thisBody;
+    private int health;
+
     final private Sprite rocketSprite;
 
-    static private Vector2 missileSize;
-
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    static private PolygonShape missileShape;
+
+    static final private Vector2 missileSize;
 }

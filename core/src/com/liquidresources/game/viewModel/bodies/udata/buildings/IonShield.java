@@ -2,6 +2,7 @@ package com.liquidresources.game.viewModel.bodies.udata.buildings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,9 +25,11 @@ public class IonShield extends SteerableBodyImpl {
                      final RelationTypes relationType) {
         super(relationType, 100);
 
-        bodyDef = new BodyDef();
-        bodyDef.position.set(endPosition.x, startPosition.y + ionShieldSize.y - m2p(10));
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
+        bodyDef.position.set(endPosition.x, startPosition.y + ionShieldSize.y - m2p(10)); // TODO remove magic numbers
 
         if (ionShieldShape == null) {
             ionShieldShape = new PolygonShape();
@@ -83,12 +86,16 @@ public class IonShield extends SteerableBodyImpl {
             ionShieldShape.dispose();
             ionShieldShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
-    static final private Vector2 ionShieldSize;
+    final private Sprite ionShield = new Sprite();
 
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
     static private PolygonShape ionShieldShape;
+
+    static final private Vector2 ionShieldSize;
 }

@@ -13,7 +13,6 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.common.utils.UConverter;
 import com.liquidresources.game.view.particles.SmokeParticles;
 import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
@@ -37,18 +36,20 @@ public class ShipFactoryViewFacade extends SteerableBodyImpl {
                 true
         );
 
-        bodyDef = new BodyDef();
+        if (bodyDef == null) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
         bodyDef.position.set(defaultPosition.x + shipFactorySize.x * 0.5f, defaultPosition.y + shipFactorySize.y * 0.5f);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        if (bodyShape == null) {
-            bodyShape = new PolygonShape();
-            bodyShape.setAsBox(shipFactorySize.x * 0.5f, shipFactorySize.y * 0.5f);
+        if (shipFactoryShape == null) {
+            shipFactoryShape = new PolygonShape();
+            shipFactoryShape.setAsBox(shipFactorySize.x * 0.5f, shipFactorySize.y * 0.5f);
         }
 
         if (fixtureDef == null) {
             fixtureDef = new FixtureDef();
-            fixtureDef.shape = bodyShape;
+            fixtureDef.shape = shipFactoryShape;
         }
     }
 
@@ -99,20 +100,22 @@ public class ShipFactoryViewFacade extends SteerableBodyImpl {
     }
 
     static public void dispose() {
-        if (bodyShape != null) {
-            bodyShape.dispose();
-            bodyShape = null;
+        if (shipFactoryShape != null) {
+            shipFactoryShape.dispose();
+            shipFactoryShape = null;
         }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
-
-    static final private Vector2 shipFactorySize;
 
     final private Sprite shipFactory;
 
     final private SmokeParticles smokeParticles;
 
-    private BodyDef bodyDef;
+    static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
-    static private PolygonShape bodyShape;
+    static private PolygonShape shipFactoryShape;
+
+    static final private Vector2 shipFactorySize;
 }

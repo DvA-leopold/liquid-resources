@@ -126,8 +126,6 @@ public class GameRenderer implements Observer {
         }
 
         batch.end();
-
-        worldDebugRenderer.render(bodyFactoryWrapper.getPhysicsWorld(), camera.combined);
     }
 
     private void renderExitState() {

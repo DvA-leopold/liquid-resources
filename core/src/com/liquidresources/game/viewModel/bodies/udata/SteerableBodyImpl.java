@@ -12,28 +12,28 @@ import com.liquidresources.game.model.common.utils.LocationC;
 import com.liquidresources.game.model.common.utils.SteeringUtils;
 import com.liquidresources.game.model.types.RelationTypes;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 abstract public class SteerableBodyImpl implements UniversalBody, Steerable<Vector2> {
     public SteerableBodyImpl(RelationTypes relationType, int health) {
         this.relationType = relationType;
         this.health = health;
-        isActive = new AtomicBoolean(true);
         this.steeringBehavior = new Arrive<>(this)
                 .setTimeToTarget(0.1f)
                 .setArrivalTolerance(0.001f)
                 .setDecelerationRadius(3);
     }
 
-    protected void selfDestroy(final BodyFactoryWrapper bodyFactoryWrapper) {
-        if (isActive.getAndSet(false)) {
+    /**
+     * make damage to this body
+     * @param bodyFactoryWrapper global container of all bodies
+     * @param dmg deal damage
+     * @return <code>true</code> if body will be destroyed, <code>false</code> res
+     */
+    protected boolean makeDamage(final BodyFactoryWrapper bodyFactoryWrapper, int dmg) {
+        health -= dmg;
+        if (health <= 0) {
             bodyFactoryWrapper.destroyBody(getBodyType(), thisBody);
         }
-    }
-
-    @Override
-    public boolean isActive() {
-        return isActive.get();
+        return health <= 0;
     }
 
     @Override
@@ -154,19 +154,17 @@ abstract public class SteerableBodyImpl implements UniversalBody, Steerable<Vect
 
     private int health;
 
-    private AtomicBoolean isActive;
-
     final private RelationTypes relationType;
     protected Body thisBody;
 
     private float boundingRadius;
     private boolean tagged;
 
-    private float maxLinearSpeed = 5; // TODO set speed
-    private float maxLinearAcceleration = 100;
+    private float maxLinearSpeed;
+    private float maxLinearAcceleration;
     private float maxAngularSpeed;
     private float maxAngularAcceleration;
 
     protected SteeringBehavior<Vector2> steeringBehavior;
-    final static protected SteeringAcceleration<Vector2> steeringOutput = new SteeringAcceleration<>(new Vector2());
+    static final protected SteeringAcceleration<Vector2> steeringOutput = new SteeringAcceleration<>(new Vector2());
 }

@@ -1,5 +1,6 @@
 package com.liquidresources.game.viewModel.bodies.udata.bullets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +13,13 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
 
+import static com.liquidresources.game.model.common.utils.UConverter.m2p;
+
 public class Bomb extends SteerableBodyImpl {
+    static {
+        bombSize = m2p(Gdx.graphics.getWidth() * 0.001f, Gdx.graphics.getHeight() * 0.001f);
+    }
+
     public Bomb(final Vector2 spawnPosition,
                 final Vector2 targetPosition,
                 final Vector2 bulletSize,
@@ -27,7 +34,7 @@ public class Bomb extends SteerableBodyImpl {
 
     @Override
     public Vector2 getSize() {
-        return null;
+        return bombSize;
     }
 
     @Override
@@ -45,18 +52,29 @@ public class Bomb extends SteerableBodyImpl {
 
     @Override
     public BodyDef getBodyDef() {
-        return null;
+        return bodyDef;
     }
 
     @Override
     public FixtureDef getFixtureDef() {
-        return null;
+        return fixtureDef;
+    }
+
+    static public void dispose() {
+        if (bombShape != null) {
+            bombShape.dispose();
+            bombShape = null;
+        }
+        fixtureDef = null;
+        bodyDef = null;
     }
 
 
     final private Sprite bombSprite = new Sprite();
 
-    private BodyDef bodyDef;
-    static public FixtureDef fixtureDef;
-    static public PolygonShape polygonShape;
+    static private BodyDef bodyDef;
+    static private FixtureDef fixtureDef;
+    static private PolygonShape bombShape;
+
+    static final private Vector2 bombSize;
 }

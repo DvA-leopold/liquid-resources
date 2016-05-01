@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.view.windows.GameOptionWindow;
 import com.liquidresources.game.viewModel.GameStates;
 import com.liquidresources.game.viewModel.bases.BaseFacade;

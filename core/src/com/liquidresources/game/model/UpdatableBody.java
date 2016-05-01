@@ -13,13 +13,10 @@ public interface UpdatableBody {
 
     void setBody(final Body body);
 
-    boolean isActive();
 
     BodyTypes getBodyType();
     Vector2 getPosition();
     RelationTypes getRelation();
     BodyDef getBodyDef();
     FixtureDef getFixtureDef();
-
-
 }
