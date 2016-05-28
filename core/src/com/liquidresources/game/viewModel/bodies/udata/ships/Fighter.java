@@ -31,7 +31,7 @@ public class Fighter extends SteerableBodyImpl {
         super.setMaxLinearAcceleration(100);
         this.bodyFactoryWrapper = bodyFactoryWrapper;
 
-        this.shipSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/ships/fighter.png"));
+        this.shipSprite = new Sprite((Texture) ResourceManager.instance().get("drawable/ships/fighter.png"));
         this.shipSprite.setPosition(defaultPosition.x - shipSize.x * 0.5f, defaultPosition.y - shipSize.y * 0.5f);
         this.shipSprite.setSize(shipSize.x, shipSize.y);
 

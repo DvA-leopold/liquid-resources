@@ -32,7 +32,7 @@ public class GameRenderer implements Observer {
         worldDebugRenderer = new Box2DDebugRenderer();
         camera = ((LiquidResources) Gdx.app.getApplicationListener()).getCamera();
 
-        desertBackground = (Texture) ResourceManager.getInstance().get("backgrounds/desert.jpg");
+        desertBackground = (Texture) ResourceManager.instance().get("backgrounds/desert.jpg");
         mainFonts = ((LiquidResources) Gdx.app.getApplicationListener()).getMainFonts();
 
         symbolsRenderer = new SymbolsRenderer(0, m2p(Gdx.graphics.getHeight() - 60), m2p(20), m2p(45));

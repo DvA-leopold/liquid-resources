@@ -41,7 +41,7 @@ public class ResourceManager {
         mimeFileTypes.put("p", ParticleEffect.class);
     }
 
-    public static ResourceManager getInstance() {
+    public static ResourceManager instance() {
         return SingletonHolder.instance;
     }
 
@@ -62,7 +62,7 @@ public class ResourceManager {
             String fileName = file.file().getName();
             String extension = getExtension(fileName);
             if (mimeFileTypes.containsKey(extension)) {
-                getInstance().assetManager.load(file.path(), mimeFileTypes.get(extension));
+                instance().assetManager.load(file.path(), mimeFileTypes.get(extension));
                 currentStorageSize += file.length();
             }
         }
@@ -126,7 +126,7 @@ public class ResourceManager {
     }
 
     public void dispose() {
-        getInstance().assetManager.dispose();
+        instance().assetManager.dispose();
     }
 
     private FileHandle[] getFiles(FileHandle sectionForLoading) throws FileNotFoundException {
@@ -156,7 +156,7 @@ public class ResourceManager {
         assetManager.setLoader(Skin.class, newSkinLoader);
     }
 
-    private String getExtension(String filePath) {
+    private String getExtension(String filePath) throws NoSuchElementException {
         int index = filePath.lastIndexOf(".");
         if (index == -1) {
             throw new NoSuchElementException("this file have no extension");

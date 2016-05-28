@@ -28,7 +28,7 @@ public class GameScreenWidgetsGroup implements Observer {
                 new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),
                 ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch()
         );
-        Skin skin = (Skin) ResourceManager.getInstance().get("skins/game_screen/gameSkin.json");
+        Skin skin = (Skin) ResourceManager.instance().get("skins/game_screen/gameSkin.json");
 
         optionWindowButton = new Button(skin, "optionButton");
         optionWindowButton.setSize(buttonWidth, buttonHeight);

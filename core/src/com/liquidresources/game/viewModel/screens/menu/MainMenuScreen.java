@@ -14,8 +14,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        ((LiquidResources) Gdx.app.getApplicationListener())
-                .getMusicManager().registerMusic(this.getClass(), MusicManager.MusicTypes.ADDITION_MUSIC);
+        MusicManager.instance().registerMusic(this.getClass(), MusicManager.MusicTypes.ADDITION_MUSIC);
     }
 
     @Override
@@ -32,12 +31,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void pause() {
-        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().pauseMusic();
+        MusicManager.instance().pauseMusic();
     }
 
     @Override
     public void resume() {
-        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().resumeMusic();
+        MusicManager.instance().resumeMusic();
     }
 
     @Override

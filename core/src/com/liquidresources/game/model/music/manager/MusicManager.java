@@ -9,7 +9,7 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 import java.util.HashMap;
 
 public class MusicManager {
-    public MusicManager() {
+    private MusicManager() {
         musicEnable = false; // TODO enable music
         musicManagerStarted = false;
         currentMusicType = null;
@@ -17,12 +17,14 @@ public class MusicManager {
         musicTable = new HashMap<>();
     }
 
-    public void initialize() {
-        mainSample = (Music) ResourceManager.getInstance().get("audio/music/The Complex.mp3");
-        additionSample = (Music) ResourceManager.getInstance().get("audio/music/Undaunted.mp3");
+    public static MusicManager instance() {
+        return SingletonHolder.instance;
     }
 
-    public void startMusicManager() {
+    public void initialize() {
+        mainSample = (Music) ResourceManager.instance().get("audio/music/The Complex.mp3");
+        additionSample = (Music) ResourceManager.instance().get("audio/music/Undaunted.mp3");
+
         musicManagerStarted = true;
         Class<? extends Screen> startScreen = ((Game) Gdx.app.getApplicationListener()).getScreen().getClass();
 
@@ -33,7 +35,6 @@ public class MusicManager {
             currentMusicType = musicTable.get(startScreen);
             play(currentMusicType);
         }
-
     }
 
     /**
@@ -135,16 +136,16 @@ public class MusicManager {
     }
 
     public void dispose() {
-        ResourceManager.getInstance().unloadSection("audio");
+        ResourceManager.instance().unloadSection("audio");
         mainSample.dispose();
         additionSample.dispose();
     }
 
-    public static boolean isMusicEnable() {
+    public boolean isMusicEnable() {
         return musicEnable;
     }
 
-    public static void switchMusic() {
+    public void onoff() {
         musicEnable = !musicEnable;
     }
 
@@ -152,6 +153,10 @@ public class MusicManager {
     public enum MusicTypes {
         MAIN_MUSIC,
         ADDITION_MUSIC
+    }
+
+    static private class SingletonHolder {
+        static final MusicManager instance = new MusicManager();
     }
 
 
@@ -164,5 +169,5 @@ public class MusicManager {
 
     final private HashMap<Class<? extends Screen>, MusicTypes> musicTable;
 
-    private static boolean musicEnable;
+    private boolean musicEnable;
 }

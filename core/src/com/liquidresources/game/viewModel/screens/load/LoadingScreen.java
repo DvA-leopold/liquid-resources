@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.liquidresources.game.LiquidResources;
+import com.liquidresources.game.model.music.manager.MusicManager;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.common.utils.UConverter;
 import com.liquidresources.game.viewModel.screens.menu.MainMenuScreen;
@@ -18,17 +19,17 @@ public class LoadingScreen implements Screen {
     @Override
     public void show() {
         barHorizontalMid = new Texture("init/white_square_progress_bar.png");
-        ResourceManager.getInstance().loadSection("drawable", false);
-        ResourceManager.getInstance().loadSection("backgrounds", false);
-        ResourceManager.getInstance().loadSection("audio", false);
-        ResourceManager.getInstance().loadSection("symbols", false);
-        ResourceManager.getInstance().loadSection("particles", false);
-        ResourceManager.getInstance().loadSection("skins", false);
+        ResourceManager.instance().loadSection("drawable", false);
+        ResourceManager.instance().loadSection("backgrounds", false);
+        ResourceManager.instance().loadSection("audio", false);
+        ResourceManager.instance().loadSection("symbols", false);
+        ResourceManager.instance().loadSection("particles", false);
+        ResourceManager.instance().loadSection("skins", false);
     }
 
     @Override
     public void render(float delta) {
-        int progress = (int) (ResourceManager.getInstance().updateAndGetProgress() * 100);
+        int progress = (int) (ResourceManager.instance().updateAndGetProgress() * 100);
         int position = 100;
         int barHorizontalWidth = barHorizontalMid.getWidth() + 5;
 
@@ -42,10 +43,10 @@ public class LoadingScreen implements Screen {
         batch.end();
 
         if (progress >= 100) {
-            ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().initialize();
-            ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().startMusicManager();
+            MusicManager.instance().initialize();
+//            MusicManager.instance().startMusicManager();
 
-            System.out.println(ResourceManager.getInstance().getCurrentStorageSize());
+            System.out.println(ResourceManager.instance().getCurrentStorageSize());
 
             ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
         }
