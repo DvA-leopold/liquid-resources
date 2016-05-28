@@ -44,7 +44,6 @@ public class LoadingScreen implements Screen {
 
         if (progress >= 100) {
             MusicManager.instance().initialize();
-//            MusicManager.instance().startMusicManager();
 
             System.out.println(ResourceManager.instance().getCurrentStorageSize());
 

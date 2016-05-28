@@ -2,6 +2,7 @@ package com.liquidresources.game.viewModel.bodies.udata.ships;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -72,37 +73,44 @@ public class Fighter extends SteerableBodyImpl {
 
     @Override
     public void update(final Body myself, float delta) {
-        switch(fighterAI.getFighterStatus()) {
+        switch (fighterAI.getFighterStatus()) {
             case SEARCH:
                 fighterAI.retarget(myself.getPosition(), bodyFactoryWrapper);
+                System.out.println("search");
                 break;
             case ATTACK:
                 if (fighterAI.allowAttack(myself.getPosition()) && fighterAI.allowShoot(delta)) {
                     shoot(fighterAI.getTarget());
+                    System.out.println("shoot");
+                } else {
+                    move(delta);
                 }
-                // TODO shoot
                 break;
             case RELOAD:
                 fighterAI.reload(delta);
-                // TODO reload
+                move(delta);
                 break;
             case GO_AWAY:
                 fighterAI.reload(delta);
-                // TODO go away
+                move(delta);
                 break;
             case GET_CLOSE:
-                // TODO get close
+                fighterAI.getClose(myself.getPosition());
+                System.out.println("get close");
+                move(delta);
         }
+    }
 
+    private void move(float delta) {
         boolean anyAcceleration = false;
         if (super.steeringBehavior != null) {
-            if (((Arrive<Vector2>)super.steeringBehavior).getTarget() == null) {
-                ((Arrive<Vector2>)super.steeringBehavior).setTarget(fighterAI.getTarget());
+            if (((Arrive<Vector2>) super.steeringBehavior).getTarget() == null) {
+                ((Arrive<Vector2>) super.steeringBehavior).setTarget(fighterAI.getTarget());
             }
 
             super.steeringBehavior.calculateSteering(steeringOutput);
             if (!steeringOutput.linear.isZero()) {
-                steeringOutput.linear.add(0, 20); // gravity compensation
+                steeringOutput.linear.sub(bodyFactoryWrapper.getPhysicsWorld().getGravity()); // gravity compensation
                 super.thisBody.applyForceToCenter(steeringOutput.linear, true);
                 anyAcceleration = true;
             }

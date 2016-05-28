@@ -26,7 +26,7 @@ public class Laser extends SteerableBodyImpl {
                  final RelationTypes parentRelation) {
         super(parentRelation, 1);
 
-        this.laserSprite = new Sprite((Texture) ResourceManager.instance().get(""));  // TODO laser sprite
+        this.laserSprite = new Sprite((Texture) ResourceManager.instance().get("drawable/bullets/rocket.png"));  // TODO laser sprite
         this.laserSprite.setPosition(spawnPosition.x - laserSize.x * 0.5f, spawnPosition.y - laserSize.y * 0.5f);
         this.laserSprite.setSize(laserSize.x, laserSize.y);
 
