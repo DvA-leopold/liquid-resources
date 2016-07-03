@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
 
         alliedBase.show();
         enemyBase.show();
-        enemyBase.initEnemyAI();
+//        enemyBase.initEnemyAI();
 
         gameScreenWidgetGroup.initGameButtonsListeners(alliedBase, gameWorldModel);
 

@@ -3,7 +3,6 @@ package com.liquidresources.game.viewModel.bases;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Timer;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.game.world.base.CapitalModel;
 import com.liquidresources.game.model.types.RelationTypes;
@@ -38,7 +37,7 @@ public class EnemyBase extends BaseFacade {
         bodyFactoryWrapper.createBody(shipFactoryFacade);
 
         initCoords.x += buildingsPositionDelimiter;
-        endPosition.x += shipFactoryFacade.getSize().x * 1.5f; //TODO 1.5 ??
+        endPosition.x += shipFactoryFacade.getSize().x * 1.5f;
         Vector2 shieldEndPosition = new Vector2(endPosition.x + buildingsPositionDelimiter, endPosition.y);
         baseShield = new IonShield(initCoords, shieldEndPosition, baseRelationType);
         bodyFactoryWrapper.createBody(baseShield);

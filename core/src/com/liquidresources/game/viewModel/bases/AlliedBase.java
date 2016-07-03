@@ -37,7 +37,7 @@ public class AlliedBase extends BaseFacade {
         bodyFactoryWrapper.createBody(shipFactoryFacade);
 
         endPosition.x -= buildingsPositionDelimiter;
-        endPosition.x -= shipFactoryFacade.getSize().x * 0.5f; //TODO 0.5 ??
+        endPosition.x -= shipFactoryFacade.getSize().x * 0.5f;
         Vector2 shieldStartPosition = new Vector2(startPosition.x - buildingsPositionDelimiter, startPosition.y);
         baseShield = new IonShield(shieldStartPosition, endPosition, baseRelationType);
         bodyFactoryWrapper.createBody(baseShield);
