@@ -13,9 +13,9 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 
-public class Laser extends SteerableBodyImpl {
+public class Laser extends SteerableBody {
     static {
         laserSize = new Vector2(Gdx.graphics.getWidth() * 0.1f, Gdx.graphics.getHeight() * 0.1f);
         speed = new Vector2(100, 100);

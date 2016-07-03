@@ -2,22 +2,28 @@ package com.liquidresources.game.viewModel.bodies.udata.ships;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
+import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
+import com.badlogic.gdx.ai.steer.behaviors.Hide;
+import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Laser;
 
+import static com.badlogic.gdx.ai.steer.limiters.NullLimiter.NEUTRAL_LIMITER;
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
-public class Fighter extends SteerableBodyImpl {
+public class Fighter extends SteerableBody {
     static {
         shipSize = m2p(Gdx.graphics.getWidth() * 0.04f, Gdx.graphics.getHeight() * 0.04f);
     }
@@ -142,6 +148,22 @@ public class Fighter extends SteerableBodyImpl {
                 }
             }
         }
+    }
+
+    @Override
+    protected void blendSteeringInit(Array<SteerableBody> agents) {
+        RadiusProximity<Vector2> radiusProximity = new RadiusProximity<>(this, agents, 300);
+        CollisionAvoidance<Vector2> collisionAvoidance = new CollisionAvoidance<>(this, radiusProximity);
+        Arrive<Vector2> arriveBehaviour = new Arrive<>(this)
+                .setTimeToTarget(0.1f)
+                .setArrivalTolerance(0.001f)
+                .setDecelerationRadius(3);
+        Hide<Vector2> hideBehaviour = new Hide<>(this);
+        this.steeringBehavior = new BlendedSteering<>(this)
+                .setLimiter(NEUTRAL_LIMITER)
+                .add(collisionAvoidance, 1)
+                .add(arriveBehaviour, 1)
+                .add(hideBehaviour, 1);
     }
 
     @Override

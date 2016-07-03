@@ -11,11 +11,11 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
-public class OilPumpFacade extends SteerableBodyImpl {
+public class OilPumpFacade extends SteerableBody {
     static {
         oilPumpSize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
     }

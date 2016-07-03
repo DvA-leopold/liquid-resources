@@ -6,7 +6,7 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.UpdatableBody;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBodyImpl;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 
 import static com.liquidresources.game.model.common.utils.UConverter.p2m;
 
@@ -54,7 +54,7 @@ class FighterAI {
 
                 if (target == null || myPosition.dst(currentEnemyPosition) < myPosition.dst(target.getBodyDef().position)) {
                     myPosition = currentEnemyPosition;
-                    target = (SteerableBodyImpl) ship.getUserData();
+                    target = (SteerableBody) ship.getUserData();
                 }
             }
         }
@@ -63,7 +63,7 @@ class FighterAI {
                 BodyTypes currentType = ((UpdatableBody) building.getUserData()).getBodyType();
                 if (currentType != BodyTypes.GROUND && currentType != BodyTypes.ION_SHIELD &&
                         ((UpdatableBody) building.getUserData()).getRelation() != shipOwnerBase) {
-                    target = (SteerableBodyImpl) building.getUserData();
+                    target = (SteerableBody) building.getUserData();
                     break;
                 }
             }
@@ -106,7 +106,7 @@ class FighterAI {
         this.fighterStatus = fighterStatus;
     }
 
-    SteerableBodyImpl getTarget() {
+    SteerableBody getTarget() {
         return target;
     }
 
@@ -123,7 +123,7 @@ class FighterAI {
     }
 
 
-    private SteerableBodyImpl target = null;
+    private SteerableBody target = null;
 
     private RelationTypes shipOwnerBase;
     private FighterStatus fighterStatus;

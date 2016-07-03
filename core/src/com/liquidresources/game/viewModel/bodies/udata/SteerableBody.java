@@ -4,23 +4,29 @@ import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
+import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
+import com.badlogic.gdx.ai.steer.behaviors.Hide;
+import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.common.utils.LocationC;
 import com.liquidresources.game.model.common.utils.SteeringUtils;
 import com.liquidresources.game.model.types.RelationTypes;
 
-abstract public class SteerableBodyImpl implements UniversalBody, Steerable<Vector2> {
-    public SteerableBodyImpl(RelationTypes relationType, int health) {
+import static com.badlogic.gdx.ai.steer.limiters.NullLimiter.NEUTRAL_LIMITER;
+
+abstract public class SteerableBody implements UniversalBody, Steerable<Vector2> {
+    public SteerableBody(RelationTypes relationType, int health) {
         this.relationType = relationType;
         this.health = health;
-        this.steeringBehavior = new Arrive<>(this)
-                .setTimeToTarget(0.1f)
-                .setArrivalTolerance(0.001f)
-                .setDecelerationRadius(3);
+        this.boundingRadius = 300;
     }
+
+    protected abstract void blendSteeringInit(Array<SteerableBody> agents);
 
     /**
      * make damage to this body
