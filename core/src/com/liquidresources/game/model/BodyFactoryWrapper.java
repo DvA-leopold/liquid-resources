@@ -13,7 +13,6 @@ public class BodyFactoryWrapper {
     public BodyFactoryWrapper(final Vector2 worldGravity) {
         bodiesForDestruction = new ArrayList<>(5);
         physicsWorld = new World(worldGravity, true);
-        System.out.println("world created");
 
         shipsBodies = new HashSet<>();
         buildingsBodies = new HashSet<>();
@@ -85,8 +84,6 @@ public class BodyFactoryWrapper {
         }
 
         physicsWorld.dispose();
-        physicsWorld = null;
-        System.out.println("world destroyed");
 
         shipsBodies.clear();
         bulletBodies.clear();
@@ -136,8 +133,8 @@ public class BodyFactoryWrapper {
     private World physicsWorld;
 
     private ArrayList<Body> bodiesForDestruction;
-
     final private HashSet<Body> shipsBodies;
     final private HashSet<Body> bulletBodies;
+
     final private HashSet<Body> buildingsBodies;
 }

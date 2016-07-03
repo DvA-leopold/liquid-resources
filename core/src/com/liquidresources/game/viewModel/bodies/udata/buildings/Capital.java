@@ -24,7 +24,7 @@ public class Capital extends SteerableBody {
 
     public Capital(final Vector2 defaultPosition, final RelationTypes relationType) {
         super(relationType, 100);
-        capitalSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/buildings/capitalSprite.png"));
+        capitalSprite = new Sprite((Texture) ResourceManager.instance().get("drawable/buildings/capitalSprite.png"));
         capitalSprite.setPosition(defaultPosition.x, defaultPosition.y);
         capitalSprite.setSize(capitalSize.x, capitalSize.y);
 

@@ -24,7 +24,7 @@ public class GameOptionWindow extends Window {
         setVisible(false);
 
         musicButton = new CheckBox("", skin, "musicCheckBox");
-        musicButton.setChecked(!MusicManager.isMusicEnable());
+        musicButton.setChecked(!MusicManager.instance().isMusicEnable());
         soundButton = new CheckBox("", skin, "soundCheckBox");
         soundButton.setChecked(!SoundManager.isSoundEnable());
 
@@ -44,11 +44,11 @@ public class GameOptionWindow extends Window {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MusicManager.switchMusic();
-                if (MusicManager.isMusicEnable()) {
-                    ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().resumeMusic();
+                MusicManager.instance().onoff();
+                if (MusicManager.instance().isMusicEnable()) {
+                    MusicManager.instance().resumeMusic();
                 } else {
-                    ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
+                    MusicManager.instance().stopMusic();
                 }
             }
         });

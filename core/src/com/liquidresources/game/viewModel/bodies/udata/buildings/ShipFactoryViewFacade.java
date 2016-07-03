@@ -25,7 +25,7 @@ public class ShipFactoryViewFacade extends SteerableBody {
 
     public ShipFactoryViewFacade(final Vector2 defaultPosition, final RelationTypes relationType) {
         super(relationType, 100);
-        Texture factoryTexture = (Texture) ResourceManager.getInstance().get("drawable/buildings/shipFactory.png");
+        Texture factoryTexture = (Texture) ResourceManager.instance().get("drawable/buildings/shipFactory.png");
 
         shipFactory = new Sprite(factoryTexture);
         shipFactory.setPosition(defaultPosition.x, defaultPosition.y);

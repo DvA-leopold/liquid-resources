@@ -31,7 +31,7 @@ public class OilPumpFacade extends SteerableBody {
         isStoped = false;
 
         TextureRegion[] pompFrames = new TextureRegion[10];
-        TextureAtlas pompImageAtlas = (TextureAtlas) ResourceManager.getInstance().get("drawable/animation/oil-pomp.atlas");
+        TextureAtlas pompImageAtlas = (TextureAtlas) ResourceManager.instance().get("drawable/animation/oil-pomp.atlas");
 
         for (int i=0; i<10; ++i) {
             pompFrames[i] = new TextureRegion(pompImageAtlas.findRegion("oil-pomp" + Integer.toString(i)));

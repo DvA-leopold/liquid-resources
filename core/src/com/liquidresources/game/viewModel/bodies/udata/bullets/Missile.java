@@ -25,7 +25,7 @@ public class Missile implements UniversalBody {
                    final RelationTypes parentRelation) {
         this.relationType = parentRelation;
 
-        rocketSprite = new Sprite((Texture) ResourceManager.getInstance().get("drawable/bullets/rocket.png"));
+        rocketSprite = new Sprite((Texture) ResourceManager.instance().get("drawable/bullets/rocket.png"));
         rocketSprite.setPosition(
                 spawnPosition.x - missileSize.x * 0.5f,
                 spawnPosition.y - missileSize.y * 0.5f

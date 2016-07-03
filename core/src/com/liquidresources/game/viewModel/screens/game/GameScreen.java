@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.model.music.manager.MusicManager;
@@ -16,7 +15,6 @@ import com.liquidresources.game.viewModel.bodies.udata.buildings.Capital;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.IonShield;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
-import com.liquidresources.game.viewModel.bodies.udata.bullets.Bomb;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Laser;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
 import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
@@ -51,12 +49,11 @@ public class GameScreen implements Screen {
 
         alliedBase.show();
         enemyBase.show();
-        enemyBase.initEnemyAI();
+//        enemyBase.initEnemyAI();
 
         gameScreenWidgetGroup.initGameButtonsListeners(alliedBase, gameWorldModel);
 
-        ((LiquidResources) Gdx.app.getApplicationListener()).
-                getMusicManager().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
+        MusicManager.instance().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
     }
 
     @Override
@@ -74,17 +71,17 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         gameWorldModel.pause();
-        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().pauseMusic();
+        MusicManager.instance().pauseMusic();
     }
 
     @Override
     public void resume() {
-        ((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().resumeMusic();
+        MusicManager.instance().resumeMusic();
     }
 
     @Override
     public void hide() {
-        //((LiquidResources) Gdx.app.getApplicationListener()).getMusicManager().stopMusic();
+        MusicManager.instance().stopMusic();
         alliedBase.hide();
         enemyBase.hide();
         dispose();
@@ -99,7 +96,7 @@ public class GameScreen implements Screen {
         IonShield.dispose();
         OilPumpFacade.dispose();
         ShipFactoryViewFacade.dispose();
-        Bomb.dispose();
+//        Bomb.dispose()
         Laser.dispose();
         Missile.dispose();
         Fighter.dispose();

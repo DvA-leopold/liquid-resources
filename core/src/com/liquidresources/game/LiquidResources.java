@@ -39,7 +39,6 @@ public final class LiquidResources extends Game {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0f);
 
         mainBatch = new SpriteBatch();
-        musicManager = new MusicManager();
 
         setScreen(new LoadingScreen());
 	}
@@ -65,9 +64,9 @@ public final class LiquidResources extends Game {
     @Override
     public void dispose() {
         super.dispose();
-        musicManager.dispose();
         mainBatch.dispose();
-        ResourceManager.getInstance().dispose();
+        MusicManager.instance().dispose();
+        ResourceManager.instance().dispose();
     }
 
     @Override
@@ -88,15 +87,11 @@ public final class LiquidResources extends Game {
     @Override
     public void setScreen(Screen screen) {
         super.setScreen(screen);
-        musicManager.switchSample(screen.getClass());
+        MusicManager.instance().switchSample(screen.getClass());
     }
 
     final public SpriteBatch getMainBatch() {
         return mainBatch;
-    }
-
-    final public MusicManager getMusicManager() {
-        return musicManager;
     }
 
     final public Camera getCamera() {
@@ -121,7 +116,7 @@ public final class LiquidResources extends Game {
         fontMap.put("mainFonts", mainFonts);
         fontMap.put("addFonts", additionFont);
 
-        ResourceManager.getInstance().setSkinLoader(new FreeTypeFontSkinLoader(new InternalFileHandleResolver(), fontMap));
+        ResourceManager.instance().setSkinLoader(new FreeTypeFontSkinLoader(new InternalFileHandleResolver(), fontMap));
 
         fontGenerator.dispose();
     }
@@ -131,8 +126,6 @@ public final class LiquidResources extends Game {
     private VersionHandler versionHandler;
 
     private BitmapFont mainFonts;
-
-    private MusicManager musicManager;
 
     private Camera camera;
     private SpriteBatch mainBatch;
