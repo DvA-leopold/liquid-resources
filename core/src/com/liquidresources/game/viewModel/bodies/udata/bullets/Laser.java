@@ -14,9 +14,9 @@ import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBodyImpl;
 
-public class Laser extends SteerableBody {
+public class Laser extends UniversalBodyImpl {
     static {
         laserSize = new Vector2(Gdx.graphics.getWidth() * 0.1f, Gdx.graphics.getHeight() * 0.1f);
         speed = new Vector2(100, 100);
@@ -46,11 +46,6 @@ public class Laser extends SteerableBody {
             fixtureDef.shape = laserShape;
             fixtureDef.isSensor = true;
         }
-    }
-
-    @Override
-    public void blendSteeringInit(Array<SteerableBody> agents) {
-
     }
 
     @Override

@@ -6,8 +6,6 @@ public enum BodyTypes {
     SHIP_FACTORY,
     ION_SHIELD,
 
-    FIGHTER_SHIP,
-
     MISSILE,
     LASER,
     BOMB,

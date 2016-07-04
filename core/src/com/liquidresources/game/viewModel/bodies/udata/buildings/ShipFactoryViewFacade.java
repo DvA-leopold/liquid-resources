@@ -9,17 +9,16 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.view.particles.SmokeParticles;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
+import com.liquidresources.game.viewModel.bodies.udata.UniversalBodyImpl;
 
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
 
-public class ShipFactoryViewFacade extends SteerableBody {
+public class ShipFactoryViewFacade extends UniversalBodyImpl {
     static {
         shipFactorySize = m2p(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.08f);
     }
@@ -52,11 +51,6 @@ public class ShipFactoryViewFacade extends SteerableBody {
             fixtureDef = new FixtureDef();
             fixtureDef.shape = shipFactoryShape;
         }
-    }
-
-    @Override
-    public void blendSteeringInit(Array<SteerableBody> agents) {
-
     }
 
     /**

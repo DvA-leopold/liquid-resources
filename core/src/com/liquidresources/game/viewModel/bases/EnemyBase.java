@@ -30,7 +30,7 @@ public class EnemyBase extends BaseFacade {
         endPosition.x -= oilPompFacade.getSize().x + buildingsPositionDelimiter;
         capital = new Capital(endPosition, baseRelationType);
         bodyFactoryWrapper.createBody(capital);
-        capitalModel = new CapitalModel(endPosition, endPosition, bodyFactoryWrapper);
+        capitalModel = new CapitalModel(endPosition, bodyFactoryWrapper);
 
         endPosition.x -= capital.getSize().x + buildingsPositionDelimiter;
         shipFactoryFacade = new ShipFactoryViewFacade(endPosition, baseRelationType);

@@ -4,14 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
-import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
-import static com.liquidresources.game.model.common.utils.UConverter.p2m;
 
 public class CapitalModel {
     public CapitalModel(final Vector2 missileSpawnPos,
-                        final Vector2 shipsSpawnPos,
                         final BodyFactoryWrapper bodyFactoryWrapper) {
         this.bodyFactoryWrapper = bodyFactoryWrapper;
         oilBarrels = 0;
@@ -19,7 +16,6 @@ public class CapitalModel {
         shieldStatus = false;
 
         this.missileSpawnPos = missileSpawnPos;
-        this.shipsSpawnPos = shipsSpawnPos;
     }
 
     public boolean changeOil(int oilBarrels) {
@@ -71,10 +67,6 @@ public class CapitalModel {
         bodyFactoryWrapper.createBody(new Missile(spawnPosition, relationType));
     }
 
-    public void createShip(RelationTypes relationType) {
-        bodyFactoryWrapper.createBody(new Fighter(shipsSpawnPos, 100, bodyFactoryWrapper, relationType));
-    }
-
     public void switchIonShield() {
         shieldStatus = !shieldStatus;
     }
@@ -94,7 +86,7 @@ public class CapitalModel {
 
     final private BodyFactoryWrapper bodyFactoryWrapper;
 
-    final private Vector2 missileSpawnPos, shipsSpawnPos;
+    final private Vector2 missileSpawnPos;
     private long oilBarrels, waterBarrels;
 
     private boolean shieldStatus;

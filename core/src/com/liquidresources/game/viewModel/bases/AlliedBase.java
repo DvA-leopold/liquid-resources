@@ -30,7 +30,7 @@ public class AlliedBase extends BaseFacade {
         capital = new Capital(endPosition, baseRelationType);
         bodyFactoryWrapper.createBody(capital);
 
-        capitalModel = new CapitalModel(endPosition, endPosition, bodyFactoryWrapper);
+        capitalModel = new CapitalModel(endPosition, bodyFactoryWrapper);
 
         endPosition.x += capital.getSize().x + buildingsPositionDelimiter;
         shipFactoryFacade = new ShipFactoryViewFacade(endPosition, baseRelationType);

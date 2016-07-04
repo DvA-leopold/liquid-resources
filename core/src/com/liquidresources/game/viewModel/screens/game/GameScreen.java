@@ -17,7 +17,6 @@ import com.liquidresources.game.viewModel.bodies.udata.buildings.OilPumpFacade;
 import com.liquidresources.game.viewModel.bodies.udata.buildings.ShipFactoryViewFacade;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Laser;
 import com.liquidresources.game.viewModel.bodies.udata.bullets.Missile;
-import com.liquidresources.game.viewModel.bodies.udata.ships.Fighter;
 import com.liquidresources.game.viewModel.screens.game.buttons.GameScreenWidgetsGroup;
 
 import static com.liquidresources.game.model.common.utils.UConverter.m2p;
@@ -99,7 +98,6 @@ public class GameScreen implements Screen {
 //        Bomb.dispose()
         Laser.dispose();
         Missile.dispose();
-        Fighter.dispose();
     }
 
 

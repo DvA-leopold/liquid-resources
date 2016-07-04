@@ -34,12 +34,6 @@ public abstract class BaseFacade {  // TODO make universal base facade
         capitalModel.switchIonShield();
     }
 
-    public void createShip(int shipCost) {
-        if (capitalModel.changeOil(shipCost)) {
-            capitalModel.createShip(baseRelationType);
-        }
-    }
-
     public long getOil() {
         return capitalModel.getOilBarrels();
     }

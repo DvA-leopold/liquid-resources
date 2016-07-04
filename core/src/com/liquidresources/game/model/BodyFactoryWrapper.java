@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.types.BodyTypes;
-import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ public class BodyFactoryWrapper {
         physicsWorld = new World(worldGravity, true);
 
         staticBodies = new Array<>();
-        staticSteerableBodies = new Array<>();
         dynamicBodies = new HashSet<>();
 
         physicsWorld.setContactListener(new ContactListener() {
@@ -45,16 +43,13 @@ public class BodyFactoryWrapper {
         bodyForCreate.createFixture(universalBodyUserData.getFixtureDef());
         bodyForCreate.setUserData(universalBodyUserData);
         universalBodyUserData.setBody(bodyForCreate);
-        boolean success = false;
 
         switch(universalBodyUserData.getBodyType()) {
             case BOMB:
             case LASER:
             case MISSILE:
-            case FIGHTER_SHIP:
-                success = dynamicBodies.add(bodyForCreate);
-                if(universalBodyUserData instanceof SteerableBody) {
-                    ((SteerableBody) universalBodyUserData).blendSteeringInit(staticSteerableBodies);
+                if (!dynamicBodies.add(bodyForCreate)) {
+                    System.err.println("Error, container already have such element ");
                 }
                 break;
             case CAPITAL:
@@ -63,16 +58,10 @@ public class BodyFactoryWrapper {
             case ION_SHIELD:
             case GROUND:
                 staticBodies.add(bodyForCreate);
-                if (universalBodyUserData instanceof SteerableBody) {
-                    staticSteerableBodies.add((SteerableBody) universalBodyUserData);
-                }
                 break;
             default:
                 System.err.print("no such type");
-        }
-
-        if (!success) {
-            System.err.println("Error, container already have such element ");
+                break;
         }
     }
 
@@ -98,10 +87,6 @@ public class BodyFactoryWrapper {
         return staticBodies;
     }
 
-    public Array<SteerableBody> getSteerableBodies() {
-        return staticSteerableBodies;
-    }
-
     public HashSet<Body> getDynamicBodies() {
         return dynamicBodies;
     }
@@ -115,7 +100,6 @@ public class BodyFactoryWrapper {
             case BOMB:
             case LASER:
             case MISSILE:
-            case FIGHTER_SHIP:
                 dynamicBodies.remove(bodyForDestroy);
                 break;
         }
@@ -138,5 +122,4 @@ public class BodyFactoryWrapper {
 
     final private HashSet<Body> dynamicBodies;
     final private Array<Body> staticBodies;
-    private Array<SteerableBody> staticSteerableBodies;
 }

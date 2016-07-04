@@ -69,7 +69,7 @@ public class GameScreenWidgetsGroup implements Observer {
         fighterButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                baseFacade.createShip(-55);
+//                baseFacade.createShip(-55);
             }
         });
         ionShieldButton.addListener(new ClickListener() {
