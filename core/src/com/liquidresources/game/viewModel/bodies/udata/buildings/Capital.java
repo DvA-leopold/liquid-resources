@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
@@ -42,6 +43,11 @@ public class Capital extends SteerableBody {
             fixtureDef.shape = capitalShape;
             fixtureDef.isSensor = true;
         }
+    }
+
+    @Override
+    public void blendSteeringInit(Array<SteerableBody> agents) {
+
     }
 
     @Override

@@ -95,15 +95,15 @@ public class GameRenderer implements Observer {
         batch.draw(desertBackground, 0, 0, m2p(Gdx.graphics.getWidth()), m2p(Gdx.graphics.getHeight()));
         batch.enableBlending();
 
-        for (Body building : bodyFactoryWrapper.getBuildingsBodies()) {
+        for (Body building : bodyFactoryWrapper.getStaticBodies()) {
             ((DrawableBody) building.getUserData()).draw(batch, null, delta);
         }
 
-        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
-            ((DrawableBody) ship.getUserData()).draw(batch, ship.getPosition(), delta);
-        }
+//        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
+//            ((DrawableBody) ship.getUserData()).draw(batch, ship.getPosition(), delta);
+//        }
 
-        for (Body bullet : bodyFactoryWrapper.getBulletBodies()) {
+        for (Body bullet : bodyFactoryWrapper.getDynamicBodies()) {
             ((DrawableBody) bullet.getUserData()).draw(batch, bullet.getPosition(), delta);
         }
 
@@ -117,13 +117,13 @@ public class GameRenderer implements Observer {
         batch.draw(desertBackground, 0, 0, m2p(Gdx.graphics.getWidth()), m2p(Gdx.graphics.getHeight()));
         batch.enableBlending();
 
-        for (Body staticBody : bodyFactoryWrapper.getBuildingsBodies()) {
+        for (Body staticBody : bodyFactoryWrapper.getStaticBodies()) {
             ((DrawableBody) staticBody.getUserData()).draw(batch, null, 0f);
         }
 
-        for (Body dynamicBody : bodyFactoryWrapper.getShipsBodies()) {
-            ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
-        }
+//        for (Body dynamicBody : bodyFactoryWrapper.getShipsBodies()) {
+//            ((DrawableBody) dynamicBody.getUserData()).draw(batch, dynamicBody.getPosition(), delta);
+//        }
 
         batch.end();
     }

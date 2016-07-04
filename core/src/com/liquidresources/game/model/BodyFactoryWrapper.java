@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.types.BodyTypes;
+import com.liquidresources.game.viewModel.bodies.udata.SteerableBody;
 import com.liquidresources.game.viewModel.bodies.udata.UniversalBody;
 
 import java.util.ArrayList;
@@ -14,9 +15,9 @@ public class BodyFactoryWrapper {
         bodiesForDestruction = new ArrayList<>(5);
         physicsWorld = new World(worldGravity, true);
 
-        shipsBodies = new HashSet<>();
-        buildingsBodies = new HashSet<>();
-        bulletBodies = new HashSet<>();
+        staticBodies = new Array<>();
+        staticSteerableBodies = new Array<>();
+        dynamicBodies = new HashSet<>();
 
         physicsWorld.setContactListener(new ContactListener() {
             @Override
@@ -50,17 +51,21 @@ public class BodyFactoryWrapper {
             case BOMB:
             case LASER:
             case MISSILE:
-                success = bulletBodies.add(bodyForCreate);
+            case FIGHTER_SHIP:
+                success = dynamicBodies.add(bodyForCreate);
+                if(universalBodyUserData instanceof SteerableBody) {
+                    ((SteerableBody) universalBodyUserData).blendSteeringInit(staticSteerableBodies);
+                }
                 break;
             case CAPITAL:
             case OIL_POMP:
             case SHIP_FACTORY:
             case ION_SHIELD:
             case GROUND:
-                success = buildingsBodies.add(bodyForCreate);
-                break;
-            case FIGHTER_SHIP:
-                success = shipsBodies.add(bodyForCreate);
+                staticBodies.add(bodyForCreate);
+                if (universalBodyUserData instanceof SteerableBody) {
+                    staticSteerableBodies.add((SteerableBody) universalBodyUserData);
+                }
                 break;
             default:
                 System.err.print("no such type");
@@ -85,21 +90,20 @@ public class BodyFactoryWrapper {
 
         physicsWorld.dispose();
 
-        shipsBodies.clear();
-        bulletBodies.clear();
-        buildingsBodies.clear();
+        dynamicBodies.clear();
+        staticBodies.clear();
     }
 
-    public HashSet<Body> getShipsBodies() {
-        return shipsBodies;
+    public Array<Body> getStaticBodies() {
+        return staticBodies;
     }
 
-    public HashSet<Body> getBuildingsBodies() {
-        return buildingsBodies;
+    public Array<SteerableBody> getSteerableBodies() {
+        return staticSteerableBodies;
     }
 
-    public HashSet<Body> getBulletBodies() {
-        return bulletBodies;
+    public HashSet<Body> getDynamicBodies() {
+        return dynamicBodies;
     }
 
     public World getPhysicsWorld() {
@@ -111,10 +115,8 @@ public class BodyFactoryWrapper {
             case BOMB:
             case LASER:
             case MISSILE:
-                bulletBodies.remove(bodyForDestroy);
-                break;
             case FIGHTER_SHIP:
-                shipsBodies.remove(bodyForDestroy);
+                dynamicBodies.remove(bodyForDestroy);
                 break;
         }
         bodiesForDestruction.add(bodyForDestroy);
@@ -133,8 +135,8 @@ public class BodyFactoryWrapper {
     private World physicsWorld;
 
     private ArrayList<Body> bodiesForDestruction;
-    final private HashSet<Body> shipsBodies;
-    final private HashSet<Body> bulletBodies;
 
-    final private HashSet<Body> buildingsBodies;
+    final private HashSet<Body> dynamicBodies;
+    final private Array<Body> staticBodies;
+    private Array<SteerableBody> staticSteerableBodies;
 }

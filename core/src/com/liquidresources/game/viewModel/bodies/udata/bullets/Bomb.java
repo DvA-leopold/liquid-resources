@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
@@ -25,6 +26,11 @@ public class Bomb extends SteerableBody {
                 final Vector2 bulletSize,
                 final RelationTypes parentRelation) {
         super(parentRelation, 1);
+    }
+
+    @Override
+    public void blendSteeringInit(Array<SteerableBody> agents) {
+
     }
 
     @Override

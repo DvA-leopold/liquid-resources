@@ -43,22 +43,25 @@ class FighterAI {
     }
 
     void retarget(Vector2 myPosition, final BodyFactoryWrapper bodyFactoryWrapper) {
-        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
-            if (((UpdatableBody) ship.getUserData()).getRelation() != shipOwnerBase) {
-                Vector2 currentEnemyPosition = ((UpdatableBody) ship.getUserData()).getPosition();
+        for (Body ship : bodyFactoryWrapper.getDynamicBodies()) {
+            switch (((UpdatableBody) ship.getUserData()).getBodyType()) {
+                case FIGHTER_SHIP:
+                    if (((UpdatableBody) ship.getUserData()).getRelation() != shipOwnerBase) {
+                        Vector2 currentEnemyPosition = ((UpdatableBody) ship.getUserData()).getPosition();
 
-                if (target == null || myPosition.dst(currentEnemyPosition) < myPosition.dst(target.getPosition())) {
-                    myPosition = currentEnemyPosition;
-                    target = (SteerableBodyImpl) ship.getUserData();
-                }
+                        if (target == null || myPosition.dst(currentEnemyPosition) < myPosition.dst(target.getPosition())) {
+                            myPosition = currentEnemyPosition;
+                            target = (SteerableBody) ship.getUserData();// TODO оптимизировать и проверить метод
+                        }
+                    }
             }
         }
         if (target == null) {
-            for (Body building: bodyFactoryWrapper.getBuildingsBodies()) {
+            for (Body building: bodyFactoryWrapper.getStaticBodies()) {
                 BodyTypes currentType = ((UpdatableBody) building.getUserData()).getBodyType();
                 if (currentType != BodyTypes.GROUND && currentType != BodyTypes.ION_SHIELD &&
                         ((UpdatableBody) building.getUserData()).getRelation() != shipOwnerBase) {
-                    target = (SteerableBodyImpl) building.getUserData();
+                    target = (SteerableBody) building.getUserData();
                     break;
                 }
             }
@@ -106,7 +109,7 @@ class FighterAI {
         return fighterStatus;
     }
 
-    SteerableBodyImpl getTarget() {
+    SteerableBody getTarget() {
         return target;
     }
 
@@ -123,11 +126,12 @@ class FighterAI {
     }
 
 
-    private SteerableBodyImpl target = null;
+    private SteerableBody target = null;
 
     private RelationTypes shipOwnerBase;
     private FighterStatus fighterStatus;
 
+    private float shootRange;
     private float farShootRange;
     private float shortShootRange;
     private float currentReloadRate;

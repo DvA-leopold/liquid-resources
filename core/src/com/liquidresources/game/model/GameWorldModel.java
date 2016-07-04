@@ -50,11 +50,11 @@ public class GameWorldModel extends Observable {
             notifyObservers(capitalModel.getShieldStatus());
         }
 
-        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
-            ((UpdatableBody) ship.getUserData()).update(ship, delta);
-        }
+//        for (Body ship : bodyFactoryWrapper.getShipsBodies()) {
+//            ((UpdatableBody) ship.getUserData()).update(ship, delta);
+//        }
 
-        for (Body bullet : bodyFactoryWrapper.getBulletBodies()) {
+        for (Body bullet : bodyFactoryWrapper.getDynamicBodies()) {
             ((UpdatableBody) bullet.getUserData()).update(bullet, delta);
         }
         bodyFactoryWrapper.updateWorld();

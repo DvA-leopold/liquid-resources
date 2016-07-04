@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.liquidresources.game.model.BodyFactoryWrapper;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
 import com.liquidresources.game.model.types.BodyTypes;
@@ -56,6 +57,11 @@ public class OilPumpFacade extends SteerableBody {
             fixtureDef.shape = oilPumpShape;
             fixtureDef.isSensor = false;
         }
+    }
+
+    @Override
+    public void blendSteeringInit(Array<SteerableBody> agents) {
+
     }
 
     @Override
@@ -121,14 +127,16 @@ public class OilPumpFacade extends SteerableBody {
     private boolean isStoped;
     private float workSpeed;
     private float stateTime = 0f;
+
     final private float defaultAnimationSpeed;
-
     private Animation pompAnimation;
-    final private Vector2 defaultPosition;
 
+    final private Vector2 defaultPosition;
     static private BodyDef bodyDef;
     static private FixtureDef fixtureDef;
+
     static private PolygonShape oilPumpShape;
+
 
     static final private Vector2 oilPumpSize;
 }

@@ -158,7 +158,7 @@ public class Fighter extends SteerableBody {
     }
 
     @Override
-    protected void blendSteeringInit(Array<SteerableBody> agents) {
+    public void blendSteeringInit(Array<SteerableBody> agents) {
         RadiusProximity<Vector2> radiusProximity = new RadiusProximity<>(this, agents, 300);
         CollisionAvoidance<Vector2> collisionAvoidance = new CollisionAvoidance<>(this, radiusProximity);
         Arrive<Vector2> arriveBehaviour = new Arrive<>(this)

@@ -26,7 +26,7 @@ abstract public class SteerableBody implements UniversalBody, Steerable<Vector2>
         this.boundingRadius = 300;
     }
 
-    protected abstract void blendSteeringInit(Array<SteerableBody> agents);
+    public abstract void blendSteeringInit(Array<SteerableBody> agents);
 
     /**
      * make damage to this body
