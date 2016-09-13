@@ -3,6 +3,7 @@ package com.liquidresources.game.view.screens.game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.audio.MusicManager;
@@ -14,7 +15,7 @@ import com.uwsoft.editor.renderer.SceneLoader;
 
 final public class GameScreen implements Screen {
     public GameScreen() {
-        viewport = new FitViewport(35.0f, 22.5f);
+        viewport = new StretchViewport(35.0f, 22.5f);
         sceneLoader = new SceneLoader(); // TODO implement Iresourceretriever
         sceneLoader.loadScene("MainScene", viewport);
 
@@ -31,7 +32,6 @@ final public class GameScreen implements Screen {
     public void show() {
         MusicManager.instance().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
         gameScreenWidgetsGroup.setListeners(gameWorldModel.getIonShieldListener());
-
     }
 
     @Override
