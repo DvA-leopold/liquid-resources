@@ -1,0 +1,83 @@
+package com.liquidresources.game.model.bodies;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.liquidresources.game.model.EntityInitializer;
+import com.liquidresources.game.model.types.BodyTypes;
+import com.liquidresources.game.model.types.RelationTypes;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.scripts.IScript;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+
+public abstract class UpdatableBodyImpl implements UpdatableBody, IScript {
+    public UpdatableBodyImpl(RelationTypes relationType, int health) {
+        this.relationType = relationType;
+        this.health = health;
+    }
+
+    public static void setEntityInitializer(final EntityInitializer entityInitializer) {
+        if (UpdatableBodyImpl.entityInitializer == null) {
+            UpdatableBodyImpl.entityInitializer = entityInitializer;
+        }
+    }
+
+    /**
+     *
+     * @param dmg deal damage to this body
+     * @throws NullPointerException if engine not initializes or no body exist
+     */
+    protected void takeDamage(int dmg) throws NullPointerException {
+        PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
+        if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
+            BodyTypes bodyType = ((UpdatableBody) physicsBodyComponent.body.getUserData()).getBodyType();
+            health -= dmg;
+            switch (bodyType) {
+                case METEOR:
+                    dispose();
+                    entityInitializer.getEngine().removeEntity(entity);
+                    break;
+                default:
+                    if (health < 1) {
+                        dispose();
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public RelationTypes getRelation() {
+        return relationType;
+    }
+
+    @Override
+    public void init(Entity entity) {
+        this.entity = entity;
+        //need to make one render call to init physic body
+        entityInitializer.getEngine().update(Gdx.graphics.getDeltaTime()); // FIXME related to ***1, cant notify here, result is NullPointerException
+                                                    // FIXME cos user data does not attached yet, but collision already happened
+        PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
+        if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
+            physicsBodyComponent.body.setUserData(this);
+            switch (getBodyType()) {
+                case ION_SHIELD:
+                    physicsBodyComponent.body.setActive(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static void finalDispose() {
+        entityInitializer = null;
+    }
+
+
+    private int health;
+    protected Entity entity;
+    final private RelationTypes relationType;
+
+    static protected EntityInitializer entityInitializer;
+}
