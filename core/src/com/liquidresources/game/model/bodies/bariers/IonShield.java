@@ -24,7 +24,12 @@ final public class IonShield extends UpdatableBodyImpl {
 
     @Override
     public void collisionContact(Body collidedWithBody) {
-        takeDamage(25);
+        if (isActive) {
+            if (!((Capital) entityInitializer.getSceneElement("capital")).changeOil(-100)) {
+                ComponentRetriever.get(super.entity, PhysicsBodyComponent.class).body.setActive(false);
+                switchShield();
+            }
+        }
     }
 
     @Override
@@ -39,9 +44,7 @@ final public class IonShield extends UpdatableBodyImpl {
     }
 
     @Override
-    public void dispose() {
-        isActive = false;
-    }
+    public void dispose() { }
 
     public void switchShield() throws NullPointerException {
         ComponentRetriever.get(super.entity, PhysicsBodyComponent.class).body.setActive(!isActive);

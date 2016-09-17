@@ -22,27 +22,10 @@ public abstract class UpdatableBodyImpl implements UpdatableBody, IScript {
         }
     }
 
-    /**
-     *
-     * @param dmg deal damage to this body
-     * @throws NullPointerException if engine not initializes or no body exist
-     */
-    protected void takeDamage(int dmg) throws NullPointerException {
-        PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-        if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
-            BodyTypes bodyType = ((UpdatableBody) physicsBodyComponent.body.getUserData()).getBodyType();
-            health -= dmg;
-            switch (bodyType) {
-                case METEOR:
-                    dispose();
-                    entityInitializer.getEngine().removeEntity(entity);
-                    break;
-                default:
-                    if (health < 1) {
-                        dispose();
-                    }
-                    break;
-            }
+    protected void takeDamage(int dmg) {
+        health -= dmg;
+        if (health < 1) {
+            dispose();
         }
     }
 

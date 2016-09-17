@@ -2,10 +2,7 @@ package com.liquidresources.game.view.screens.game.widgets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -106,7 +103,7 @@ public class GameScreenWidgetsGroup implements GSObserver {
         ionShieldButton.setVisible(visible);
     }
 
-    static public void setIonShieldChecked() {
+    static public void setIonShieldChecked() { // TODO refactor this
         ionShieldButton.setChecked(false);
     }
 

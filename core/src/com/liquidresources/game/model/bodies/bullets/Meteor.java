@@ -15,7 +15,9 @@ final public class Meteor extends UpdatableBodyImpl {
     public void act(float delta) { }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+        entityInitializer.getEngine().removeEntity(entity);
+    }
 
     @Override
     public BodyTypes getBodyType() {
