@@ -3,7 +3,6 @@ package com.liquidresources.game.model.bodies;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.liquidresources.game.model.EntityInitializer;
-import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.scripts.IScript;

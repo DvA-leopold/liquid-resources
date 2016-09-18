@@ -5,6 +5,7 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
 
+
 final public class Missile extends UpdatableBodyImpl {
     public Missile(final RelationTypes parentRelation) {
         super(parentRelation, 1);
