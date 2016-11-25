@@ -63,7 +63,8 @@ public class GameScreenWidgetsGroup implements GSObserver {
         stage.draw();
     }
 
-    public void setListeners(final ClickListener ionShieldClickListener) {
+    public void setListeners(final ClickListener ionShieldClickListener,
+                             final ClickListener fireMissileClickListener) {
         laserFire.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -72,13 +73,7 @@ public class GameScreenWidgetsGroup implements GSObserver {
         });
 
         ionShieldButton.addListener(ionShieldClickListener);
-
-        missileFire.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // TODO fire missile
-            }
-        });
+        missileFire.addListener(fireMissileClickListener);
 
         optionWindowButton.addListener(new ClickListener() {
             @Override

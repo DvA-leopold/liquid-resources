@@ -1,10 +1,11 @@
 package com.liquidresources.game.model;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
-import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
+import com.liquidresources.game.model.bodies.*;
 import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.model.bodies.bariers.Planet;
 import com.liquidresources.game.model.bodies.buildings.Capital;
@@ -20,6 +21,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.ItemWrapper;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,26 +32,30 @@ final public class EntityInitializer {
         UpdatableBodyImpl.setEntityInitializer(this);
         timer = new Timer();
 
-        entityMap = new HashMap<>();
-        entityMap.put("capital", new Capital(RelationTypes.ALLY));
-        entityMap.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
-        entityMap.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
-        entityMap.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
-        entityMap.put("factory", new PowerFactory(RelationTypes.ALLY));
-        entityMap.put("ion_shield", new IonShield(RelationTypes.ALLY));
-        entityMap.put("planet", new Planet(RelationTypes.NEUTRAL));
+        baseEntitiesMap = new HashMap<>();
+        baseEntitiesMap.put("capital", new Capital(RelationTypes.ALLY));
+        baseEntitiesMap.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
+        baseEntitiesMap.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
+        baseEntitiesMap.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
+        baseEntitiesMap.put("factory", new PowerFactory(RelationTypes.ALLY));
+        baseEntitiesMap.put("ion_shield", new IonShield(RelationTypes.ALLY));
+        baseEntitiesMap.put("planet", new Planet(RelationTypes.NEUTRAL));
 
         ItemWrapper itemRoot = new ItemWrapper(sceneLoader.getRoot());
-        for (Map.Entry<String, IScript> entry : entityMap.entrySet()) {
+        for (Map.Entry<String, IScript> entry : baseEntitiesMap.entrySet()) {
             itemRoot.getChild(entry.getKey()).addScript(entry.getValue());
         }
+
+        dynamicEntities = new HashMap<>();
+        dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<IScript>());
+        dynamicEntities.put(RelationTypes.ALLY, new ArrayList<IScript>());
     }
 
-    private void createEntityFromLibrary(String entityName,
-                                         Class<? extends IScript> iScriptClass,
-                                         float x,
-                                         float y,
-                                         RelationTypes entityRelation) { // TODO add synchronisation
+    public void createEntityFromLibrary(String entityName,
+                                        Class<? extends IScript> iScriptClass,
+                                        float x,
+                                        float y,
+                                        RelationTypes entityRelation) { // TODO add synchronisation
         try {
             CompositeItemVO createdEntityData = sceneLoader.loadVoFromLibrary(entityName);
             Entity createdEntity = sceneLoader.entityFactory.createEntity(sceneLoader.getRoot(), createdEntityData);
@@ -63,7 +69,11 @@ final public class EntityInitializer {
 
             IScript script = iScriptClass.getDeclaredConstructor(RelationTypes.class).newInstance(entityRelation);
             new ItemWrapper(createdEntity).addScript(script);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException err) {
+
+            synchronized (dynamicEntities) {
+                dynamicEntities.get(entityRelation).add(script);
+            }
+        } catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException err) {
             System.err.println(err.getMessage());
         }
     }
@@ -93,12 +103,24 @@ final public class EntityInitializer {
         timer.scheduleTask(task, secondDelay, secondInterval, repeatCount);
     }
 
-    public Engine getEngine() {
-        return sceneLoader.getEngine();
+
+    public Location<Vector2> getTargetEntity(RelationTypes relationType) {
+        synchronized (dynamicEntities) {
+            if (!dynamicEntities.get(relationType).isEmpty()) {
+//                Vector2 pos = ((UpdatableBodyImpl) dynamicEntities.get(relationType).get(0)).getPosition();
+//                System.out.println("target pos : " + pos.x + " " + pos.y);
+                return (Location<Vector2>) dynamicEntities.get(relationType).get(0); // TODO fix warning with cast
+            }
+        }
+        return null;
     }
 
-    public IScript getSceneElement(String entityName) {
-        return entityMap.get(entityName);
+    public SceneLoader getSceneLoader() {
+        return sceneLoader;
+    }
+
+    public IScript getBaseSceneElement(String entityName) {
+        return baseEntitiesMap.get(entityName);
     }
 
     void stopTimer() {
@@ -115,7 +137,8 @@ final public class EntityInitializer {
     }
 
 
+    final private HashMap<String, IScript> baseEntitiesMap;
+    final private HashMap<RelationTypes, ArrayList<IScript>> dynamicEntities;
     final private SceneLoader sceneLoader;
-    final private HashMap<String, IScript> entityMap;
     final private Timer timer;
 }

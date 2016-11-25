@@ -10,6 +10,7 @@ import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 
 final public class GameScreen implements Screen {
@@ -17,6 +18,7 @@ final public class GameScreen implements Screen {
         viewport = new StretchViewport(35.0f, 22.5f);
         sceneLoader = new SceneLoader(); // TODO implement Iresourceretriever
         sceneLoader.loadScene("MainScene", viewport);
+        PhysicsBodyLoader.getInstance().scale = 1;
 
         gameScreenWidgetsGroup = new GameScreenWidgetsGroup(sceneLoader.getBatch());
         GameStateHolder.addObserver(gameScreenWidgetsGroup);
@@ -30,7 +32,10 @@ final public class GameScreen implements Screen {
     @Override
     public void show() {
         MusicManager.instance().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
-        gameScreenWidgetsGroup.setListeners(gameWorldModel.getIonShieldListener());
+        gameScreenWidgetsGroup.setListeners(
+                gameWorldModel.getIonShieldListener(),
+                gameWorldModel.getFireMissileListener()
+        );
     }
 
     @Override

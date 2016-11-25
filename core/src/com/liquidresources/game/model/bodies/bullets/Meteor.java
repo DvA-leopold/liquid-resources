@@ -16,7 +16,7 @@ final public class Meteor extends UpdatableBodyImpl {
 
     @Override
     public void dispose() {
-        entityInitializer.getEngine().removeEntity(entity);
+        entityInitializer.getSceneLoader().getEngine().removeEntity(entity);
     }
 
     @Override

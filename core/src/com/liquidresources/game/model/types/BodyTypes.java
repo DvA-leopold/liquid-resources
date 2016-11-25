@@ -8,7 +8,7 @@ public enum BodyTypes {
     ION_SHIELD,
 
     MISSILE,
-    LASER,
+    BULLET,
 
     GROUND,
 

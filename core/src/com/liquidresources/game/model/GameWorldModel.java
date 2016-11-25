@@ -19,7 +19,7 @@ final public class GameWorldModel implements GSObserver {
     public GameWorldModel(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
         entityInitializer = new EntityInitializer(sceneLoader);
-        entityInitializer.createEntityFromLibraryByTimer("meteor", Meteor.class, RelationTypes.ENEMY, 2, 4, 100);
+//        entityInitializer.createEntityFromLibraryByTimer("meteor", Meteor.class, RelationTypes.ENEMY, 2, 4, 100);
 
         sceneLoader.world.setContactListener(new ContactListener() {
             @Override
@@ -30,9 +30,8 @@ final public class GameWorldModel implements GSObserver {
 
                     ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
                             .collisionContact(contact.getFixtureA().getBody());
-
                 } catch (Exception err) {  // FIXME problem with objects, spawned by timer, p.s - stop and start timer ***1 related too UpdatebleBodyImpl init
-                    System.err.println(err.getMessage());
+                    System.err.println("problem: " + err.getMessage());
                 }
             }
 
@@ -64,7 +63,7 @@ final public class GameWorldModel implements GSObserver {
             case GAME_RUNNING:
                 sceneLoader.engine.update(delta);
                 sceneLoader.getBatch().begin();
-                Capital capital = (Capital) entityInitializer.getSceneElement("capital");
+                Capital capital = (Capital) entityInitializer.getBaseSceneElement("capital");
                 symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getOilBarrels());
                 symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getWaterBarrels(), 0, 1);
                 sceneLoader.getBatch().end();
@@ -101,10 +100,19 @@ final public class GameWorldModel implements GSObserver {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    ((IonShield) entityInitializer.getSceneElement("ion_shield")).switchShield();
+                    ((IonShield) entityInitializer.getBaseSceneElement("ion_shield")).switchShield();
                 } catch (NullPointerException err) {
                     System.err.println(err.getMessage());
                 }
+            }
+        };
+    }
+
+    public ClickListener getFireMissileListener() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Capital) entityInitializer.getBaseSceneElement("capital")).fireMissile();
             }
         };
     }

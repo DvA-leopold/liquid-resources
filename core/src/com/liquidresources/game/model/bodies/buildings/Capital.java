@@ -1,6 +1,7 @@
 package com.liquidresources.game.model.bodies.buildings;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.liquidresources.game.model.bodies.bullets.Missile;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
@@ -23,9 +24,9 @@ final public class Capital extends UpdatableBodyImpl {
 
     @Override
     public void act(float delta) {
-        Pump waterPump = ((Pump) entityInitializer.getSceneElement("pump_1"));
-        Pump oilPump = ((Pump) entityInitializer.getSceneElement("pump_2"));
-        Pump oilPump2 = ((Pump) entityInitializer.getSceneElement("pump_3"));
+        Pump waterPump = ((Pump) entityInitializer.getBaseSceneElement("pump_1"));
+        Pump oilPump = ((Pump) entityInitializer.getBaseSceneElement("pump_2"));
+        Pump oilPump2 = ((Pump) entityInitializer.getBaseSceneElement("pump_3"));
         update(oilPump.getResources() + oilPump2.getResources(), waterPump.getResources());
     }
 
@@ -67,6 +68,18 @@ final public class Capital extends UpdatableBodyImpl {
 
     public long getWaterBarrels() {
         return waterBarrels;
+    }
+
+    public void fireMissile() {
+        if (changeWater(-10)) {
+            entityInitializer.createEntityFromLibrary("missile", Missile.class, 10, 10 , RelationTypes.ALLY);
+        } else {
+            System.out.println("no water");
+        }
+    }
+
+    public void fireLaser() {
+
     }
 
 
