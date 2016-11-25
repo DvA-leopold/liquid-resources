@@ -1,0 +1,83 @@
+
+pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+25
+  rotate: false
+  xy: 2, 398
+  size: 611, 598
+  orig: 611, 598
+  offset: 0, 0
+  index: -1
+capitalSprite
+  rotate: false
+  xy: 615, 566
+  size: 104, 430
+  orig: 104, 430
+  offset: 0, 0
+  index: -1
+fire
+  rotate: false
+  xy: 615, 380
+  size: 193, 184
+  orig: 193, 184
+  offset: 0, 0
+  index: -1
+ionshield
+  rotate: false
+  xy: 303, 156
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 941, 954
+  size: 7, 42
+  orig: 7, 42
+  offset: 0, 0
+  index: -1
+shipFactory
+  rotate: false
+  xy: 2, 2
+  size: 228, 113
+  orig: 228, 113
+  offset: 0, 0
+  index: -1
+tree3
+  rotate: false
+  xy: 721, 787
+  size: 218, 209
+  orig: 218, 209
+  offset: 0, 0
+  index: -1
+treeBack1
+  rotate: false
+  xy: 810, 481
+  size: 117, 110
+  orig: 117, 110
+  offset: 0, 0
+  index: -1
+treeFront1
+  rotate: false
+  xy: 721, 593
+  size: 205, 192
+  orig: 205, 192
+  offset: 0, 0
+  index: -1
+treeFront2
+  rotate: false
+  xy: 2, 117
+  size: 299, 279
+  orig: 299, 279
+  offset: 0, 0
+  index: -1
+treeback2
+  rotate: false
+  xy: 810, 399
+  size: 85, 80
+  orig: 85, 80
+  offset: 0, 0
+  index: -1

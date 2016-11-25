@@ -3,26 +3,27 @@ package com.liquidresources.game.model.resource.manager;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.liquidresources.game.model.resource.manager.loaders.FreeTypeFontSkinLoader;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.FileNotFoundException;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.util.*;
 
 public class ResourceManager {
     private ResourceManager() {
         currentStorageSize = 0;
         mimeFileTypes = new Hashtable<>();
         assetManager = new AssetManager();
+        fontMap = new HashMap<>();
 
         mimeFileTypes.put("png", Texture.class);
         mimeFileTypes.put("jpeg", Texture.class);
@@ -36,9 +37,13 @@ public class ResourceManager {
         mimeFileTypes.put("ogg", Audio.class);
 
         mimeFileTypes.put("fnt", BitmapFont.class);
+        mimeFileTypes.put("ttf", BitmapFont.class);
+
         mimeFileTypes.put("json", Skin.class);
 
         mimeFileTypes.put("p", ParticleEffect.class);
+
+        mimeFileTypes.put("dt", SceneVO.class);
     }
 
     public static ResourceManager instance() {
@@ -50,24 +55,24 @@ public class ResourceManager {
      * @param section path to the folder
      * @param sync if this is true then we will wait till all files are load
      */
-    public void loadSection(String section, boolean sync) {  // TODO check this code
+    public void loadSection(String section, boolean sync) {
         FileHandle sectionRoot = Gdx.files.internal(section);
-        FileHandle[] allFiles = new FileHandle[0];
         try {
-            allFiles = getFiles(sectionRoot);
+            FileHandle[] allFiles = getFiles(sectionRoot);
+            for (FileHandle file : allFiles) {
+                String fileName = file.file().getName();
+                String extension = getExtension(fileName);
+                if (mimeFileTypes.containsKey(extension)) {
+                    assetManager.load(file.path(), mimeFileTypes.get(extension));
+                    currentStorageSize += file.length();
+                }
+            }
+            if (sync) {
+                assetManager.finishLoading();
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        for (FileHandle file : allFiles) {
-            String fileName = file.file().getName();
-            String extension = getExtension(fileName);
-            if (mimeFileTypes.containsKey(extension)) {
-                instance().assetManager.load(file.path(), mimeFileTypes.get(extension));
-                currentStorageSize += file.length();
-            }
-        }
-        if (sync) {
-            assetManager.finishLoading();
         }
     }
 
@@ -115,14 +120,40 @@ public class ResourceManager {
         if (assetManager.isLoaded(fileName)) {
             return assetManager.get(fileName);
         } else {
-            System.err.print(fileName + " was not loaded ");
+            System.err.println(fileName + " was not loaded ");
             return null;
         }
+    }
+
+    public void generateFonts(String ttfFilePath) {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(ttfFilePath));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        fontParameter.size = Gdx.graphics.getHeight() * 64 / Gdx.graphics.getWidth();
+        fontParameter.color = Color.BLACK;
+        BitmapFont mainFonts = fontGenerator.generateFont(fontParameter);
+
+        fontParameter.color = Color.WHITE;
+        BitmapFont addFonts = fontGenerator.generateFont(fontParameter);
+
+        fontMap.put("mainFonts", mainFonts);
+        fontMap.put("addFonts", addFonts);
+
+        fontGenerator.dispose();
+        assetManager.setLoader(Skin.class, new FreeTypeFontSkinLoader(fontMap));
+    }
+
+    public BitmapFont getFont(String fontName) {
+        return fontMap.get(fontName);
     }
 
     public float updateAndGetProgress() {
         assetManager.update();
         return assetManager.getProgress();
+    }
+
+    public long getCurrentStorageSize() {
+        return currentStorageSize / 1024 / 1024;
     }
 
     public void dispose() {
@@ -152,20 +183,12 @@ public class ResourceManager {
         return filesListArray;
     }
 
-    public void setSkinLoader(SkinLoader newSkinLoader) {
-        assetManager.setLoader(Skin.class, newSkinLoader);
-    }
-
     private String getExtension(String filePath) throws NoSuchElementException {
         int index = filePath.lastIndexOf(".");
         if (index == -1) {
-            throw new NoSuchElementException("this file have no extension");
+            throw new NoSuchElementException("this file had no extension");
         }
         return filePath.substring(index + 1);
-    }
-
-    public long getCurrentStorageSize() {
-        return currentStorageSize / 1024 / 1024;
     }
 
     private static class SingletonHolder {
@@ -173,7 +196,9 @@ public class ResourceManager {
     }
 
 
-    private long currentStorageSize;
     final private AssetManager assetManager;
+    final private Map<String, BitmapFont> fontMap; // TODO get fonts general from asset manager
+
     final private Hashtable<String, Class> mimeFileTypes;
+    private long currentStorageSize;
 }

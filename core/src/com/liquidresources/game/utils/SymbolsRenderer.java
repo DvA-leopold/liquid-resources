@@ -1,4 +1,4 @@
-package com.liquidresources.game.view.symbols;
+package com.liquidresources.game.utils;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,7 +7,8 @@ import com.liquidresources.game.model.resource.manager.ResourceManager;
 
 import java.util.ArrayList;
 
-public class SymbolsRenderer {
+
+final public class SymbolsRenderer {
     public SymbolsRenderer(float xDefaultPosition, float yDefaultPosition, float width, float height) {
         this.xDefaultPosition = xDefaultPosition;
         this.yDefaultPosition = yDefaultPosition;
@@ -31,7 +32,7 @@ public class SymbolsRenderer {
         int numberOfDigits = (int) Math.ceil(Math.log10(number + 1));
         for (int i = numberOfDigits; i > 0; --i) {
             batch.draw(
-                    texturesNumbersArray.get((int) (number % 10)),
+                    texturesNumbersArray.get((int) number % 10),
                     xDefaultPosition + width * i + xOffset,
                     yDefaultPosition - yOffset, width, height);
             number /= 10;

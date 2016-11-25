@@ -1,0 +1,73 @@
+{
+  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+    "optionButton": {
+      "up": "clear_up",
+      "down": "clear_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2
+    },
+    "resumeButton": {
+      "up": "clear_up",
+      "down": "clear_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2
+    },
+    "fightersAction": {
+      "up": "fighters_up",
+      "down": "fighters_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2
+    },
+    "rocketAction": {
+      "up": "rocket_up",
+      "down": "rocket_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2
+    }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": {
+      "up": "clear_up",
+      "down": "clear_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2,
+      "font": "mainFonts"
+    },
+    "exitButton": {
+      "up": "clear_up",
+      "down": "clear_down",
+      "pressedOffsetX": 1,
+      "pressedOffsetY": -2,
+      "font": "mainFonts"
+    }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+    "musicCheckBox": {
+      "up": "music_on",
+      "down": "music_off",
+      "checked": "music_off",
+      "font": "mainFonts"
+    },
+    "soundCheckBox": {
+      "up": "sound_on",
+      "down": "sound_off",
+      "checked": "sound_off",
+      "font": "mainFonts"
+    },
+    "shieldAction": {
+      "up": "shield_up",
+      "down": "shield_down",
+      "checked": "shield_down",
+      "font": "mainFonts"
+    }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+    "default": {
+      "titleFont": "mainFonts",
+      "background": "dirt"
+    }
+  }
+}
