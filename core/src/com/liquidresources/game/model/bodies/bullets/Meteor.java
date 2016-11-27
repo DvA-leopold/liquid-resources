@@ -16,7 +16,7 @@ final public class Meteor extends UpdatableBodyImpl {
 
     @Override
     public void dispose() {
-        entityInitializer.getSceneLoader().getEngine().removeEntity(entity);
+        entityInitializer.destroyEntity(getRelation(), this);
     }
 
     @Override
@@ -27,6 +27,7 @@ final public class Meteor extends UpdatableBodyImpl {
     @Override
     public void collisionContact(Body collidedWithBody) {
         if (((UpdatableBodyImpl) collidedWithBody.getUserData()).getBodyType() != BodyTypes.METEOR) {
+            System.out.println("meteor collide");
             takeDamage(1);
         }
     }

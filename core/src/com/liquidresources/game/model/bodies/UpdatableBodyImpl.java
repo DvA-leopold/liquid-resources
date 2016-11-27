@@ -1,7 +1,6 @@
 package com.liquidresources.game.model.bodies;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.liquidresources.game.model.EntityInitializer;
@@ -37,24 +36,29 @@ public abstract class UpdatableBodyImpl implements UpdatableBody, IScript, Locat
         return relationType;
     }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
     @Override
     public void init(Entity entity) {
-        this.entity = entity;
-        //need to make one render call to init physic body
-        entityInitializer.getSceneLoader().getEngine().update(Gdx.graphics.getDeltaTime()); // FIXME related to ***1, cant notify here, result is NullPointerException
-                                                                                            // FIXME cos user data does not attached yet, but collision already happened
-        physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-        if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
-            physicsBodyComponent.body.setUserData(this);
-            switch (getBodyType()) {
-                case ION_SHIELD:
-                    physicsBodyComponent.body.setActive(false);
-                    break;
-                default:
-                    break;
+        if (this.entity == null) {
+            this.entity = entity;
+            entityInitializer.sheduleForInitPhysicComponent(this);
+        } else {
+            physicsBodyComponent = ComponentRetriever.get(this.entity, PhysicsBodyComponent.class);
+            if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
+                physicsBodyComponent.body.setUserData(this);
+                switch (getBodyType()) {
+                    case ION_SHIELD:
+                        physicsBodyComponent.body.setActive(false);
+                        break;
+                    default:
+                        break;
+                }
             }
+            isInitialized = true;
         }
-        isInitialized = true;
     }
 
     @Override

@@ -72,7 +72,7 @@ final public class Capital extends UpdatableBodyImpl {
 
     public void fireMissile() {
         if (changeWater(-10)) {
-            entityInitializer.createEntityFromLibrary("missile", Missile.class, 10, 10 , RelationTypes.ALLY);
+            entityInitializer.createEntityFromLibrary("missile", new Missile(this.getRelation()), 10, 10);
         } else {
             System.out.println("no water");
         }

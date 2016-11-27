@@ -1,10 +1,6 @@
 package com.liquidresources.game.model;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.ai.utils.Location;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Timer;
 import com.liquidresources.game.model.bodies.*;
 import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.model.bodies.bariers.Planet;
@@ -20,7 +16,6 @@ import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.ItemWrapper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,115 +25,91 @@ final public class EntityInitializer {
     EntityInitializer(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
         UpdatableBodyImpl.setEntityInitializer(this);
-        timer = new Timer();
 
-        baseEntitiesMap = new HashMap<>();
-        baseEntitiesMap.put("capital", new Capital(RelationTypes.ALLY));
-        baseEntitiesMap.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
-        baseEntitiesMap.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
-        baseEntitiesMap.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
-        baseEntitiesMap.put("factory", new PowerFactory(RelationTypes.ALLY));
-        baseEntitiesMap.put("ion_shield", new IonShield(RelationTypes.ALLY));
-        baseEntitiesMap.put("planet", new Planet(RelationTypes.NEUTRAL));
+        staticEntities = new HashMap<>();
+        staticEntities.put("capital", new Capital(RelationTypes.ALLY));
+        staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
+        staticEntities.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
+        staticEntities.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
+        staticEntities.put("factory", new PowerFactory(RelationTypes.ALLY));
+        staticEntities.put("ion_shield", new IonShield(RelationTypes.ALLY));
+        staticEntities.put("planet", new Planet(RelationTypes.NEUTRAL));
+
+        bodiesSheduledForInit = new ArrayList<>();
 
         ItemWrapper itemRoot = new ItemWrapper(sceneLoader.getRoot());
-        for (Map.Entry<String, IScript> entry : baseEntitiesMap.entrySet()) {
+        for (Map.Entry<String, UpdatableBodyImpl> entry : staticEntities.entrySet()) {
             itemRoot.getChild(entry.getKey()).addScript(entry.getValue());
         }
 
         dynamicEntities = new HashMap<>();
-        dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<IScript>());
-        dynamicEntities.put(RelationTypes.ALLY, new ArrayList<IScript>());
+        dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<UpdatableBodyImpl>());
+        dynamicEntities.put(RelationTypes.ALLY, new ArrayList<UpdatableBodyImpl>());
+        dynamicEntities.put(RelationTypes.NEUTRAL, new ArrayList<UpdatableBodyImpl>());
     }
 
     public void createEntityFromLibrary(String entityName,
-                                        Class<? extends IScript> iScriptClass,
+                                        UpdatableBodyImpl iUpdatableBody,
                                         float x,
-                                        float y,
-                                        RelationTypes entityRelation) { // TODO add synchronisation
-        try {
-            CompositeItemVO createdEntityData = sceneLoader.loadVoFromLibrary(entityName);
-            Entity createdEntity = sceneLoader.entityFactory.createEntity(sceneLoader.getRoot(), createdEntityData);
+                                        float y) {
+        CompositeItemVO createdEntityData = sceneLoader.loadVoFromLibrary(entityName);
+        Entity createdEntity = sceneLoader.entityFactory.createEntity(sceneLoader.getRoot(), createdEntityData);
 
-            TransformComponent transformComponent = ComponentRetriever.get(createdEntity, TransformComponent.class);
-            transformComponent.x = x;
-            transformComponent.y = y;
+        TransformComponent transformComponent = ComponentRetriever.get(createdEntity, TransformComponent.class);
+        transformComponent.x = x;
+        transformComponent.y = y;
 
-            sceneLoader.entityFactory.initAllChildren(sceneLoader.getEngine(), createdEntity, createdEntityData.composite);
-            sceneLoader.getEngine().addEntity(createdEntity);
+        sceneLoader.entityFactory.initAllChildren(sceneLoader.getEngine(), createdEntity, createdEntityData.composite);
+        sceneLoader.getEngine().addEntity(createdEntity);
 
-            IScript script = iScriptClass.getDeclaredConstructor(RelationTypes.class).newInstance(entityRelation);
-            new ItemWrapper(createdEntity).addScript(script);
+        new ItemWrapper(createdEntity).addScript(iUpdatableBody);
+        dynamicEntities.get(iUpdatableBody.getRelation()).add(iUpdatableBody);
+    }
 
-            synchronized (dynamicEntities) {
-                dynamicEntities.get(entityRelation).add(script);
+    public void destroyEntity(RelationTypes relationType, UpdatableBodyImpl bodyForRemove) {
+        sceneLoader.getEngine().removeEntity(bodyForRemove.getEntity());
+        dynamicEntities.get(relationType).remove(bodyForRemove);
+    }
+
+    void initSheduledBodies() {
+        if (!bodiesSheduledForInit.isEmpty()) {
+            for (UpdatableBodyImpl body: bodiesSheduledForInit) {
+                body.init(null);
             }
-        } catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException err) {
-            System.err.println(err.getMessage());
+            bodiesSheduledForInit.clear();
         }
     }
 
-    /**
-     * create entity in time intervals, need to start timer before create any entity
-     * @param entityName entity name from the library
-     * @param iScriptClass script class which instance will be attached to the library
-     * @param secondDelay delay in seconds before first spawn
-     * @param secondInterval spawn interval
-     * @param repeatCount repeat count
-     */
-    void createEntityFromLibraryByTimer(final String entityName,
-                                        final Class<? extends IScript> iScriptClass,
-                                        final RelationTypes entityRelation,
-                                        float secondDelay,
-                                        float secondInterval,
-                                        int repeatCount) {
-        Timer.Task task = new Timer.Task() {
-            @Override
-            public void run() {
-                int randomX = MathUtils.random(0, 35);
-                int randomY = MathUtils.random(18, 22);
-                createEntityFromLibrary(entityName, iScriptClass, randomX, randomY, entityRelation);
-            }
-        };
-        timer.scheduleTask(task, secondDelay, secondInterval, repeatCount);
+    public void sheduleForInitPhysicComponent(UpdatableBodyImpl bodyForShedule) {
+        bodiesSheduledForInit.add(bodyForShedule);
     }
 
-
-    public Location<Vector2> getTargetEntity(RelationTypes relationType) {
-        synchronized (dynamicEntities) {
-            if (!dynamicEntities.get(relationType).isEmpty()) {
-//                Vector2 pos = ((UpdatableBodyImpl) dynamicEntities.get(relationType).get(0)).getPosition();
-//                System.out.println("target pos : " + pos.x + " " + pos.y);
-                return (Location<Vector2>) dynamicEntities.get(relationType).get(0); // TODO fix warning with cast
+    public UpdatableBodyImpl getTargetBody(RelationTypes relationType) {
+        UpdatableBodyImpl closestBody = null;
+        UpdatableBodyImpl capitalBody = staticEntities.get("capital");
+        if (!dynamicEntities.get(relationType).isEmpty()) {
+            for (UpdatableBodyImpl body: dynamicEntities.get(relationType)) {
+                if (closestBody == null) {
+                    closestBody = body;
+                } else {
+                    float currentDst = body.getPosition().dst(capitalBody.getPosition());
+                    float oldDst = closestBody.getPosition().dst(capitalBody.getPosition());
+                    closestBody = (currentDst < oldDst) ? body : closestBody;
+                }
             }
         }
-        return null;
-    }
-
-    public SceneLoader getSceneLoader() {
-        return sceneLoader;
+        System.out.println("size: " + dynamicEntities.get(RelationTypes.ENEMY).size() + " " + closestBody);
+        return closestBody;
     }
 
     public IScript getBaseSceneElement(String entityName) {
-        return baseEntitiesMap.get(entityName);
-    }
-
-    void stopTimer() {
-        timer.stop();
-    }
-
-    void startTimer() {
-        timer.start();
-    }
-
-    void dispose() {
-        timer.stop();
-        timer.clear();
+        return staticEntities.get(entityName);
     }
 
 
-    final private HashMap<String, IScript> baseEntitiesMap;
-    final private HashMap<RelationTypes, ArrayList<IScript>> dynamicEntities;
+    final private ArrayList<UpdatableBodyImpl> bodiesSheduledForInit;
+
+    final private HashMap<String, UpdatableBodyImpl> staticEntities;
+    final private HashMap<RelationTypes, ArrayList<UpdatableBodyImpl>> dynamicEntities;
     final private SceneLoader sceneLoader;
-    final private Timer timer;
 }

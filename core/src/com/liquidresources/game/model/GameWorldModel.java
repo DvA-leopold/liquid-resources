@@ -1,6 +1,7 @@
 package com.liquidresources.game.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -19,8 +20,8 @@ final public class GameWorldModel implements GSObserver {
     public GameWorldModel(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
         entityInitializer = new EntityInitializer(sceneLoader);
-//        entityInitializer.createEntityFromLibraryByTimer("meteor", Meteor.class, RelationTypes.ENEMY, 2, 4, 100);
-
+        entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), 10, 20);
+        entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), 16, 20);
         sceneLoader.world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
@@ -31,7 +32,7 @@ final public class GameWorldModel implements GSObserver {
                     ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
                             .collisionContact(contact.getFixtureA().getBody());
                 } catch (Exception err) {  // FIXME problem with objects, spawned by timer, p.s - stop and start timer ***1 related too UpdatebleBodyImpl init
-                    System.err.println("problem: " + err.getMessage());
+                    System.err.println("collision contact: " + err.getMessage());
                 }
             }
 
@@ -61,7 +62,13 @@ final public class GameWorldModel implements GSObserver {
                 }
                 break;
             case GAME_RUNNING:
+                counter++;
+                if (counter > 100) {
+                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(5, 20), MathUtils.random(15, 20));
+                    counter = 0;
+                }
                 sceneLoader.engine.update(delta);
+                entityInitializer.initSheduledBodies();
                 sceneLoader.getBatch().begin();
                 Capital capital = (Capital) entityInitializer.getBaseSceneElement("capital");
                 symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getOilBarrels());
@@ -83,14 +90,11 @@ final public class GameWorldModel implements GSObserver {
             case GAME_PREPARING:
                 break;
             case GAME_RUNNING:
-                entityInitializer.startTimer();
                 break;
             case GAME_PAUSED:
-                entityInitializer.stopTimer();
                 break;
             case GAME_EXIT:
             case GAME_OVER:
-                entityInitializer.dispose();
                 break;
         }
     }
@@ -117,6 +121,8 @@ final public class GameWorldModel implements GSObserver {
         };
     }
 
+
+    private int counter = 0;
 
     final private SceneLoader sceneLoader;
 

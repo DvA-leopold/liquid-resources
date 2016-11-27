@@ -10,17 +10,13 @@ import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
-import com.liquidresources.game.utils.LocationC;
 
 
 final public class Missile extends UpdatableBodyImpl implements Steerable<Vector2> {
-
-    private LocationC locationC = new LocationC();
-
     public Missile(final RelationTypes parentRelation) {
         super(parentRelation, 1);
-        setMaxLinearSpeed(40);
-        setMaxLinearAcceleration(80);
+        setMaxLinearSpeed(15);
+        setMaxLinearAcceleration(30);
         boundingRadius = 10;
         independentFacing = true;
         this.steeringBehavior = new Arrive<>(this)
@@ -56,14 +52,19 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
 
         if (steeringBehavior != null) {
             if (((Arrive<Vector2>) steeringBehavior).getTarget() == null) {
-                ((Arrive<Vector2>) steeringBehavior).setTarget(locationC);
-//                entityInitializer.getTargetEntity(RelationTypes.ENEMY)
+                UpdatableBodyImpl targetUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+                if (targetUpdatableBody != null) {
+                    System.out.println("type: " + targetUpdatableBody.getBodyType());
+                    ((Arrive<Vector2>) steeringBehavior).setTarget(targetUpdatableBody);
+                } else {
+                    return;
+                }
             }
 
             steeringBehavior.calculateSteering(STEERING_ACCELERATION_OUTPUT);
 
             if (!STEERING_ACCELERATION_OUTPUT.linear.isZero()) {
-                STEERING_ACCELERATION_OUTPUT.linear.sub(entityInitializer.getSceneLoader().world.getGravity());
+//                STEERING_ACCELERATION_OUTPUT.linear.sub(entityInitializer.getSceneLoader().world.getGravity());
                 physicsBodyComponent.body.applyForceToCenter(STEERING_ACCELERATION_OUTPUT.linear, true);
             }
 
@@ -84,7 +85,7 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
 
     @Override
     public void dispose() {
-        entityInitializer.getSceneLoader().getEngine().removeEntity(entity);
+        entityInitializer.destroyEntity(getRelation(), this);
     }
 
     @Override
@@ -174,5 +175,4 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
 
     final private SteeringBehavior<Vector2> steeringBehavior;
     static final private SteeringAcceleration<Vector2> STEERING_ACCELERATION_OUTPUT = new SteeringAcceleration<>(new Vector2());
-
 }
