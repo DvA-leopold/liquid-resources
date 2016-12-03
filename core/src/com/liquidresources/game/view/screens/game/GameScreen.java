@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.audio.MusicManager;
-import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
+import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -69,7 +69,7 @@ final public class GameScreen implements Screen {
     public void dispose() {
         physicsDebugRenderer.dispose();
         gameScreenWidgetsGroup.dispose();
-        UpdatableBodyImpl.finalDispose();
+        UpdatableBody.finalDispose();
         GameStateHolder.dispose();
     }
 

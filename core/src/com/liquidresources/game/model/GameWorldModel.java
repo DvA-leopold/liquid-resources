@@ -5,10 +5,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.bodies.buildings.Capital;
 import com.liquidresources.game.model.bodies.bullets.Meteor;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.utils.GSObserver;
 import com.liquidresources.game.utils.GameStateHolder;
@@ -63,8 +63,9 @@ final public class GameWorldModel implements GSObserver {
                 break;
             case GAME_RUNNING:
                 counter++;
-                if (counter > 100) {
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(5, 20), MathUtils.random(15, 20));
+                if (counter > 200) {
+                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 23);
+                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 23);
                     counter = 0;
                 }
                 sceneLoader.engine.update(delta);

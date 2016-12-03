@@ -4,14 +4,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.bodies.buildings.Capital;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.liquidresources.game.model.bodies.UpdatableBody;
 
 import static com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup.setIonShieldChecked;
 
 
-final public class IonShield extends UpdatableBodyImpl {
+final public class IonShield extends UpdatableBody {
     public IonShield(final RelationTypes relationType) {
         super(relationType, 100);
         isActive = false;
@@ -26,18 +24,21 @@ final public class IonShield extends UpdatableBodyImpl {
     public void collisionContact(Body collidedWithBody) {
         if (isActive) {
             if (!((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(-100)) {
-                ComponentRetriever.get(super.entity, PhysicsBodyComponent.class).body.setActive(false);
-                switchShield();
+                isActive = !isActive;
             }
         }
     }
 
     @Override
     public void act(float delta) {
+        if (physicsBodyComponent != null && isActive != physicsBodyComponent.body.isActive()) {
+            physicsBodyComponent.body.setActive(isActive);
+        }
+
         if (isActive) {
             if (!((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(-3)) {
                 isActive = false;
-                ComponentRetriever.get(super.entity, PhysicsBodyComponent.class).body.setActive(false);
+                physicsBodyComponent.body.setActive(false);
                 setIonShieldChecked();
             }
         }
@@ -47,7 +48,7 @@ final public class IonShield extends UpdatableBodyImpl {
     public void dispose() { }
 
     public void switchShield() throws NullPointerException {
-        ComponentRetriever.get(super.entity, PhysicsBodyComponent.class).body.setActive(!isActive);
+        physicsBodyComponent.body.setActive(!isActive);
         isActive = !isActive;
     }
 

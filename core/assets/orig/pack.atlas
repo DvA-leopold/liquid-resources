@@ -18,13 +18,6 @@ capitalSprite
   orig: 104, 430
   offset: 0, 0
   index: -1
-fire
-  rotate: false
-  xy: 615, 380
-  size: 193, 184
-  orig: 193, 184
-  offset: 0, 0
-  index: -1
 ionshield
   rotate: false
   xy: 303, 156
@@ -44,6 +37,13 @@ shipFactory
   xy: 2, 2
   size: 228, 113
   orig: 228, 113
+  offset: 0, 0
+  index: -1
+smoke
+  rotate: false
+  xy: 615, 380
+  size: 193, 184
+  orig: 193, 184
   offset: 0, 0
   index: -1
 tree3

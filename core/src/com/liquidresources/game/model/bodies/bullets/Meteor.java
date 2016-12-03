@@ -1,12 +1,12 @@
 package com.liquidresources.game.model.bodies.bullets;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
+import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 
 
-final public class Meteor extends UpdatableBodyImpl {
+final public class Meteor extends UpdatableBody {
     public Meteor(RelationTypes relationType) {
         super(relationType, 1);
     }
@@ -16,7 +16,7 @@ final public class Meteor extends UpdatableBodyImpl {
 
     @Override
     public void dispose() {
-        entityInitializer.destroyEntity(getRelation(), this);
+        entityInitializer.destroyEntity(this);
     }
 
     @Override
@@ -25,9 +25,10 @@ final public class Meteor extends UpdatableBodyImpl {
     }
 
     @Override
-    public void collisionContact(Body collidedWithBody) {
-        if (((UpdatableBodyImpl) collidedWithBody.getUserData()).getBodyType() != BodyTypes.METEOR) {
-            System.out.println("meteor collide");
+    public void collisionContact(Body collidedEnemyBody) {
+        UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
+        if (this.equals(collidedUpdatableBody.getHunterUpdatableBody()) ||
+                (this.getRelation() != collidedUpdatableBody.getRelation() && this.getBodyType() != BodyTypes.MISSILE)) {
             takeDamage(1);
         }
     }

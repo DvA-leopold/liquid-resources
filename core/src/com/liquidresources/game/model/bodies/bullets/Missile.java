@@ -6,13 +6,12 @@ import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
-import com.liquidresources.game.model.bodies.UpdatableBodyImpl;
+import com.liquidresources.game.model.bodies.UpdatableBody;
 
 
-final public class Missile extends UpdatableBodyImpl implements Steerable<Vector2> {
+final public class Missile extends UpdatableBody implements Steerable<Vector2> {
     public Missile(final RelationTypes parentRelation) {
         super(parentRelation, 1);
         setMaxLinearSpeed(15);
@@ -34,12 +33,14 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
     public void collisionContact(Body collidedEnemyBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
         if (collidedUpdatableBody.getRelation() != this.getRelation()) {
-            switch (collidedUpdatableBody.getBodyType()) {
-                case METEOR:
-                    takeDamage(1);
-                    break;
-                default:
-                    break;
+            if (this.equals(collidedUpdatableBody.getHunterUpdatableBody())) {
+                switch (collidedUpdatableBody.getBodyType()) {
+                    case METEOR:
+                        takeDamage(1);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -52,9 +53,10 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
 
         if (steeringBehavior != null) {
             if (((Arrive<Vector2>) steeringBehavior).getTarget() == null) {
-                UpdatableBodyImpl targetUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+                UpdatableBody targetUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
                 if (targetUpdatableBody != null) {
-                    System.out.println("type: " + targetUpdatableBody.getBodyType());
+                    targetUpdatableBody.setHunterUpdatableBody(this);
+                    this.setHunterUpdatableBody(targetUpdatableBody);
                     ((Arrive<Vector2>) steeringBehavior).setTarget(targetUpdatableBody);
                 } else {
                     return;
@@ -85,7 +87,7 @@ final public class Missile extends UpdatableBodyImpl implements Steerable<Vector
 
     @Override
     public void dispose() {
-        entityInitializer.destroyEntity(getRelation(), this);
+        entityInitializer.destroyEntity(this);
     }
 
     @Override

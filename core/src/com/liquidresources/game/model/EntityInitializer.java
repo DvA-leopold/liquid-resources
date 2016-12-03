@@ -24,7 +24,7 @@ import java.util.Map;
 final public class EntityInitializer {
     EntityInitializer(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
-        UpdatableBodyImpl.setEntityInitializer(this);
+        UpdatableBody.setEntityInitializer(this);
 
         staticEntities = new HashMap<>();
         staticEntities.put("capital", new Capital(RelationTypes.ALLY));
@@ -38,18 +38,18 @@ final public class EntityInitializer {
         bodiesSheduledForInit = new ArrayList<>();
 
         ItemWrapper itemRoot = new ItemWrapper(sceneLoader.getRoot());
-        for (Map.Entry<String, UpdatableBodyImpl> entry : staticEntities.entrySet()) {
+        for (Map.Entry<String, UpdatableBody> entry : staticEntities.entrySet()) {
             itemRoot.getChild(entry.getKey()).addScript(entry.getValue());
         }
 
         dynamicEntities = new HashMap<>();
-        dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<UpdatableBodyImpl>());
-        dynamicEntities.put(RelationTypes.ALLY, new ArrayList<UpdatableBodyImpl>());
-        dynamicEntities.put(RelationTypes.NEUTRAL, new ArrayList<UpdatableBodyImpl>());
+        dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<UpdatableBody>());
+        dynamicEntities.put(RelationTypes.ALLY, new ArrayList<UpdatableBody>());
+        dynamicEntities.put(RelationTypes.NEUTRAL, new ArrayList<UpdatableBody>());
     }
 
     public void createEntityFromLibrary(String entityName,
-                                        UpdatableBodyImpl iUpdatableBody,
+                                        UpdatableBody iUpdatableBody,
                                         float x,
                                         float y) {
         CompositeItemVO createdEntityData = sceneLoader.loadVoFromLibrary(entityName);
@@ -66,40 +66,50 @@ final public class EntityInitializer {
         dynamicEntities.get(iUpdatableBody.getRelation()).add(iUpdatableBody);
     }
 
-    public void destroyEntity(RelationTypes relationType, UpdatableBodyImpl bodyForRemove) {
+    public void destroyEntity(UpdatableBody bodyForRemove) {
         sceneLoader.getEngine().removeEntity(bodyForRemove.getEntity());
-        dynamicEntities.get(relationType).remove(bodyForRemove);
+        dynamicEntities.get(bodyForRemove.getRelation()).remove(bodyForRemove);
     }
 
     void initSheduledBodies() {
         if (!bodiesSheduledForInit.isEmpty()) {
-            for (UpdatableBodyImpl body: bodiesSheduledForInit) {
+            for (UpdatableBody body: bodiesSheduledForInit) {
                 body.init(null);
             }
             bodiesSheduledForInit.clear();
         }
     }
 
-    public void sheduleForInitPhysicComponent(UpdatableBodyImpl bodyForShedule) {
+    public void sheduleForInitPhysicComponent(UpdatableBody bodyForShedule) {
         bodiesSheduledForInit.add(bodyForShedule);
     }
 
-    public UpdatableBodyImpl getTargetBody(RelationTypes relationType) {
-        UpdatableBodyImpl closestBody = null;
-        UpdatableBodyImpl capitalBody = staticEntities.get("capital");
+    public UpdatableBody getTargetBody(RelationTypes relationType) {
+        UpdatableBody closestBody = null;
         if (!dynamicEntities.get(relationType).isEmpty()) {
-            for (UpdatableBodyImpl body: dynamicEntities.get(relationType)) {
+            UpdatableBody capitalBody = staticEntities.get("capital");
+            for (UpdatableBody body: dynamicEntities.get(relationType)) {
                 if (closestBody == null) {
                     closestBody = body;
                 } else {
-                    float currentDst = body.getPosition().dst(capitalBody.getPosition());
-                    float oldDst = closestBody.getPosition().dst(capitalBody.getPosition());
-                    closestBody = (currentDst < oldDst) ? body : closestBody;
+                    if (body.getHunterUpdatableBody() == null) {
+                        float currentDst = body.getPosition().dst(capitalBody.getPosition());
+                        float oldDst = closestBody.getPosition().dst(capitalBody.getPosition());
+                        closestBody = (currentDst < oldDst) ? body : closestBody;
+                    }
                 }
             }
         }
-        System.out.println("size: " + dynamicEntities.get(RelationTypes.ENEMY).size() + " " + closestBody);
         return closestBody;
+    }
+
+    public boolean hasTargetBodies(RelationTypes relationType, BodyTypes targetBodyType) {
+        for (UpdatableBody body: dynamicEntities.get(relationType)) {
+            if (body.getBodyType() == targetBodyType && body.getHunterUpdatableBody() == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public IScript getBaseSceneElement(String entityName) {
@@ -107,9 +117,9 @@ final public class EntityInitializer {
     }
 
 
-    final private ArrayList<UpdatableBodyImpl> bodiesSheduledForInit;
+    final private ArrayList<UpdatableBody> bodiesSheduledForInit;
 
-    final private HashMap<String, UpdatableBodyImpl> staticEntities;
-    final private HashMap<RelationTypes, ArrayList<UpdatableBodyImpl>> dynamicEntities;
+    final private HashMap<String, UpdatableBody> staticEntities;
+    final private HashMap<RelationTypes, ArrayList<UpdatableBody>> dynamicEntities;
     final private SceneLoader sceneLoader;
 }
