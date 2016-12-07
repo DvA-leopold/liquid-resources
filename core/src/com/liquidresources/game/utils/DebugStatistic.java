@@ -38,10 +38,10 @@ final public class DebugStatistic {
         if (drawFpsStat) {
             mainFont.draw(
                     batch, "fps:" + Gdx.graphics.getFramesPerSecond(),
-                    10, Gdx.graphics.getHeight() * 0.08f);
+                    10, Gdx.graphics.getHeight() * 0.06f);
         }
         if (drawVersionStat) {
-            mainFont.draw(batch, version, 10, Gdx.graphics.getHeight() * 0.05f);
+            mainFont.draw(batch, version, 10, Gdx.graphics.getHeight() * 0.04f);
         }
         batch.end();
     }

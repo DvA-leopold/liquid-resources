@@ -42,7 +42,7 @@ public class GameScreenWidgetsGroup implements GSObserver {
         laserFire.setVisible(false);
 
         Table actionTable = new Table();
-        actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.1f);
+        actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.05f);
         actionTable.add(ionShieldButton).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(missileFire).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(laserFire).width(buttonWidth).height(buttonHeight).pad(10);

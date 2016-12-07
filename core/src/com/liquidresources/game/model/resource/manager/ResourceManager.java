@@ -129,7 +129,7 @@ public class ResourceManager {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(ttfFilePath));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        fontParameter.size = Gdx.graphics.getHeight() * 64 / Gdx.graphics.getWidth();
+        fontParameter.size = Gdx.graphics.getHeight() * 24 / Gdx.graphics.getWidth();
         fontParameter.color = Color.BLACK;
         BitmapFont mainFonts = fontGenerator.generateFont(fontParameter);
 

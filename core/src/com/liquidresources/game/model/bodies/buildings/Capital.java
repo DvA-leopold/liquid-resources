@@ -42,7 +42,7 @@ final public class Capital extends UpdatableBody {
         }
     }
 
-    public boolean changeWater(int waterBarrels) {
+    private boolean changeWater(int waterBarrels) {
         if (this.waterBarrels + waterBarrels >= 0) {
             this.waterBarrels += waterBarrels;
             return true;

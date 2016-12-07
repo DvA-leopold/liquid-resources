@@ -15,7 +15,7 @@ import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 final public class GameScreen implements Screen {
     public GameScreen() {
-        viewport = new StretchViewport(35.0f, 22.5f);
+        viewport = new StretchViewport(21.25f, 30f);
         sceneLoader = new SceneLoader(); // TODO implement Iresourceretriever
         sceneLoader.loadScene("MainScene", viewport);
         PhysicsBodyLoader.getInstance().scale = 1;

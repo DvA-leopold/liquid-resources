@@ -51,7 +51,7 @@ final public class GameWorldModel implements GSObserver {
 
             }
         });
-        symbolsRenderer = new SymbolsRenderer(0, 21f, 1, 1);
+        symbolsRenderer = new SymbolsRenderer(0, 28f, 1, 1);
     }
 
     public void update(float delta) {

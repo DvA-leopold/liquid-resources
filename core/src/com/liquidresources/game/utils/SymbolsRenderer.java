@@ -28,7 +28,7 @@ final public class SymbolsRenderer {
     }
 
     public void renderNumber(final Batch batch, long number, float xOffset, float yOffset) {
-        //сдвиг цифр в обратную сторону: i = 0; i< numberOfDigits; ++i; and xDefaultPosition - width * i
+        //reverse draw: i = 0; i< numberOfDigits; ++i; and xDefaultPosition - width * i
         int numberOfDigits = (int) Math.ceil(Math.log10(number + 1));
         for (int i = numberOfDigits; i > 0; --i) {
             batch.draw(
