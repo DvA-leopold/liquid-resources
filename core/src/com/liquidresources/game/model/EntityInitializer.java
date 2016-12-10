@@ -89,10 +89,10 @@ final public class EntityInitializer {
         if (!dynamicEntities.get(relationType).isEmpty()) {
             UpdatableBody capitalBody = staticEntities.get("capital");
             for (UpdatableBody body: dynamicEntities.get(relationType)) {
-                if (closestBody == null) {
-                    closestBody = body;
-                } else {
-                    if (body.getHunterUpdatableBody() == null) {
+                if (body.getHunterUpdatableBody() == null) {
+                    if (closestBody == null) {
+                        closestBody = body;
+                    } else {
                         float currentDst = body.getPosition().dst(capitalBody.getPosition());
                         float oldDst = closestBody.getPosition().dst(capitalBody.getPosition());
                         closestBody = (currentDst < oldDst) ? body : closestBody;

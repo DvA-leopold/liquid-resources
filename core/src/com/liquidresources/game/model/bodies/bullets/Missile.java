@@ -32,15 +32,13 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
     @Override
     public void collisionContact(Body collidedEnemyBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
-        if (collidedUpdatableBody.getRelation() != this.getRelation()) {
-            if (this.equals(collidedUpdatableBody.getHunterUpdatableBody())) {
-                switch (collidedUpdatableBody.getBodyType()) {
-                    case METEOR:
-                        takeDamage(1);
-                        break;
-                    default:
-                        break;
-                }
+        if (this.equals(collidedUpdatableBody.getHunterUpdatableBody())) {
+            switch (collidedUpdatableBody.getBodyType()) {
+                case METEOR:
+                    takeDamage(1);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -57,6 +55,7 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
                 if (targetUpdatableBody != null) {
                     targetUpdatableBody.setHunterUpdatableBody(this);
                     this.setHunterUpdatableBody(targetUpdatableBody);
+                    System.out.println(targetUpdatableBody);
                     ((Arrive<Vector2>) steeringBehavior).setTarget(targetUpdatableBody);
                 } else {
                     return;

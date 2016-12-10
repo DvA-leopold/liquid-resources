@@ -28,7 +28,7 @@ final public class Meteor extends UpdatableBody {
     public void collisionContact(Body collidedEnemyBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
         if (this.equals(collidedUpdatableBody.getHunterUpdatableBody()) ||
-                (this.getRelation() != collidedUpdatableBody.getRelation() && this.getBodyType() != BodyTypes.MISSILE)) {
+                (this.getRelation() != collidedUpdatableBody.getRelation() && collidedUpdatableBody.getBodyType() != BodyTypes.MISSILE)) {
             takeDamage(1);
         }
     }
