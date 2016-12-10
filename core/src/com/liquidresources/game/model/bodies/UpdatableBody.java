@@ -113,7 +113,7 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
     protected PhysicsBodyComponent physicsBodyComponent;
     protected static EntityInitializer entityInitializer;
 
-    private int health;
+    protected int health;
     private Entity entity;
     private UpdatableBody hunterUpdatableBody;
     final private RelationTypes relationType;

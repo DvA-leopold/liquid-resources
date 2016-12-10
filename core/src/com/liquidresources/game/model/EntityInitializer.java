@@ -31,19 +31,25 @@ final public class EntityInitializer {
         staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP) {
             @Override
             public void act(float delta) {
-                ((Capital) staticEntities.get("capital")).changeWater(1);
+                if (health > 0) {
+                    ((Capital) staticEntities.get("capital")).changeWater(1);
+                }
             }
         });
         staticEntities.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP) {
             @Override
             public void act(float delta) {
-                ((Capital) staticEntities.get("capital")).changeOil(1);
+                if (health > 0) {
+                    ((Capital) staticEntities.get("capital")).changeOil(1);
+                }
             }
         });
         staticEntities.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP) {
             @Override
             public void act(float delta) {
-                ((Capital) staticEntities.get("capital")).changeOil(1);
+                if (health > 0) {
+                    ((Capital) staticEntities.get("capital")).changeOil(1);
+                }
             }
         });
         staticEntities.put("factory", new PowerFactory(RelationTypes.ALLY));

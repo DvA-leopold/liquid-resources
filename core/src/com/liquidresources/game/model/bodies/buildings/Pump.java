@@ -7,7 +7,7 @@ import com.liquidresources.game.model.bodies.UpdatableBody;
 
 
 abstract public class Pump extends UpdatableBody {
-    public Pump(RelationTypes relationTypes, BodyTypes bodyType) {
+    protected Pump(RelationTypes relationTypes, BodyTypes bodyType) {
         super(relationTypes, 100);
         this.bodyType = bodyType;
     }
