@@ -6,10 +6,21 @@ import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
 
 
-abstract public class Pump extends UpdatableBody {
-    protected Pump(RelationTypes relationTypes, BodyTypes bodyType) {
+final public class Pump extends UpdatableBody {
+    public Pump(RelationTypes relationTypes, BodyTypes bodyType) {
         super(relationTypes, 100);
         this.bodyType = bodyType;
+    }
+
+    @Override
+    public void act(float delta) {
+        if (health > 0) {
+            if (bodyType == BodyTypes.OIL_PUMP) {
+                ((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(1);
+            } else {
+                ((Capital) entityInitializer.getBaseSceneElement("capital")).changeWater(1);
+            }
+        }
     }
 
     @Override
