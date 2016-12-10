@@ -28,9 +28,24 @@ final public class EntityInitializer {
 
         staticEntities = new HashMap<>();
         staticEntities.put("capital", new Capital(RelationTypes.ALLY));
-        staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
-        staticEntities.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
-        staticEntities.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP));
+        staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP) {
+            @Override
+            public void act(float delta) {
+                ((Capital) staticEntities.get("capital")).changeWater(1);
+            }
+        });
+        staticEntities.put("pump_2", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP) {
+            @Override
+            public void act(float delta) {
+                ((Capital) staticEntities.get("capital")).changeOil(1);
+            }
+        });
+        staticEntities.put("pump_3", new Pump(RelationTypes.ALLY, BodyTypes.OIL_PUMP) {
+            @Override
+            public void act(float delta) {
+                ((Capital) staticEntities.get("capital")).changeOil(1);
+            }
+        });
         staticEntities.put("factory", new PowerFactory(RelationTypes.ALLY));
         staticEntities.put("ion_shield", new IonShield(RelationTypes.ALLY));
         staticEntities.put("planet", new Planet(RelationTypes.NEUTRAL));

@@ -5,18 +5,12 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
 
-final public class Pump extends UpdatableBody {
+
+abstract public class Pump extends UpdatableBody {
     public Pump(RelationTypes relationTypes, BodyTypes bodyType) {
         super(relationTypes, 100);
         this.bodyType = bodyType;
     }
-
-    short getResources() {
-        return 1;
-    }
-
-    @Override
-    public void act(float delta) { }
 
     @Override
     public void dispose() {
@@ -32,6 +26,7 @@ final public class Pump extends UpdatableBody {
     public void collisionContact(Body collidedWithBody) {
 
     }
+
 
     final private BodyTypes bodyType;
 }

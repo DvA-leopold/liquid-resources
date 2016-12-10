@@ -55,7 +55,6 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
                 if (targetUpdatableBody != null) {
                     targetUpdatableBody.setHunterUpdatableBody(this);
                     this.setHunterUpdatableBody(targetUpdatableBody);
-                    System.out.println(targetUpdatableBody);
                     ((Arrive<Vector2>) steeringBehavior).setTarget(targetUpdatableBody);
                 } else {
                     return;

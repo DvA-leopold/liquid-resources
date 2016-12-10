@@ -23,12 +23,7 @@ final public class Capital extends UpdatableBody {
     }
 
     @Override
-    public void act(float delta) {
-        Pump waterPump = ((Pump) entityInitializer.getBaseSceneElement("pump_1"));
-        Pump oilPump = ((Pump) entityInitializer.getBaseSceneElement("pump_2"));
-        Pump oilPump2 = ((Pump) entityInitializer.getBaseSceneElement("pump_3"));
-        update(oilPump.getResources() + oilPump2.getResources(), waterPump.getResources());
-    }
+    public void act(float delta) { }
 
     @Override
     public void dispose() { }
@@ -42,24 +37,13 @@ final public class Capital extends UpdatableBody {
         }
     }
 
-    private boolean changeWater(int waterBarrels) {
+    public boolean changeWater(int waterBarrels) {
         if (this.waterBarrels + waterBarrels >= 0) {
             this.waterBarrels += waterBarrels;
             return true;
         } else {
             return false;
         }
-    }
-
-    private boolean update(int oilBarrels, short waterBarrels) {
-        this.oilBarrels = oilBarrels + oilBarrels < Long.MAX_VALUE
-                ? this.oilBarrels + oilBarrels
-                : Long.MAX_VALUE - 1;
-
-        this.waterBarrels = this.waterBarrels + waterBarrels < Long.MAX_VALUE
-                ? this.waterBarrels + waterBarrels
-                : Long.MAX_VALUE - 1;
-        return true;
     }
 
     public long getOilBarrels() {
