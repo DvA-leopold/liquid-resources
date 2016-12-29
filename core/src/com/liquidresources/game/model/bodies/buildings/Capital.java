@@ -1,6 +1,7 @@
 package com.liquidresources.game.model.bodies.buildings;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.liquidresources.game.model.bodies.bullets.Bullet;
 import com.liquidresources.game.model.bodies.bullets.Missile;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
@@ -59,6 +60,14 @@ final public class Capital extends UpdatableBody {
             entityInitializer.createEntityFromLibrary("missile", new Missile(this.getRelation()), 10, 10);
         } else {
             System.out.println("no water or target entities");
+        }
+    }
+
+    public void fireBullet() {
+        if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-4)) {
+            entityInitializer.createEntityFromLibrary("bullet", new Bullet(this.getRelation()), 10, 10);
+        } else {
+            System.out.println("no water");
         }
     }
 

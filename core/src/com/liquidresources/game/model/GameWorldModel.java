@@ -122,6 +122,15 @@ final public class GameWorldModel implements GSObserver {
         };
     }
 
+    public ClickListener getBulletFireListener() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Capital) entityInitializer.getBaseSceneElement("capital")).fireBullet();
+            }
+        };
+    }
+
 
     private int counter = 0;
 

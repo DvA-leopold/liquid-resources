@@ -38,14 +38,14 @@ public class GameScreenWidgetsGroup implements GSObserver {
         ionShieldButton.setVisible(false);
         missileFire = new Button(skin, "rocketAction");
         missileFire.setVisible(false);
-        laserFire = new Button(skin, "fightersAction");
-        laserFire.setVisible(false);
+        bulletFire = new Button(skin, "fightersAction");
+        bulletFire.setVisible(false);
 
         Table actionTable = new Table();
         actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.05f);
         actionTable.add(ionShieldButton).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(missileFire).width(buttonWidth).height(buttonHeight).pad(10);
-        actionTable.add(laserFire).width(buttonWidth).height(buttonHeight).pad(10);
+        actionTable.add(bulletFire).width(buttonWidth).height(buttonHeight).pad(10);
 
         gameOptionWindow = new GameOptionWindow("", skin);
 
@@ -64,13 +64,9 @@ public class GameScreenWidgetsGroup implements GSObserver {
     }
 
     public void setListeners(final ClickListener ionShieldClickListener,
-                             final ClickListener fireMissileClickListener) {
-        laserFire.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-            }
-        });
+                             final ClickListener fireMissileClickListener,
+                             final ClickListener fireBulletClickListener) {
+        bulletFire.addListener(fireBulletClickListener);
 
         ionShieldButton.addListener(ionShieldClickListener);
         missileFire.addListener(fireMissileClickListener);
@@ -93,9 +89,9 @@ public class GameScreenWidgetsGroup implements GSObserver {
 
     private void setVisible(boolean visible) {
         missileFire.setVisible(visible);
-        laserFire.setVisible(visible);
-        optionWindowButton.setVisible(visible);
+        bulletFire.setVisible(visible);
         ionShieldButton.setVisible(visible);
+        optionWindowButton.setVisible(visible);
     }
 
     static public void setIonShieldChecked() { // TODO refactor this
@@ -107,12 +103,12 @@ public class GameScreenWidgetsGroup implements GSObserver {
         switch (newGameState) {
             case GAME_RUNNING:
                 missileFire.setDisabled(false);
-                laserFire.setDisabled(false);
+                bulletFire.setDisabled(false);
                 ionShieldButton.setDisabled(false);
                 break;
             case GAME_PAUSED:
                 missileFire.setDisabled(true);
-                laserFire.setDisabled(true);
+                bulletFire.setDisabled(true);
                 ionShieldButton.setDisabled(true);
                 break;
         }
@@ -125,7 +121,7 @@ public class GameScreenWidgetsGroup implements GSObserver {
 
     final private Button missileFire;
 
-    final private Button laserFire;
+    final private Button bulletFire;
 
     final private GameOptionWindow gameOptionWindow;
 }

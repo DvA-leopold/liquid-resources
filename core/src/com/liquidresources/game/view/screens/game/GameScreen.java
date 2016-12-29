@@ -34,7 +34,8 @@ final public class GameScreen implements Screen {
         MusicManager.instance().registerMusic(this.getClass(), MusicManager.MusicTypes.MAIN_MUSIC);
         gameScreenWidgetsGroup.setListeners(
                 gameWorldModel.getIonShieldListener(),
-                gameWorldModel.getFireMissileListener()
+                gameWorldModel.getFireMissileListener(),
+                gameWorldModel.getBulletFireListener()
         );
     }
 
