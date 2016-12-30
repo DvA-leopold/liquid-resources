@@ -64,8 +64,8 @@ final public class GameWorldModel implements GSObserver {
             case GAME_RUNNING:
                 counter++;
                 if (counter > 200) {
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 23);
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 23);
+                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 30);
+                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 30);
                     counter = 0;
                 }
                 sceneLoader.engine.update(delta);
