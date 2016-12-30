@@ -35,7 +35,7 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
         if (this.equals(collidedUpdatableBody.getHunterUpdatableBody())) {
             switch (collidedUpdatableBody.getBodyType()) {
                 case METEOR:
-                    takeDamage(1);
+                    takeDamage(10);
                     break;
                 default:
                     break;

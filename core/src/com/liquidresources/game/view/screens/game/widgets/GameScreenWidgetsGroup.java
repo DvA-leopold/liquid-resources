@@ -117,10 +117,9 @@ public class GameScreenWidgetsGroup implements GSObserver {
 
     final private Stage stage;
     static private CheckBox ionShieldButton; // TODO refactor this
+
     final private Button optionWindowButton;
-
     final private Button missileFire;
-
     final private Button bulletFire;
 
     final private GameOptionWindow gameOptionWindow;

@@ -1,5 +1,6 @@
 package com.liquidresources.game.model.bodies.bullets;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.bodies.UpdatableBody;
@@ -19,7 +20,10 @@ final public class Bullet extends UpdatableBody {
 
     @Override
     public void collisionContact(Body collidedEnemyBody) {
-
+        UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
+        if (collidedUpdatableBody.getRelation() != this.getRelation()) {
+            takeDamage(1);
+        }
     }
 
     @Override
@@ -29,10 +33,11 @@ final public class Bullet extends UpdatableBody {
         }
 
         if (targetVector == null) {
-            Vector2 targetBodyPos = entityInitializer.getTargetBody(RelationTypes.ENEMY).getPosition();
+            setHunterUpdatableBody(entityInitializer.getTargetBody(RelationTypes.ENEMY));
+            Vector2 targetBodyPos = getHunterUpdatableBody().getPosition();
             if (targetBodyPos != null) {
                 targetVector = new Vector2(targetBodyPos);
-                targetVector.sub(this.getPosition());
+                targetVector.sub(this.getPosition().add(MathUtils.random(-1.5f, 0f), 0));
             } else {
                 return;
             }

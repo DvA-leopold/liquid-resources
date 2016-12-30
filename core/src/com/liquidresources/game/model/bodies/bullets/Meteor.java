@@ -8,7 +8,7 @@ import com.liquidresources.game.model.types.RelationTypes;
 
 final public class Meteor extends UpdatableBody {
     public Meteor(RelationTypes relationType) {
-        super(relationType, 1);
+        super(relationType, 10);
     }
 
     @Override
@@ -27,9 +27,17 @@ final public class Meteor extends UpdatableBody {
     @Override
     public void collisionContact(Body collidedEnemyBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
-        if (this.equals(collidedUpdatableBody.getHunterUpdatableBody()) ||
-                (this.getRelation() != collidedUpdatableBody.getRelation() && collidedUpdatableBody.getBodyType() != BodyTypes.MISSILE)) {
-            takeDamage(1);
+        if (equals(collidedUpdatableBody.getHunterUpdatableBody())) {
+            if (getRelation() != collidedUpdatableBody.getRelation()) {
+                switch (collidedUpdatableBody.getBodyType()) {
+                    case MISSILE:
+                        takeDamage(10);
+                        break;
+                    case BULLET:
+                        takeDamage(2);
+                        break;
+                }
+            }
         }
     }
 }
