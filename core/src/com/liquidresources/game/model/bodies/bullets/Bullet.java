@@ -33,10 +33,10 @@ final public class Bullet extends UpdatableBody {
         }
 
         if (targetVector == null) {
-            setHunterUpdatableBody(entityInitializer.getTargetBody(RelationTypes.ENEMY));
-            Vector2 targetBodyPos = getHunterUpdatableBody().getPosition();
-            if (targetBodyPos != null) {
-                targetVector = new Vector2(targetBodyPos);
+            UpdatableBody hunterUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+            if (hunterUpdatableBody != null) {
+                setHunterUpdatableBody(hunterUpdatableBody);
+                targetVector = new Vector2(hunterUpdatableBody.getPosition());
                 targetVector.sub(this.getPosition().add(MathUtils.random(-1.5f, 0f), 0));
             } else {
                 return;

@@ -89,7 +89,7 @@ final public class EntityInitializer {
         if (!dynamicEntities.get(relationType).isEmpty()) {
             UpdatableBody capitalBody = staticEntities.get("capital");
             for (UpdatableBody body: dynamicEntities.get(relationType)) {
-                if (body.getHunterUpdatableBody() == null) {
+                if (body.isInitialized() && body.getHunterUpdatableBody() == null) {
                     if (closestBody == null) {
                         closestBody = body;
                     } else {

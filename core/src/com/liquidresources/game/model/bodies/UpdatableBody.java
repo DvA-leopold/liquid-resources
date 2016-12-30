@@ -100,6 +100,10 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
         return SteeringUtils.angleToVector(outVector, angle);
     }
 
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
     public abstract BodyTypes getBodyType();
 
     public abstract void collisionContact(Body collidedEnemyBody);
