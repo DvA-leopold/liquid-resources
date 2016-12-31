@@ -20,11 +20,28 @@ final public class Capital extends UpdatableBody {
 
     @Override
     public void collisionContact(Body collidedWithBody) {
-
+        UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedWithBody.getUserData();
+        if (collidedUpdatableBody.getRelation() == RelationTypes.ENEMY) {
+            switch (collidedUpdatableBody.getBodyType()) {
+                case METEOR:
+                    takeDamage(25);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
-    public void act(float delta) { }
+    public void act(float delta) {
+        if (!isInitialized) {
+            return;
+        }
+
+        if (health <= 0) {
+            physicsBodyComponent.body.setActive(false);
+        }
+    }
 
     @Override
     public void dispose() { }
@@ -67,7 +84,7 @@ final public class Capital extends UpdatableBody {
         if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-4)) {
             entityInitializer.createEntityFromLibrary("bullet", new Bullet(this.getRelation()), 10, 10);
         } else {
-            System.out.println("no water");
+            System.out.println("no water or target entities");
         }
     }
 

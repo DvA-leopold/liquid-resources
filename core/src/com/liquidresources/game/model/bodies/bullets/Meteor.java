@@ -30,7 +30,7 @@ final public class Meteor extends UpdatableBody {
         if (equals(collidedUpdatableBody.getHunterUpdatableBody())) {
             switch (collidedUpdatableBody.getBodyType()) {
                 case MISSILE:
-                    takeDamage(10);
+                    takeDamage(health);
                     break;
                 case BULLET:
                     takeDamage(2);
@@ -45,7 +45,7 @@ final public class Meteor extends UpdatableBody {
                 case MISSILE:
                     break;
                 default:
-                    takeDamage(10);
+                    takeDamage(health);
                     break;
             }
         }

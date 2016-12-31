@@ -5,6 +5,7 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
 
+
 final public class PowerFactory extends UpdatableBody {
     public PowerFactory(final RelationTypes relationType) {
         super(relationType, 100);
@@ -17,11 +18,28 @@ final public class PowerFactory extends UpdatableBody {
 
     @Override
     public void collisionContact(Body collidedWithBody) {
-
+        UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedWithBody.getUserData();
+        if (collidedUpdatableBody.getRelation() == RelationTypes.ENEMY) {
+            switch (collidedUpdatableBody.getBodyType()) {
+                case METEOR:
+                    takeDamage(25);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
-    public void act(float delta) { }
+    public void act(float delta) {
+        if (!isInitialized) {
+            return;
+        }
+
+        if (health <= 0 && physicsBodyComponent.body.isActive()) {
+            physicsBodyComponent.body.setActive(false);
+        }
+    }
 
     @Override
     public void dispose() {
