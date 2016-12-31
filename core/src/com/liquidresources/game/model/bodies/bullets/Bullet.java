@@ -43,6 +43,7 @@ final public class Bullet extends UpdatableBody {
             }
         }
 
+        physicsBodyComponent.body.setTransform(this.getPosition(), vectorToAngle(physicsBodyComponent.body.getLinearVelocity()));
         physicsBodyComponent.body.applyForceToCenter(targetVector, true);
     }
 

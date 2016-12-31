@@ -48,7 +48,6 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
         if (!isInitialized) {
             return;
         }
-
         if (steeringBehavior != null) {
             if (((Arrive<Vector2>) steeringBehavior).getTarget() == null) {
                 UpdatableBody targetUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
