@@ -38,7 +38,7 @@ final public class EntityInitializer {
         bodiesSheduledForInit = new ArrayList<>();
 
         ItemWrapper itemRoot = new ItemWrapper(sceneLoader.getRoot());
-        for (Map.Entry<String, UpdatableBody> entry : staticEntities.entrySet()) {
+        for (Map.Entry<String, UpdatableBody> entry: staticEntities.entrySet()) {
             itemRoot.getChild(entry.getKey()).addScript(entry.getValue());
         }
 
@@ -48,10 +48,7 @@ final public class EntityInitializer {
         dynamicEntities.put(RelationTypes.NEUTRAL, new ArrayList<UpdatableBody>());
     }
 
-    public void createEntityFromLibrary(String entityName,
-                                        UpdatableBody iUpdatableBody,
-                                        float x,
-                                        float y) {
+    public void createEntityFromLibrary(String entityName, UpdatableBody iUpdatableBody, float x, float y) {
         CompositeItemVO createdEntityData = sceneLoader.loadVoFromLibrary(entityName);
         Entity createdEntity = sceneLoader.entityFactory.createEntity(sceneLoader.getRoot(), createdEntityData);
 

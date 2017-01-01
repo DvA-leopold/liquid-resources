@@ -38,7 +38,7 @@ final public class Capital extends UpdatableBody {
             return;
         }
 
-        if (health <= 0) {
+        if (health <= 0 && physicsBodyComponent.body.isActive()) {
             physicsBodyComponent.body.setActive(false);
         }
     }

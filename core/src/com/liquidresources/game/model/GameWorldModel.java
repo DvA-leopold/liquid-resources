@@ -20,8 +20,6 @@ final public class GameWorldModel implements GSObserver {
     public GameWorldModel(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
         entityInitializer = new EntityInitializer(sceneLoader);
-        entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), 10, 20);
-        entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), 16, 20);
         sceneLoader.world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {

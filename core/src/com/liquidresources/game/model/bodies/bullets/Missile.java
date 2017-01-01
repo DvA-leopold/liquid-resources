@@ -17,7 +17,7 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
         setMaxLinearSpeed(15);
         setMaxLinearAcceleration(30);
         boundingRadius = 10;
-        independentFacing = true;
+        independentFacing = false;
         this.steeringBehavior = new Arrive<>(this)
                 .setTimeToTarget(4f)
                 .setArrivalTolerance(0.001f)
@@ -32,7 +32,7 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
     @Override
     public void collisionContact(Body collidedEnemyBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedEnemyBody.getUserData();
-        if (this.equals(collidedUpdatableBody.getHunterUpdatableBody())) {
+        if (equals(collidedUpdatableBody.getHunterUpdatableBody())) {
             switch (collidedUpdatableBody.getBodyType()) {
                 case METEOR:
                     takeDamage(10);
