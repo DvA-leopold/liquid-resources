@@ -164,7 +164,7 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
 
 
     final private boolean independentFacing;
-    private float boundingRadius;
+    final private float boundingRadius;
     private boolean tagged;
 
     private float maxLinearSpeed;

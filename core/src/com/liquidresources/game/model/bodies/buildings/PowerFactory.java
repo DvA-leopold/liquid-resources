@@ -50,5 +50,6 @@ final public class PowerFactory extends UpdatableBody {
                 new ItemWrapper(getEntity()).getChild("smoke").getEntity(),
                 ParticleComponent.class);
         particleComponent.particleEffect.allowCompletion();
+        // particleComponent.particleEffect.start(); for switch back on
     }
 }

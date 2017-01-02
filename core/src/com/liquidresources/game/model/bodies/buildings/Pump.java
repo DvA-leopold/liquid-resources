@@ -4,6 +4,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
 final public class Pump extends UpdatableBody {
@@ -32,7 +34,15 @@ final public class Pump extends UpdatableBody {
     }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+        SpriteAnimationStateComponent animationComponent = ComponentRetriever.get(getEntity(), SpriteAnimationStateComponent.class);
+        animationComponent.paused = true;
+
+//        ImmutableArray<Component> components = getEntity().getComponents();
+//        for (Component component: components) {
+//            System.out.println(component);
+//        }
+    }
 
     @Override
     public BodyTypes getBodyType() {
