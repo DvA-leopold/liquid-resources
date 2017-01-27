@@ -4,7 +4,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
@@ -26,10 +30,11 @@ final public class Pump extends UpdatableBody {
             } else {
                 ((Capital) entityInitializer.getBaseSceneElement("capital")).changeWater(1);
             }
-        } else {
-            if (physicsBodyComponent.body.isActive()) {
-                physicsBodyComponent.body.setActive(false);
-            }
+        } else if (physicsBodyComponent.body.isActive()) {
+            physicsBodyComponent.body.setActive(false);
+            System.out.println("pump body pos: "  + physicsBodyComponent.body.getPosition());
+//                TextureRegionComponent component = ComponentRetriever.get(getEntity(), TextureRegionComponent.class);
+//                System.out.println("pump texture pos: " + component.region.getTexture());
         }
     }
 
