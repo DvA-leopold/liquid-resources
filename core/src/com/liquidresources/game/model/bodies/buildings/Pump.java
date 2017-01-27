@@ -4,12 +4,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
-import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
-import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
-import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
-import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
 final public class Pump extends UpdatableBody {
