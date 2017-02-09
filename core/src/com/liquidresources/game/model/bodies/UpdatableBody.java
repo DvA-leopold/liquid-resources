@@ -3,7 +3,7 @@ package com.liquidresources.game.model.bodies;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.liquidresources.game.system.EntityInitializerSystem;
+import com.liquidresources.game.systems.EntityInitializerSystem;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.utils.SteeringUtils;

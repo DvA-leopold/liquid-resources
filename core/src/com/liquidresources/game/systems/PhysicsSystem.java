@@ -1,4 +1,4 @@
-package com.liquidresources.game.system;
+package com.liquidresources.game.systems;
 
 import com.artemis.BaseSystem;
 

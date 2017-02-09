@@ -12,7 +12,7 @@ import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.utils.GSObserver;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.utils.SymbolsRenderer;
-import com.liquidresources.game.system.EntityInitializerSystem;
+import com.liquidresources.game.systems.EntityInitializerSystem;
 
 
 final public class GameWorldModel implements GSObserver {
@@ -123,7 +123,7 @@ final public class GameWorldModel implements GSObserver {
 
     private int counter = 0;
 
-    final private com.liquidresources.game.system.EntityInitializerSystem entityInitializerSystem;
+    final private EntityInitializerSystem entityInitializerSystem;
     final private SymbolsRenderer symbolsRenderer;
     final private SpriteBatch batch;
 

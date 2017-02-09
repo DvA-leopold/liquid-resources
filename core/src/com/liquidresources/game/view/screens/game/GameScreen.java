@@ -11,7 +11,7 @@ import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.audio.MusicManager;
 import com.liquidresources.game.model.bodies.UpdatableBody;
-import com.liquidresources.game.system.PhysicsSystem;
+import com.liquidresources.game.systems.PhysicsSystem;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup;
 
