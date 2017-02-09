@@ -3,10 +3,8 @@ package com.liquidresources.game.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.bodies.buildings.Capital;
 import com.liquidresources.game.model.bodies.bullets.Meteor;
 import com.liquidresources.game.model.types.RelationTypes;
@@ -14,6 +12,7 @@ import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.utils.GSObserver;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.utils.SymbolsRenderer;
+import com.liquidresources.game.system.EntityInitializerSystem;
 
 
 final public class GameWorldModel implements GSObserver {
@@ -124,7 +123,7 @@ final public class GameWorldModel implements GSObserver {
 
     private int counter = 0;
 
-    final private EntityInitializerSystem entityInitializerSystem;
+    final private com.liquidresources.game.system.EntityInitializerSystem entityInitializerSystem;
     final private SymbolsRenderer symbolsRenderer;
     final private SpriteBatch batch;
 

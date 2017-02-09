@@ -1,4 +1,4 @@
-package com.liquidresources.game.model;
+package com.liquidresources.game.system;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 
 final public class EntityInitializerSystem implements AfterSceneInit {
-    EntityInitializerSystem() {
+    public EntityInitializerSystem() {
         UpdatableBody.setEntityInitializerSystem(this);
 
         staticEntities = new HashMap<>();
@@ -88,9 +88,11 @@ final public class EntityInitializerSystem implements AfterSceneInit {
     }
 
 
+    // should be initialized by artemis --
     private ComponentMapper<VisSprite> spriteCm;
     private ComponentMapper<PhysicsBody> physicsCm;
     private VisIDManager idManager;
+    // -- -- -- -- -- -- -- -- -- -- -- --
 
     final private HashMap<String, UpdatableBody> staticEntities;
 
