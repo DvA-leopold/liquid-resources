@@ -1,10 +1,10 @@
 package com.liquidresources.game.systems;
 
+import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.kotcrab.vis.runtime.component.PhysicsBody;
-import com.kotcrab.vis.runtime.component.VisSprite;
 import com.kotcrab.vis.runtime.system.VisIDManager;
 import com.kotcrab.vis.runtime.util.AfterSceneInit;
 import com.liquidresources.game.model.bodies.*;
@@ -21,10 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-final public class EntityInitializerSystem implements AfterSceneInit {
+final public class EntityInitializerSystem extends BaseSystem implements AfterSceneInit {
     public EntityInitializerSystem() {
-        UpdatableBody.setEntityInitializerSystem(this);
-
         staticEntities = new HashMap<>();
         staticEntities.put("capital", new Capital(RelationTypes.ALLY));
         staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
@@ -38,6 +36,11 @@ final public class EntityInitializerSystem implements AfterSceneInit {
         dynamicEntities.put(RelationTypes.ENEMY, new ArrayList<UpdatableBody>());
         dynamicEntities.put(RelationTypes.ALLY, new ArrayList<UpdatableBody>());
         dynamicEntities.put(RelationTypes.NEUTRAL, new ArrayList<UpdatableBody>());
+    }
+
+    @Override
+    protected void processSystem() {
+        System.out.println("process entity system");
     }
 
     public void createEntityFromLibrary(String entityName, UpdatableBody iUpdatableBody, float x, float y) {
@@ -89,9 +92,9 @@ final public class EntityInitializerSystem implements AfterSceneInit {
 
 
     // should be initialized by artemis --
-    private ComponentMapper<VisSprite> spriteCm;
-    private ComponentMapper<PhysicsBody> physicsCm;
-    private VisIDManager idManager;
+//    protected ComponentMapper<VisSprite> spriteCm;
+    protected ComponentMapper<PhysicsBody> physicsCm;
+    protected VisIDManager idManager;
     // -- -- -- -- -- -- -- -- -- -- -- --
 
     final private HashMap<String, UpdatableBody> staticEntities;

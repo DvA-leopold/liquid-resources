@@ -3,7 +3,6 @@ package com.liquidresources.game.model.bodies;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.liquidresources.game.systems.EntityInitializerSystem;
 import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.utils.SteeringUtils;
@@ -14,12 +13,6 @@ public abstract class UpdatableBody implements Location<Vector2> {
         this.relationType = relationType;
         this.health = health;
         this.isInitialized = false;
-    }
-
-    public static void setEntityInitializerSystem(final EntityInitializerSystem entityInitializerSystem) {
-        if (UpdatableBody.entityInitializerSystem == null) {
-            UpdatableBody.entityInitializerSystem = entityInitializerSystem;
-        }
     }
 
     protected void takeDamage(int dmg) {
@@ -96,15 +89,9 @@ public abstract class UpdatableBody implements Location<Vector2> {
 
     public abstract void collisionContact(Body collidedEnemyBody);
 
-    public static void finalDispose() {
-        entityInitializerSystem = null;
-    }
-
 
     protected Body body;
     protected boolean isInitialized;
-
-    protected static EntityInitializerSystem entityInitializerSystem;
 
     protected int health;
     private UpdatableBody hunterUpdatableBody;

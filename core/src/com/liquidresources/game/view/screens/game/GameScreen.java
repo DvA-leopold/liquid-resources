@@ -10,7 +10,6 @@ import com.kotcrab.vis.runtime.scene.VisAssetManager;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.audio.MusicManager;
-import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.systems.PhysicsSystem;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup;
@@ -32,7 +31,6 @@ final public class GameScreen implements Screen {
         SceneLoader.SceneParameter parameter = new SceneLoader.SceneParameter();
         parameter.config.addSystem(PhysicsSystem.class);
         mainScene = visAssetManager.loadSceneNow("scene/main.scene", parameter);
-
     }
 
     @Override
@@ -78,7 +76,6 @@ final public class GameScreen implements Screen {
     public void dispose() {
         physicsDebugRenderer.dispose();
         gameScreenWidgetsGroup.dispose();
-        UpdatableBody.finalDispose();
         GameStateHolder.dispose();
         visAssetManager.dispose();
     }
@@ -88,6 +85,7 @@ final public class GameScreen implements Screen {
 
     final private GameScreenWidgetsGroup gameScreenWidgetsGroup;
     final private GameWorldModel gameWorldModel;
+
     final private VisAssetManager visAssetManager;
     final private Scene mainScene;
 }
