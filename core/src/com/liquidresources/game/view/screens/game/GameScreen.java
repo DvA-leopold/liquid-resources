@@ -1,32 +1,38 @@
 package com.liquidresources.game.view.screens.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.runtime.scene.Scene;
+import com.kotcrab.vis.runtime.scene.SceneLoader;
+import com.kotcrab.vis.runtime.scene.VisAssetManager;
+import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameWorldModel;
 import com.liquidresources.game.audio.MusicManager;
 import com.liquidresources.game.model.bodies.UpdatableBody;
+import com.liquidresources.game.system.GameManager;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup;
-import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 
 final public class GameScreen implements Screen {
     public GameScreen() {
-        viewport = new StretchViewport(21.25f, 30f);
-        sceneLoader = new SceneLoader(); // TODO implement Iresourceretriever
-        sceneLoader.loadScene("MainScene", viewport);
-        PhysicsBodyLoader.getInstance().scale = 1;
+        final SpriteBatch batch = ((LiquidResources) Gdx.app.getApplicationListener()).getMainBatch();
+        visAssetManager = new VisAssetManager(batch);
 
-        gameScreenWidgetsGroup = new GameScreenWidgetsGroup(sceneLoader.getBatch());
+        gameScreenWidgetsGroup = new GameScreenWidgetsGroup(batch);
         GameStateHolder.addObserver(gameScreenWidgetsGroup);
 
-        gameWorldModel = new GameWorldModel(sceneLoader);
+        gameWorldModel = new GameWorldModel(batch);
         GameStateHolder.addObserver(gameWorldModel);
 
         physicsDebugRenderer = new Box2DDebugRenderer();
+
+        SceneLoader.SceneParameter parameter = new SceneLoader.SceneParameter();
+        parameter.config.addSystem(GameManager.class);
+        mainScene = visAssetManager.loadSceneNow("scene/main.scene", parameter);
+
     }
 
     @Override
@@ -42,13 +48,15 @@ final public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         gameWorldModel.update(delta);
-
-        physicsDebugRenderer.render(sceneLoader.world, viewport.getCamera().combined);
+        mainScene.render();
+//        physicsDebugRenderer.render(, viewport.getCamera().combined);
         gameScreenWidgetsGroup.render();
     }
 
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int width, int height) {
+        mainScene.resize(width, height);
+    }
 
     @Override
     public void pause() {
@@ -72,14 +80,14 @@ final public class GameScreen implements Screen {
         gameScreenWidgetsGroup.dispose();
         UpdatableBody.finalDispose();
         GameStateHolder.dispose();
+        visAssetManager.dispose();
     }
 
 
     final private Box2DDebugRenderer physicsDebugRenderer;
 
-    final private Viewport viewport;
-
     final private GameScreenWidgetsGroup gameScreenWidgetsGroup;
     final private GameWorldModel gameWorldModel;
-    final private SceneLoader sceneLoader;
+    final private VisAssetManager visAssetManager;
+    final private Scene mainScene;
 }

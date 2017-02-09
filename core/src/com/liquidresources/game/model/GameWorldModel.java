@@ -1,6 +1,7 @@
 package com.liquidresources.game.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,42 +14,35 @@ import com.liquidresources.game.model.bodies.bariers.IonShield;
 import com.liquidresources.game.utils.GSObserver;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.utils.SymbolsRenderer;
-import com.uwsoft.editor.renderer.SceneLoader;
 
 
 final public class GameWorldModel implements GSObserver {
-    public GameWorldModel(final SceneLoader sceneLoader) {
-        this.sceneLoader = sceneLoader;
-        entityInitializer = new EntityInitializer(sceneLoader);
-        sceneLoader.world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                try {
-                    ((UpdatableBody) contact.getFixtureA().getBody().getUserData())
-                            .collisionContact(contact.getFixtureB().getBody());
-
-                    ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
-                            .collisionContact(contact.getFixtureA().getBody());
-                } catch (Exception err) {  // FIXME problem with objects, spawned by timer, p.s - stop and start timer ***1 related too UpdatebleBodyImpl init
-                    System.err.println("collision contact: " + err.getMessage());
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }
-        });
+    public GameWorldModel(final SpriteBatch batch) {
+        this.batch = batch;
+        entityInitializerSystem = new EntityInitializerSystem();
+//        sceneLoader.world.setContactListener(new ContactListener() {
+//            @Override
+//            public void beginContact(Contact contact) {
+//                try {
+//                    ((UpdatableBody) contact.getFixtureA().getBody().getUserData())
+//                            .collisionContact(contact.getFixtureB().getBody());
+//
+//                    ((UpdatableBody) contact.getFixtureB().getBody().getUserData())
+//                            .collisionContact(contact.getFixtureA().getBody());
+//                } catch (Exception err) {
+//                    System.err.println("collision contact: " + err.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void endContact(Contact contact) { }
+//
+//            @Override
+//            public void preSolve(Contact contact, Manifold oldManifold) { }
+//
+//            @Override
+//            public void postSolve(Contact contact, ContactImpulse impulse) { }
+//        });
         symbolsRenderer = new SymbolsRenderer(0, 28f, 1, 1);
     }
 
@@ -62,17 +56,15 @@ final public class GameWorldModel implements GSObserver {
             case GAME_RUNNING:
                 counter++;
                 if (counter > 200) {
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 30);
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 30);
+                    entityInitializerSystem.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 30);
+                    entityInitializerSystem.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 30);
                     counter = 0;
                 }
-                sceneLoader.engine.update(delta);
-                entityInitializer.initSheduledBodies();
-                sceneLoader.getBatch().begin();
-                Capital capital = (Capital) entityInitializer.getBaseSceneElement("capital");
-                symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getOilBarrels());
-                symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getWaterBarrels(), 0, 1);
-                sceneLoader.getBatch().end();
+                batch.begin();
+                Capital capital = (Capital) entityInitializerSystem.getBaseSceneElement("capital");
+                symbolsRenderer.renderNumber(batch, capital.getOilBarrels());
+                symbolsRenderer.renderNumber(batch, capital.getWaterBarrels(), 0, 1);
+                batch.end();
                 break;
             case GAME_PAUSED:
                 break;
@@ -103,7 +95,7 @@ final public class GameWorldModel implements GSObserver {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    ((IonShield) entityInitializer.getBaseSceneElement("ion_shield")).switchShield();
+                    ((IonShield) entityInitializerSystem.getBaseSceneElement("ion_shield")).switchShield();
                 } catch (NullPointerException err) {
                     System.err.println(err.getMessage());
                 }
@@ -115,7 +107,7 @@ final public class GameWorldModel implements GSObserver {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Capital) entityInitializer.getBaseSceneElement("capital")).fireMissile();
+                ((Capital) entityInitializerSystem.getBaseSceneElement("capital")).fireMissile();
             }
         };
     }
@@ -124,7 +116,7 @@ final public class GameWorldModel implements GSObserver {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Capital) entityInitializer.getBaseSceneElement("capital")).fireBullet();
+                ((Capital) entityInitializerSystem.getBaseSceneElement("capital")).fireBullet();
             }
         };
     }
@@ -132,8 +124,8 @@ final public class GameWorldModel implements GSObserver {
 
     private int counter = 0;
 
-    final private SceneLoader sceneLoader;
-
-    final private EntityInitializer entityInitializer;
+    final private EntityInitializerSystem entityInitializerSystem;
     final private SymbolsRenderer symbolsRenderer;
+    final private SpriteBatch batch;
+
 }

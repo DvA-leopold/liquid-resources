@@ -12,7 +12,6 @@ final public class Pump extends UpdatableBody {
         this.bodyType = bodyType;
     }
 
-    @Override
     public void act(float delta) {
         if (!isInitialized) {
             return;
@@ -20,27 +19,13 @@ final public class Pump extends UpdatableBody {
 
         if (health > 0) {
             if (bodyType == BodyTypes.OIL_PUMP) {
-                ((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(1);
+                ((Capital) entityInitializerSystem.getBaseSceneElement("capital")).changeOil(1);
             } else {
-                ((Capital) entityInitializer.getBaseSceneElement("capital")).changeWater(1);
+                ((Capital) entityInitializerSystem.getBaseSceneElement("capital")).changeWater(1);
             }
-        } else if (physicsBodyComponent.body.isActive()) {
-            physicsBodyComponent.body.setActive(false);
-            System.out.println("pump body pos: "  + physicsBodyComponent.body.getPosition());
-//                TextureRegionComponent component = ComponentRetriever.get(getEntity(), TextureRegionComponent.class);
-//                System.out.println("pump texture pos: " + component.region.getTexture());
+        } else if (body.isActive()) {
+            body.setActive(false);
         }
-    }
-
-    @Override
-    public void dispose() {
-        SpriteAnimationStateComponent animationComponent = ComponentRetriever.get(getEntity(), SpriteAnimationStateComponent.class);
-        animationComponent.paused = true;
-
-//        ImmutableArray<Component> components = getEntity().getComponents();
-//        for (Component component: components) {
-//            System.out.println(component);
-//        }
     }
 
     @Override

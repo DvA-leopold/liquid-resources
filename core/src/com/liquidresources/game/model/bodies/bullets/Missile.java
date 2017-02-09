@@ -43,14 +43,13 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
         }
     }
 
-    @Override
     public void act(float delta) {
         if (!isInitialized) {
             return;
         }
         if (steeringBehavior != null) {
             if (((Arrive<Vector2>) steeringBehavior).getTarget() == null) {
-                UpdatableBody targetUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+                UpdatableBody targetUpdatableBody = entityInitializerSystem.getTargetBody(RelationTypes.ENEMY);
                 if (targetUpdatableBody != null) {
                     targetUpdatableBody.setHunterUpdatableBody(this);
                     this.setHunterUpdatableBody(targetUpdatableBody);
@@ -63,38 +62,33 @@ final public class Missile extends UpdatableBody implements Steerable<Vector2> {
             steeringBehavior.calculateSteering(STEERING_ACCELERATION_OUTPUT);
 
             if (!STEERING_ACCELERATION_OUTPUT.linear.isZero()) {
-//                STEERING_ACCELERATION_OUTPUT.linear.sub(entityInitializer.getSceneLoader().world.getGravity());
-                physicsBodyComponent.body.applyForceToCenter(STEERING_ACCELERATION_OUTPUT.linear, true);
+//                STEERING_ACCELERATION_OUTPUT.linear.sub(entityInitializerSystem.getSceneLoader().world.getGravity());
+                body.applyForceToCenter(STEERING_ACCELERATION_OUTPUT.linear, true);
             }
 
             if (independentFacing) {
                 if (STEERING_ACCELERATION_OUTPUT.angular != 0) {
-                    physicsBodyComponent.body.applyTorque(STEERING_ACCELERATION_OUTPUT.angular, true);
+                    body.applyTorque(STEERING_ACCELERATION_OUTPUT.angular, true);
                 }
             } else {
                 Vector2 linVel = getLinearVelocity();
                 if (!linVel.isZero(getZeroLinearSpeedThreshold())) {
                     float newOrientation = vectorToAngle(linVel);
-                    physicsBodyComponent.body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta);
-                    physicsBodyComponent.body.setTransform(physicsBodyComponent.body.getPosition(), newOrientation);
+                    body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta);
+                    body.setTransform(body.getPosition(), newOrientation);
                 }
             }
         }
     }
 
     @Override
-    public void dispose() {
-        entityInitializer.destroyEntity(this);
-    }
-
-    @Override
     public Vector2 getLinearVelocity() {
-        return physicsBodyComponent.body.getLinearVelocity();
+        return body.getLinearVelocity();
     }
 
     @Override
     public float getAngularVelocity() {
-        return physicsBodyComponent.body.getAngularVelocity();
+        return body.getAngularVelocity();
     }
 
     @Override

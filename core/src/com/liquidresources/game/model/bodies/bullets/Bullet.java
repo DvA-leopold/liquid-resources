@@ -26,14 +26,13 @@ final public class Bullet extends UpdatableBody {
         }
     }
 
-    @Override
     public void act(float delta) {
         if (!isInitialized) {
             return;
         }
 
         if (targetVector == null) {
-            UpdatableBody hunterUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+            UpdatableBody hunterUpdatableBody = entityInitializerSystem.getTargetBody(RelationTypes.ENEMY);
             if (hunterUpdatableBody != null) {
                 setHunterUpdatableBody(hunterUpdatableBody);
                 targetVector = new Vector2(hunterUpdatableBody.getPosition());
@@ -43,13 +42,8 @@ final public class Bullet extends UpdatableBody {
             }
         }
 
-        physicsBodyComponent.body.setTransform(getPosition(), vectorToAngle(physicsBodyComponent.body.getLinearVelocity()));
-        physicsBodyComponent.body.applyForceToCenter(targetVector, true);
-    }
-
-    @Override
-    public void dispose() {
-        entityInitializer.destroyEntity(this);
+        body.setTransform(getPosition(), vectorToAngle(body.getLinearVelocity()));
+        body.applyForceToCenter(targetVector, true);
     }
 
 

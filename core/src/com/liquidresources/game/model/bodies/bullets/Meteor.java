@@ -11,13 +11,7 @@ final public class Meteor extends UpdatableBody {
         super(relationType, 10);
     }
 
-    @Override
     public void act(float delta) { }
-
-    @Override
-    public void dispose() {
-        entityInitializer.destroyEntity(this);
-    }
 
     @Override
     public BodyTypes getBodyType() {

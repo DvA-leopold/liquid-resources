@@ -32,19 +32,15 @@ final public class Capital extends UpdatableBody {
         }
     }
 
-    @Override
     public void act(float delta) {
         if (!isInitialized) {
             return;
         }
 
-        if (health <= 0 && physicsBodyComponent.body.isActive()) {
-            physicsBodyComponent.body.setActive(false);
+        if (health <= 0 && body.isActive()) {
+            body.setActive(false);
         }
     }
-
-    @Override
-    public void dispose() { }
 
     public boolean changeOil(int oilBarrels) {
         if (this.oilBarrels + oilBarrels >= 0) {
@@ -73,16 +69,16 @@ final public class Capital extends UpdatableBody {
     }
 
     public void fireMissile() {
-        if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-10)) {
-            entityInitializer.createEntityFromLibrary("missile", new Missile(this.getRelation()), 10, 10);
+        if (entityInitializerSystem.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-10)) {
+            entityInitializerSystem.createEntityFromLibrary("missile", new Missile(this.getRelation()), 10, 10);
         } else {
             System.out.println("no water or target entities");
         }
     }
 
     public void fireBullet() {
-        if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-4)) {
-            entityInitializer.createEntityFromLibrary("bullet", new Bullet(this.getRelation()), 10, 10);
+        if (entityInitializerSystem.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-4)) {
+            entityInitializerSystem.createEntityFromLibrary("bullet", new Bullet(this.getRelation()), 10, 10);
         } else {
             System.out.println("no water or target entities");
         }

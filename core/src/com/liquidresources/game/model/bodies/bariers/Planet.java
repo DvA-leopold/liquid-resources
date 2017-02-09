@@ -21,9 +21,5 @@ final public class Planet extends UpdatableBody {
 
     }
 
-    @Override
     public void act(float delta) { }
-
-    @Override
-    public void dispose() { }
 }

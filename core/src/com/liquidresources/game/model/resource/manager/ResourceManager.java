@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.liquidresources.game.model.resource.manager.loaders.FreeTypeFontSkinLoader;
-import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -42,8 +41,6 @@ public class ResourceManager {
         mimeFileTypes.put("json", Skin.class);
 
         mimeFileTypes.put("p", ParticleEffect.class);
-
-        mimeFileTypes.put("dt", SceneVO.class);
     }
 
     public static ResourceManager instance() {

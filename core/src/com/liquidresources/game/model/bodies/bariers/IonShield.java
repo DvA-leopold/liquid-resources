@@ -23,32 +23,28 @@ final public class IonShield extends UpdatableBody {
     @Override
     public void collisionContact(Body collidedWithBody) {
         if (isActive) {
-            if (!((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(-100)) {
+            if (!((Capital) entityInitializerSystem.getBaseSceneElement("capital")).changeOil(-100)) {
                 isActive = !isActive;
             }
         }
     }
 
-    @Override
     public void act(float delta) {
-        if (physicsBodyComponent != null && isActive != physicsBodyComponent.body.isActive()) {
-            physicsBodyComponent.body.setActive(isActive);
+        if (body != null && isActive != body.isActive()) {
+            body.setActive(isActive);
         }
 
         if (isActive) {
-            if (!((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(-3)) {
+            if (!((Capital) entityInitializerSystem.getBaseSceneElement("capital")).changeOil(-3)) {
                 isActive = false;
-                physicsBodyComponent.body.setActive(false);
+                body.setActive(false);
                 setIonShieldChecked();
             }
         }
     }
 
-    @Override
-    public void dispose() { }
-
     public void switchShield() throws NullPointerException {
-        physicsBodyComponent.body.setActive(!isActive);
+        body.setActive(!isActive);
         isActive = !isActive;
     }
 
