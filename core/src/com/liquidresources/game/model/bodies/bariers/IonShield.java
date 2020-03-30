@@ -6,9 +6,6 @@ import com.liquidresources.game.model.types.BodyTypes;
 import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.UpdatableBody;
 
-import static com.liquidresources.game.view.screens.game.widgets.GameScreenWidgetsGroup.setIonShieldChecked;
-
-
 final public class IonShield extends UpdatableBody {
     public IonShield(final RelationTypes relationType) {
         super(relationType, 100);
@@ -39,7 +36,7 @@ final public class IonShield extends UpdatableBody {
             if (!((Capital) entityInitializer.getBaseSceneElement("capital")).changeOil(-3)) {
                 isActive = false;
                 physicsBodyComponent.body.setActive(false);
-                setIonShieldChecked();
+//                setIonShieldChecked();
             }
         }
     }

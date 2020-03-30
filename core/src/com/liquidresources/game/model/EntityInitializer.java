@@ -24,8 +24,6 @@ import java.util.Map;
 final public class EntityInitializer {
     EntityInitializer(final SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
-        UpdatableBody.setEntityInitializer(this);
-
         staticEntities = new HashMap<>();
         staticEntities.put("capital", new Capital(RelationTypes.ALLY));
         staticEntities.put("pump_1", new Pump(RelationTypes.ALLY, BodyTypes.WATER_PUMP));
@@ -81,25 +79,6 @@ final public class EntityInitializer {
         bodiesSheduledForInit.add(bodyForShedule);
     }
 
-    public UpdatableBody getTargetBody(RelationTypes relationType) {
-        UpdatableBody closestBody = null;
-        if (!dynamicEntities.get(relationType).isEmpty()) {
-            UpdatableBody capitalBody = staticEntities.get("capital");
-            for (UpdatableBody body: dynamicEntities.get(relationType)) {
-                if (body.isInitialized() && body.getHunterUpdatableBody() == null) {
-                    if (closestBody == null) {
-                        closestBody = body;
-                    } else {
-                        float currentDst = body.getPosition().dst(capitalBody.getPosition());
-                        float oldDst = closestBody.getPosition().dst(capitalBody.getPosition());
-                        closestBody = (currentDst < oldDst) ? body : closestBody;
-                    }
-                }
-            }
-        }
-        return closestBody;
-    }
-
     public boolean hasTargetBodies(RelationTypes relationType, BodyTypes targetBodyType) {
         for (UpdatableBody body: dynamicEntities.get(relationType)) {
             if (body.getBodyType() == targetBodyType && body.getHunterUpdatableBody() == null) {
@@ -114,9 +93,10 @@ final public class EntityInitializer {
     }
 
 
+    final private SceneLoader sceneLoader;
+
     final private ArrayList<UpdatableBody> bodiesSheduledForInit;
 
     final private HashMap<String, UpdatableBody> staticEntities;
     final private HashMap<RelationTypes, ArrayList<UpdatableBody>> dynamicEntities;
-    final private SceneLoader sceneLoader;
 }

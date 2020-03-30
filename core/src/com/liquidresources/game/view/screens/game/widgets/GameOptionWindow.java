@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.i18n.manager.I18NBundleManager;
-import com.liquidresources.game.audio.MusicManager;
-import com.liquidresources.game.audio.SoundManager;
+import com.liquidresources.game.model.audio.MusicManager;
+import com.liquidresources.game.model.audio.SoundManager;
 import com.liquidresources.game.model.GameStates;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.view.screens.menu.MainMenuScreen;
@@ -16,8 +16,8 @@ import com.liquidresources.game.view.screens.menu.MainMenuScreen;
 final class GameOptionWindow extends Window {
     GameOptionWindow(String title, Skin skin) {
         super(title, skin);
-        float buttonHeight = Gdx.graphics.getHeight() * 0.1f,
-              buttonWidth = Gdx.graphics.getWidth() * 0.3f;
+        final float buttonHeight = Gdx.graphics.getHeight() * 0.1f;
+        final float buttonWidth = Gdx.graphics.getWidth() * 0.3f;
 
         setSize(Gdx.graphics.getWidth() * 0.35f, Gdx.graphics.getHeight());
         setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() * 0.2f, 0);
@@ -25,31 +25,32 @@ final class GameOptionWindow extends Window {
         setVisible(false);
 
         musicButton = new CheckBox("", skin, "musicCheckBox");
-        musicButton.setChecked(!MusicManager.instance().isMusicEnable());
+        musicButton.setChecked(!MusicManager.inst().isMusicEnable());
         soundButton = new CheckBox("", skin, "soundCheckBox");
         soundButton.setChecked(!SoundManager.instance().isSoundEnable());
 
         exitButton = new TextButton(I18NBundleManager.getString("exit"), skin, "exitButton");
         resumeButton = new Button(skin, "resumeButton");
 
-        this.add(musicButton).width(buttonWidth * 0.5f).height(buttonHeight).padTop(Gdx.graphics.getHeight() * 0.4f);
-        this.add(soundButton).width(buttonWidth * 0.5f).height(buttonHeight).padTop(Gdx.graphics.getHeight() * 0.4f);
-        this.row();
-        this.add(exitButton).width(buttonWidth).height(buttonHeight).colspan(2);
-        this.row();
-        this.add(resumeButton).width(buttonWidth * 0.3f).height(buttonWidth * 0.3f).colspan(2).expand().bottom().right();
-        this.debug();
+        add(musicButton).width(buttonWidth * 0.5f).height(buttonHeight).padTop(Gdx.graphics.getHeight() * 0.4f);
+        add(soundButton).width(buttonWidth * 0.5f).height(buttonHeight).padTop(Gdx.graphics.getHeight() * 0.4f);
+        row();
+        add(exitButton).width(buttonWidth).height(buttonHeight).colspan(2);
+        row();
+        add(resumeButton).width(buttonWidth * 0.3f).height(buttonWidth * 0.3f).colspan(2).expand().bottom().right();
+
+        setListeners();
     }
 
-    void setListeners() {
+    private void setListeners() {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MusicManager.instance().onoff();
-                if (MusicManager.instance().isMusicEnable()) {
-                    MusicManager.instance().resumeMusic();
+                MusicManager.inst().onoff();
+                if (MusicManager.inst().isMusicEnable()) {
+                    MusicManager.inst().resumeMusic();
                 } else {
-                    MusicManager.instance().stopMusic();
+                    MusicManager.inst().stopMusic();
                 }
             }
         });
@@ -65,7 +66,7 @@ final class GameOptionWindow extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameStateHolder.changeGameState(GameStates.GAME_EXIT);
-                ((LiquidResources) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                LiquidResources.inst().setScreen(new MainMenuScreen());
             }
         });
 

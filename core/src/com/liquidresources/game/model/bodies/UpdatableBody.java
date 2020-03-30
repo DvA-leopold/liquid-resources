@@ -13,17 +13,11 @@ import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
-public abstract class UpdatableBody implements IScript, Location<Vector2> {
+public abstract class UpdatableBody implements Location<Vector2>, IScript {
     public UpdatableBody(RelationTypes relationType, int health) {
         this.relationType = relationType;
         this.health = health;
         this.isInitialized = false;
-    }
-
-    public static void setEntityInitializer(final EntityInitializer entityInitializer) {
-        if (UpdatableBody.entityInitializer == null) {
-            UpdatableBody.entityInitializer = entityInitializer;
-        }
     }
 
     protected void takeDamage(int dmg) {
@@ -37,11 +31,6 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
         return relationType;
     }
 
-    public Entity getEntity() {
-        return entity;
-    }
-
-    @Override
     public void init(Entity entity) {
         if (this.entity == null) {
             this.entity = entity;
@@ -50,12 +39,8 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
             physicsBodyComponent = ComponentRetriever.get(this.entity, PhysicsBodyComponent.class);
             if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
                 physicsBodyComponent.body.setUserData(this);
-                switch (getBodyType()) {
-                    case ION_SHIELD:
-                        physicsBodyComponent.body.setActive(false);
-                        break;
-                    default:
-                        break;
+                if (getBodyType() == BodyTypes.ION_SHIELD) {
+                    physicsBodyComponent.body.setActive(false);
                 }
             }
             isInitialized = true;
@@ -100,6 +85,10 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
         return SteeringUtils.angleToVector(outVector, angle);
     }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -107,10 +96,7 @@ public abstract class UpdatableBody implements IScript, Location<Vector2> {
     public abstract BodyTypes getBodyType();
 
     public abstract void collisionContact(Body collidedEnemyBody);
-
-    public static void finalDispose() {
-        entityInitializer = null;
-    }
+    public abstract void dispose();
 
 
     protected boolean isInitialized;

@@ -1,5 +1,6 @@
 package com.liquidresources.game.model.bodies.buildings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.liquidresources.game.model.bodies.bullets.Bullet;
 import com.liquidresources.game.model.bodies.bullets.Missile;
@@ -22,25 +23,15 @@ final public class Capital extends UpdatableBody {
     public void collisionContact(Body collidedWithBody) {
         UpdatableBody collidedUpdatableBody = (UpdatableBody) collidedWithBody.getUserData();
         if (collidedUpdatableBody.getRelation() == RelationTypes.ENEMY) {
-            switch (collidedUpdatableBody.getBodyType()) {
-                case METEOR:
-                    takeDamage(25);
-                    break;
-                default:
-                    break;
+            if (collidedUpdatableBody.getBodyType() == BodyTypes.METEOR) {
+                takeDamage(25);
             }
         }
     }
 
     @Override
     public void act(float delta) {
-        if (!isInitialized) {
-            return;
-        }
 
-        if (health <= 0 && physicsBodyComponent.body.isActive()) {
-            physicsBodyComponent.body.setActive(false);
-        }
     }
 
     @Override
@@ -50,18 +41,18 @@ final public class Capital extends UpdatableBody {
         if (this.oilBarrels + oilBarrels >= 0) {
             this.oilBarrels += oilBarrels;
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public boolean changeWater(int waterBarrels) {
         if (this.waterBarrels + waterBarrels >= 0) {
             this.waterBarrels += waterBarrels;
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public long getOilBarrels() {
@@ -73,19 +64,19 @@ final public class Capital extends UpdatableBody {
     }
 
     public void fireMissile() {
-        if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-10)) {
-            entityInitializer.createEntityFromLibrary("missile", new Missile(this.getRelation()), 10, 10);
-        } else {
-            System.out.println("no water or target entities");
+        if (changeWater(-10)) {
+            entityInitializer.createEntityFromLibrary("missile", new Missile(getRelation()), 10, 10);
+            return;
         }
+        Gdx.app.log(this.getClass().getCanonicalName(), "no water or target entities");
     }
 
     public void fireBullet() {
-        if (entityInitializer.hasTargetBodies(RelationTypes.ENEMY, BodyTypes.METEOR) && changeWater(-4)) {
-            entityInitializer.createEntityFromLibrary("bullet", new Bullet(this.getRelation()), 10, 10);
-        } else {
-            System.out.println("no water or target entities");
+        if (changeWater(-4)) {
+            entityInitializer.createEntityFromLibrary("bullet", new Bullet(getRelation()), 10, 10);
+            return;
         }
+        Gdx.app.log(this.getClass().getCanonicalName(), "no water or target entities");
     }
 
 

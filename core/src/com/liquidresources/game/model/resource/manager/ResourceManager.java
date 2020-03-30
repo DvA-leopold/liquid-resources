@@ -18,6 +18,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+
 public class ResourceManager {
     private ResourceManager() {
         currentStorageSize = 0;
@@ -46,7 +47,7 @@ public class ResourceManager {
         mimeFileTypes.put("dt", SceneVO.class);
     }
 
-    public static ResourceManager instance() {
+    public static ResourceManager inst() {
         return SingletonHolder.instance;
     }
 
@@ -157,7 +158,7 @@ public class ResourceManager {
     }
 
     public void dispose() {
-        instance().assetManager.dispose();
+        inst().assetManager.dispose();
     }
 
     private FileHandle[] getFiles(FileHandle sectionForLoading) throws FileNotFoundException {

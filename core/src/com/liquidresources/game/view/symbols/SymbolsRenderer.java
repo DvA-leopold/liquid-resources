@@ -14,7 +14,7 @@ public class SymbolsRenderer {
         this.width = width;
         this.height = height;
 
-        TextureAtlas numbersTextureAtlas = (TextureAtlas) ResourceManager.instance().get("symbols/numb.atlas");
+        TextureAtlas numbersTextureAtlas = (TextureAtlas) ResourceManager.inst().get("symbols/numb.atlas");
         texturesNumbersArray = new ArrayList<>(10);
 
         for (int i = 0; i < 10; ++i) {

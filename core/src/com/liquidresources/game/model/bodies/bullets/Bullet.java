@@ -26,22 +26,21 @@ final public class Bullet extends UpdatableBody {
         }
     }
 
-    @Override
     public void act(float delta) {
         if (!isInitialized) {
             return;
         }
 
-        if (targetVector == null) {
-            UpdatableBody hunterUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
-            if (hunterUpdatableBody != null) {
-                setHunterUpdatableBody(hunterUpdatableBody);
-                targetVector = new Vector2(hunterUpdatableBody.getPosition());
-                targetVector.sub(getPosition().add(MathUtils.random(-1.5f, 0f), 0));
-            } else {
-                return;
-            }
-        }
+//        if (targetVector == null) {
+//            UpdatableBody hunterUpdatableBody = entityInitializer.getTargetBody(RelationTypes.ENEMY);
+//            if (hunterUpdatableBody != null) {
+//                setHunterUpdatableBody(hunterUpdatableBody);
+//                targetVector = new Vector2(hunterUpdatableBody.getPosition());
+//                targetVector.sub(getPosition().add(MathUtils.random(-1.5f, 0f), 0));
+//            } else {
+//                return;
+//            }
+//        }
 
         physicsBodyComponent.body.setTransform(getPosition(), vectorToAngle(physicsBodyComponent.body.getLinearVelocity()));
         physicsBodyComponent.body.applyForceToCenter(targetVector, true);

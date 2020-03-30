@@ -7,12 +7,11 @@ import java.util.Vector;
 
 final public class GameStateHolder {
     static {
-        gameState = GameStates.GAME_PREPARING;
-        OBSERVERS_LIST = new Vector<>();
+        dispose();
     }
 
-    static public void addObserver(GSObserver GSObserver) {
-        OBSERVERS_LIST.add(GSObserver);
+    static public void addObserver(Observer observer) {
+        OBSERVERS_LIST.add(observer);
     }
 
     static public void changeGameState(GameStates newGameState) {
@@ -26,16 +25,16 @@ final public class GameStateHolder {
 
     static public void dispose() {
         gameState = GameStates.GAME_PREPARING;
-        OBSERVERS_LIST.clear();
+        OBSERVERS_LIST = new Vector<>();
     }
 
     static private void notifyObservers() {
-        for (GSObserver GSObserver : OBSERVERS_LIST) {
-            GSObserver.notify(gameState);
+        for (Observer observer : OBSERVERS_LIST) {
+            observer.notify(gameState);
         }
     }
 
 
-    static final private Vector<GSObserver> OBSERVERS_LIST;
+    static private Vector<Observer> OBSERVERS_LIST;
     static private GameStates gameState;
 }

@@ -1,26 +1,25 @@
 package com.liquidresources.game.model;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.liquidresources.game.model.bodies.UpdatableBody;
 import com.liquidresources.game.model.bodies.buildings.Capital;
-import com.liquidresources.game.model.bodies.bullets.Meteor;
-import com.liquidresources.game.model.types.RelationTypes;
 import com.liquidresources.game.model.bodies.bariers.IonShield;
-import com.liquidresources.game.utils.GSObserver;
+import com.liquidresources.game.utils.Observer;
 import com.liquidresources.game.utils.GameStateHolder;
 import com.liquidresources.game.utils.SymbolsRenderer;
 import com.uwsoft.editor.renderer.SceneLoader;
 
 
-final public class GameWorldModel implements GSObserver {
-    public GameWorldModel(final SceneLoader sceneLoader) {
-        this.sceneLoader = sceneLoader;
+final public class GameWorldModel implements Observer {
+    public GameWorldModel() {
+        world = new World(new Vector2(0, 9.8f), true);
+        sceneLoader = new SceneLoader(null, world, null); // FIXME
         entityInitializer = new EntityInitializer(sceneLoader);
-        sceneLoader.world.setContactListener(new ContactListener() {
+        world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
                 try {
@@ -49,6 +48,7 @@ final public class GameWorldModel implements GSObserver {
 
             }
         });
+        GameStateHolder.addObserver(this);
         symbolsRenderer = new SymbolsRenderer(0, 28f, 1, 1);
     }
 
@@ -60,19 +60,10 @@ final public class GameWorldModel implements GSObserver {
                 }
                 break;
             case GAME_RUNNING:
-                counter++;
-                if (counter > 200) {
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(3, 10), 30);
-                    entityInitializer.createEntityFromLibrary("meteor", new Meteor(RelationTypes.ENEMY), MathUtils.random(10, 22), 30);
-                    counter = 0;
-                }
-                sceneLoader.engine.update(delta);
                 entityInitializer.initSheduledBodies();
-                sceneLoader.getBatch().begin();
                 Capital capital = (Capital) entityInitializer.getBaseSceneElement("capital");
                 symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getOilBarrels());
                 symbolsRenderer.renderNumber(sceneLoader.getBatch(), capital.getWaterBarrels(), 0, 1);
-                sceneLoader.getBatch().end();
                 break;
             case GAME_PAUSED:
                 break;
@@ -129,11 +120,23 @@ final public class GameWorldModel implements GSObserver {
         };
     }
 
+    public ClickListener getLaserFireListener() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Capital) entityInitializer.getBaseSceneElement("capital")).fireBullet();
+            }
+        };
+    }
 
-    private int counter = 0;
+    public World getWorld() {
+        return world;
+    }
+
 
     final private SceneLoader sceneLoader;
-
+    final private World world;
     final private EntityInitializer entityInitializer;
     final private SymbolsRenderer symbolsRenderer;
+
 }

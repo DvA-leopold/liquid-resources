@@ -1,126 +1,79 @@
 package com.liquidresources.game.view.screens.game.widgets;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.liquidresources.game.LiquidResources;
 import com.liquidresources.game.model.GameStates;
 import com.liquidresources.game.model.resource.manager.ResourceManager;
-import com.liquidresources.game.utils.GSObserver;
 import com.liquidresources.game.utils.GameStateHolder;
+import com.liquidresources.game.utils.Observer;
 
-import static com.liquidresources.game.model.GameStates.GAME_PAUSED;
 
-
-public class GameScreenWidgetsGroup implements GSObserver {
-    public GameScreenWidgetsGroup(final Batch batch) {
+public class GameScreenWidgetsGroup extends Entity implements Observer {
+    public GameScreenWidgetsGroup() {
         final float buttonWidth = Gdx.graphics.getWidth() * 0.1f;
         final float buttonHeight = Gdx.graphics.getWidth() * 0.1f;
 
-        Skin skin = (Skin) ResourceManager.instance().get("ui_skin/gameSkin.json");
+        final Stage stage = LiquidResources.inst().getStage();
+        final Skin skin = (Skin) ResourceManager.inst().get("ui_skin/gameSkin.json");
 
-        optionWindowButton = new Button(skin, "optionButton");
-        optionWindowButton.setSize(buttonWidth, buttonHeight);
-        optionWindowButton.setPosition(
-                Gdx.graphics.getWidth() - optionWindowButton.getWidth(),
-                Gdx.graphics.getHeight() - optionWindowButton.getHeight()
-        );
-        optionWindowButton.setVisible(false);
+        ionShieldButton = new CheckBox("", skin, "shield_action");
+        missileFire = new Button(skin, "missile_fire");
+        bulletFire = new Button(skin, "bullet_fire");
+        laserFire = new Button(skin, "laser_fire");
 
-        ionShieldButton = new CheckBox("", skin, "shieldAction");
-        ionShieldButton.setVisible(false);
-        missileFire = new Button(skin, "rocketAction");
-        missileFire.setVisible(false);
-        bulletFire = new Button(skin, "fightersAction");
-        bulletFire.setVisible(false);
-
-        Table actionTable = new Table();
+        final Table actionTable = new Table();
         actionTable.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.05f);
         actionTable.add(ionShieldButton).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(missileFire).width(buttonWidth).height(buttonHeight).pad(10);
         actionTable.add(bulletFire).width(buttonWidth).height(buttonHeight).pad(10);
+        actionTable.add(laserFire).width(buttonWidth).height(buttonHeight).pad(10);
 
-        gameOptionWindow = new GameOptionWindow("", skin);
-
-        stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
-        stage.addActor(optionWindowButton);
-        stage.addActor(gameOptionWindow);
+        stage.addActor(new GameOptionWidget());
         stage.addActor(actionTable);
 
-        actionTable.debug();
-        setVisible(true);
-    }
-
-    public void render() {
-        stage.act();
-        stage.draw();
+        GameStateHolder.addObserver(this);
     }
 
     public void setListeners(final ClickListener ionShieldClickListener,
                              final ClickListener fireMissileClickListener,
-                             final ClickListener fireBulletClickListener) {
-        bulletFire.addListener(fireBulletClickListener);
-
+                             final ClickListener fireBulletClickListener,
+                             final ClickListener laserFireClickListener) {
         ionShieldButton.addListener(ionShieldClickListener);
         missileFire.addListener(fireMissileClickListener);
-
-        optionWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                GameStateHolder.changeGameState(GAME_PAUSED);
-                gameOptionWindow.addAction(Actions.sequence(Actions.show()));
-            }
-        });
-        gameOptionWindow.setListeners();
-
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    public void dispose() {
-        stage.dispose();
-    }
-
-    private void setVisible(boolean visible) {
-        missileFire.setVisible(visible);
-        bulletFire.setVisible(visible);
-        ionShieldButton.setVisible(visible);
-        optionWindowButton.setVisible(visible);
-    }
-
-    static public void setIonShieldChecked() { // TODO refactor this
-        ionShieldButton.setChecked(false);
+        bulletFire.addListener(fireBulletClickListener);
+        laserFire.addListener(laserFireClickListener);
     }
 
     @Override
     public void notify(GameStates newGameState) {
         switch (newGameState) {
             case GAME_RUNNING:
+                ionShieldButton.setDisabled(false);
                 missileFire.setDisabled(false);
                 bulletFire.setDisabled(false);
-                ionShieldButton.setDisabled(false);
+                laserFire.setDisabled(false);
                 break;
             case GAME_PAUSED:
+                ionShieldButton.setDisabled(true);
                 missileFire.setDisabled(true);
                 bulletFire.setDisabled(true);
-                ionShieldButton.setDisabled(true);
+                laserFire.setDisabled(true);
                 break;
         }
     }
 
 
-    final private Stage stage;
-    static private CheckBox ionShieldButton; // TODO refactor this
+    final private CheckBox ionShieldButton;
 
-    final private Button optionWindowButton;
     final private Button missileFire;
     final private Button bulletFire;
+    final private Button laserFire;
 
-    final private GameOptionWindow gameOptionWindow;
 }
