@@ -1,5 +1,6 @@
 package com.liquidresources.game;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,6 +26,7 @@ public final class LiquidResources extends Game {
         debug = new DebugStatistic(true, true);
 
         entityEngine = new PooledEngine();
+        Entity ent = entityEngine.createEntity();
 
         Gdx.input.setInputProcessor(stage);
         setScreen(new LoadingScreen());
@@ -88,6 +90,10 @@ public final class LiquidResources extends Game {
 
     public static LiquidResources inst() {
         return (LiquidResources) Gdx.app.getApplicationListener();
+    }
+
+    public PooledEngine eng() {
+	    return entityEngine;
     }
 
 
